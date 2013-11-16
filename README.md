@@ -1,4 +1,4 @@
-Graphical-Equation-Manipulator
+Graphical Equation Manipulator
 ==============================
 JavaScript port of [BuckShlegeris]/**[Graphical-equation-manipulator]**.
 
