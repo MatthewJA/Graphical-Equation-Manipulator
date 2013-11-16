@@ -2,15 +2,16 @@
 
 // Colour scheme
 
-$grey: #272822;
-$dark-grey: #151613;
 $off-white: #ECECE9;
+$search-panel-colour: #404238;
+$gem-window-colour: #272822;
+$background-colour: #151613;
 
-$green: #46C742;
-$dark-green: #0F2F0E;
+$equation-colour: #A6E22E;
+$equation-colour-dark: #44A61F;
 
-$blue: #429DC7;
-$dark-blue: #0E252F;
+$expression-colour: #66D9EF;
+$expression-colour-dark: #1FA6A6;
 
 // Fonts
 @import url("http://fonts.googleapis.com/css?family=Source+Sans+Pro");
@@ -21,10 +22,13 @@ $font-stack: "Source Sans Pro", "Open Sans", Tahoma, Arial, sans-serif;
 $width: 850px;
 $height: 600px;
 
+$whiteboard-width: 600px;
+$whiteboard-height: $height;
+
 // SCSS
 
 body {
-	background-color: $dark-grey;
+	background-color: $background-colour;
 
 	h1, h2, h3, h4, h5, h6 {
 		margin: 10px;
@@ -45,6 +49,37 @@ body {
 
 		margin: 0 auto;
 
-		background-color: $grey;
+		background-color: $gem-window-colour;
+
+		#whiteboard-panel {
+			width: $whiteboard-width;
+			height: $height;
+
+			float: left;
+		}
+
+		#search-panel {
+			width: $width - $whiteboard-width;
+			height: $height;
+
+			float: left;
+
+			background-color: $search-panel-colour;
+		}
 	}
+}
+
+@mixin formula {
+	font-family: monospace;
+	font-size: 30px;
+}
+
+.equation {
+	@include formula;
+	color: $equation-colour;
+}
+
+.expression {
+	@include formula;
+	color: $expression-colour;
 }
