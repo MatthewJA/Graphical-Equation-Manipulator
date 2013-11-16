@@ -1,0 +1,50 @@
+@import "reset";
+
+// Colour scheme
+
+$grey: #272822;
+$dark-grey: #151613;
+$off-white: #ECECE9;
+
+$green: #46C742;
+$dark-green: #0F2F0E;
+
+$blue: #429DC7;
+$dark-blue: #0E252F;
+
+// Fonts
+@import url("http://fonts.googleapis.com/css?family=Source+Sans+Pro");
+$font-stack: "Source Sans Pro", "Open Sans", Tahoma, Arial, sans-serif;
+
+// GEM window settings
+
+$width: 850px;
+$height: 600px;
+
+// SCSS
+
+body {
+	background-color: $dark-grey;
+
+	h1, h2, h3, h4, h5, h6 {
+		margin: 10px;
+
+		font-family: $font-stack;
+		color: $off-white;
+		
+		text-align:center;
+	}
+
+	h1 {
+		font-size: 30px;
+	}
+
+	#gem-window {
+		width: $width;
+		height: $height;
+
+		margin: 0 auto;
+
+		background-color: $grey;
+	}
+}
