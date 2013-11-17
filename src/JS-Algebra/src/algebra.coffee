@@ -123,14 +123,19 @@ class Equation
 
 		return leftHandSide + " = " + rightHandSide
 
-test = ->
-	Ek = new Variable("Ek")
+exportGlobals = ->
+	# Export globals for use elsewhere.
+	# http://stackoverflow.com/questions/4214731/coffeescript-global-variables/4215132#4215132
 
-	half = new Constant(1, 2)
-	m = new Variable("m")
-	v2 = new Variable("v", 2)
+	# Setup.
+	topRoot = exports ? this
+	topRoot.algebra = {}
+	root = topRoot.algebra
 
-	eq = new Equation([Ek], [half, m, v2])
+	# Export.
+	root.Variable = Variable
+	root.Constant = Constant
+	root.Equation = Equation
+	# I probably will need to change this interface at some point to make it significantly more abstracted. But it'll do for now.
 
-	console.log("Solving " + eq.toString() + " for v")
-	console.log("Solved: " + eq.solve("v").toString())
+exportGlobals()
