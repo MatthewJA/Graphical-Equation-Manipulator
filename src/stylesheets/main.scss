@@ -3,7 +3,8 @@
 // Colour scheme
 
 $off-white: #ECECE9;
-$search-panel-colour: #404238;
+$search-panel-colour: #303127;
+$search-box-colour: #404238;
 $gem-window-colour: #272822;
 $background-colour: #151613;
 
@@ -26,6 +27,12 @@ $whiteboard-width: 600px;
 $whiteboard-height: $height;
 
 // SCSS
+
+@mixin border-box {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
 
 body {
 	background-color: $background-colour;
@@ -65,6 +72,22 @@ body {
 			float: left;
 
 			background-color: $search-panel-colour;
+
+			#search-box {
+				@include border-box;
+
+				width: 100%;
+				height: 50px;
+
+				border: 0;
+				padding: 10px;
+				margin: 0;
+
+				font-size:20px;
+				color: $off-white;
+
+				background-color: $search-box-colour;
+			}
 		}
 	}
 }
