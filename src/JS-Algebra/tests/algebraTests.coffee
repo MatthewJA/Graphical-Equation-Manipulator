@@ -1,8 +1,5 @@
 describe "Can solve simple equations", ->
 
-	beforeEach ->
-		algebra = window.algebra
-
 	it "involving multiplication", ->
 		E = new algebra.Variable("E")
 		m = new algebra.Variable("m")
@@ -49,9 +46,6 @@ describe "Can solve simple equations", ->
 		expect(result).toEqual equation
 
 describe "Fails reasonably when", ->
-
-	beforeEach ->
-		algebra = window.algebra
 
 	it "attempting to solve an equation for a variable it does not contain", ->
 		a = new algebra.Variable("a")
