@@ -95,14 +95,21 @@ body {
 @mixin formula {
 	font-family: monospace;
 	font-size: 30px;
+	color: $off-white;
 }
 
 .equation {
 	@include formula;
-	color: $equation-colour;
+
+	.variable {
+		color: $equation-colour;
+	}
 }
 
 .expression {
 	@include formula;
-	color: $expression-colour;
+
+	.variable {
+		color: $expression-colour;
+	}
 }
