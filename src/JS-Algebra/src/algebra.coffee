@@ -4,6 +4,13 @@
 	At the moment, only does multiplication and division.
 ###
 
+# Errors
+class AlgebraException
+	constructor: (@message) ->
+	toString: ->
+		"AlgebraException: " + @message
+
+# Classes
 class Constant
 	# A (fractional) constant in an equation. Has a numerator and a denominator.
 	constructor: (@numerator, @denominator=1) ->
@@ -88,6 +95,9 @@ class Equation
 				rightTerm = term.copy()
 				rightTerms.push rightTerm
 
+		if (leftTerms.length == 0) # The variable was not in the equation, so throw an exception.
+			throw new AlgebraException("Variable to solve for was not in equation.")
+
 		# Now we have to get the variable we want by itself, independent of any powers.
 		# To do this, we will divide all powers by the power of our variable on the left hand side.
 
@@ -133,9 +143,13 @@ exportGlobals = ->
 	root = topRoot.algebra
 
 	# Export.
+	# Classes.
 	root.Variable = Variable
 	root.Constant = Constant
 	root.Equation = Equation
+
+	# Exceptions.
+	root.AlgebraException = AlgebraException
 	# I probably will need to change this interface at some point to make it significantly more abstracted. But it'll do for now.
 
 exportGlobals()
