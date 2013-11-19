@@ -13,6 +13,7 @@ Coming soon:
 - Constants
 - Addition
 - The cool triangle thing
+- Equation rendering
 
 Completed so far:
 - Virtually all the required HTML and CSS
