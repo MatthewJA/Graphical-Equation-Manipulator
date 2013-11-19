@@ -93,9 +93,13 @@ body {
 }
 
 @mixin formula {
+	display: inline-block;
+
 	font-family: monospace;
 	font-size: 30px;
 	color: $off-white;
+
+	cursor: default;
 }
 
 .equation {

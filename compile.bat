@@ -3,4 +3,4 @@ call sass "src\stylesheets\main.scss" --style compressed > "static\styles.min.cs
 call sass "src\stylesheets\main.scss" --style expanded > "static\styles.css"
 
 rem CoffeeScript version 1.6.3
-call coffee -c "src\Graphical-Equation-Manipulator\gem.coffee"
+call coffee --output "src\Graphical-Equation-Manipulator" --compile "src\Graphical-Equation-Manipulator"
