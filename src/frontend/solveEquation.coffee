@@ -1,14 +1,15 @@
 define [
 	"jquery"
 	"frontend/addExpression"
+	"backend/addExpression"
 	"backend/solveEquation"
 	"backend/nextExpressionID"
 	"backend/getEquations"
-], ($, setDraggables, setDoubleClickEvents, doSolveEquation, nextExpressionID, getEquations) ->
+], ($, addExpressionToWhiteboard, addExpressionToIndex, doSolveEquation, nextExpressionID, getEquations) ->
 	solveEquation = (equationID, variable) ->
 		# Solve the equation with the given ID for the given variable.
 
 		newExpressionID = nextExpressionID()
 		expression = getEquations()[equationID] # Debugging.
-		addFrontendExpression(expression)
-		addBackendExpression(expression)
+		addExpressionToWhiteboard(expression)
+		addExpressionToIndex(expression)
