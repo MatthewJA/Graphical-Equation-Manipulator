@@ -1,9 +1,19 @@
-define ["jquery", "frontend/setDraggables", "frontend/setDoubleClickEvents"], ($, setDraggables, setDoubleClickEvents) ->
+define [
+	"jquery"
+	"frontend/setDraggables"
+	"frontend/setDoubleClickEvents"
+	"backend/solveEquation"
+	"backend/getExpressions"
+], ($, setDraggables, setDoubleClickEvents, doSolveEquation, getExpressions) ->
 	solveEquation = (equationID, variable) ->
 		# Solve the equation with the given ID for the given variable.
 
-		$("#whiteboard-panel").append('<div id="expression-2" class="expression"><span class="variable">' + variable + '</span>' +
+		newExpressionID = getExpressions().length # So if we have [Expression0, Expression1] then the length will be 2 and the new ID will be 2.
+
+		$("#whiteboard-panel").append('<div id="expression-' + newExpressionID + '" class="expression"><span class="variable">' + variable + '</span>' +
 			' = <span class="variable">' + variable + '</span></div>')
 
-		setDraggables($("#expression-2"))
-		setDoubleClickEvents($("#expression-2"))
+		getExpressions().push("expression we don't care about")
+
+		setDraggables($("#expression-" + newExpressionID))
+		setDoubleClickEvents($("#expression-" + newExpressionID))
