@@ -110,17 +110,19 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 
 		toGEMHTML: (equationID, expression=false) ->
 			unless expression
+				divClass = "equation"
 				if equationID?
 					divID = "equation-" + equationID
 				else
 					divID = "equation"
 			else
+				divClass = "expression"
 				if equationID?
 					divID = "expression-" + equationID
 				else
 					divID = "expression"
 
-			html = '<div id="' + divID + '" class="equation">'
+			html = '<div id="' + divID + '" class="' + divClass + '">'
 
 			leftTerms = []
 			for term in @leftTerms
