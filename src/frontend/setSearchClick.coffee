@@ -1,8 +1,8 @@
 define [
 	"jquery"
 	"backend/getFormulae"
-	"frontend/addEquation"
-	"backend/addEquation"
+	"frontend/addEquationToWhiteboard"
+	"backend/addEquationToIndex"
 ], ($, getFormulae, addEquationToWhiteboard, addEquationToIndex) ->
 
 	# Set up given search elements/all search elements to be clicked upon.
