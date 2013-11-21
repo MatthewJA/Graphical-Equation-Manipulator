@@ -1,9 +1,9 @@
 require.config
-	baseUrl: "../tests"
+	baseUrl: "../src"
 	urlArgs: "cb=" + Math.random() # Cache breaker
 	paths:
-		"jquery": "jquery.min"
-		"src": "../src"
+		"spec": "../tests/spec"
+		"jquery": "../tests/jquery.min"
 	shim:
 		"jquery":
 			exports: ["jquery"]
