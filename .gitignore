@@ -1,3 +1,6 @@
 .sass-cache/
 *.css
 *.js
+!src/require.js
+!src/lib/jquery.min.js
+!src/lib/jquery-ui.min.js
