@@ -1,0 +1,5 @@
+*.js
+*.sublime-workspace
+!tests/lib/**/*
+!tests/jquery.min.js
+!tests/require.js
