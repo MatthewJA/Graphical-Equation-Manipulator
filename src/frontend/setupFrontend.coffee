@@ -1,6 +1,10 @@
-# define [], ->
-
-define ["jquery", "frontend/solveEquation", "frontend/setDraggables", "frontend/setDoubleClickEvents"], ($, solveEquation, setDraggables, setDoubleClickEvents) ->
+define [
+	"jquery"
+	"frontend/solveEquation"
+	"frontend/setDraggables"
+	"frontend/setDoubleClickEvents"
+	"frontend/setSearchClick"
+], ($, solveEquation, setDraggables, setDoubleClickEvents, setSearchClick) ->
 
 	setupFrontend = ->
 		# Initialise the frontend.
@@ -8,3 +12,4 @@ define ["jquery", "frontend/solveEquation", "frontend/setDraggables", "frontend/
 
 		setDraggables()
 		setDoubleClickEvents()
+		setSearchClick()
