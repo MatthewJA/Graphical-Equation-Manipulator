@@ -6,7 +6,6 @@ Manipulate physics equations in an intuitive, visual manner.
 
 Coming soon:
 - Solving equations for some variable
-- Dragging equations around
 - Simultaneously solving equations
 - Dimensions
 - Uncertainties
@@ -16,6 +15,7 @@ Coming soon:
 - Equation rendering
 
 Completed so far:
+- Dragging equations around
 - Virtually all the required HTML and CSS
 - Skeleton code
 
