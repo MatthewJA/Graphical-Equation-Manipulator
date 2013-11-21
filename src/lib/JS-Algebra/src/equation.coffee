@@ -1,4 +1,4 @@
-define ["variable", "constant", "algebraException"], (Variable, Constant, AlgebraException) ->
+define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"], (Variable, Constant, AlgebraException) ->
 	class Equation
 		# Represents an equation. Can only handle multiplication/division at the moment.
 		constructor: (leftTerms, rightTerms) ->
