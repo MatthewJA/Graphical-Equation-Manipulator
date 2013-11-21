@@ -1,4 +1,4 @@
-define ["src/variable", "src/constant", "src/algebraException"], (Variable, Constant, AlgebraException) ->
+define ["variable", "constant", "algebraException"], (Variable, Constant, AlgebraException) ->
 	class Equation
 		# Represents an equation. Can only handle multiplication/division at the moment.
 		constructor: (leftTerms, rightTerms) ->

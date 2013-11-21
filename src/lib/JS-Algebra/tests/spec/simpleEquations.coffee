@@ -1,4 +1,4 @@
-define ["src/variable", "src/constant", "src/equation"], (Variable, Constant, Equation) ->
+define ["variable", "constant", "equation"], (Variable, Constant, Equation) ->
 
 	describe "Can solve simple equations", ->
 

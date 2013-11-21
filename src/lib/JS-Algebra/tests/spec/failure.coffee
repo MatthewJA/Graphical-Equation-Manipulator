@@ -1,4 +1,4 @@
-define ["src/variable", "src/constant", "src/equation", "src/algebraException"], (Variable, Constant, Equation, AlgebraException) ->
+define ["variable", "constant", "equation", "algebraException"], (Variable, Constant, Equation, AlgebraException) ->
 
 	describe "Fails reasonably when", ->
 
