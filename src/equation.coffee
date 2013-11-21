@@ -141,7 +141,7 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 							power = "**" + term.power
 						rightTerms.push('<span class="variable">' + term.label + '</span>' + power)
 				else
-					rightTerms.push("term")
+					rightTerms.push(term)
 
 			html += leftTerms.join(" * ") + " = " + rightTerms.join(" * ") + "</div>"
 
