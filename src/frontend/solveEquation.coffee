@@ -8,7 +8,7 @@ define [
 	solveEquation = (equationID, variable) ->
 		# Solve the equation with the given ID for the given variable.
 
-		newExpressionID = getExpressions().length # So if we have [Expression0, Expression1] then the length will be 2 and the new ID will be 2.
+		newExpressionID = getExpressions().length
 
 		$("#whiteboard-panel").append('<div id="expression-' + newExpressionID + '" class="expression"><span class="variable">' + variable + '</span>' +
 			' = <span class="variable">' + variable + '</span></div>')

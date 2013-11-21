@@ -12,7 +12,6 @@ define ["jquery"], ($) ->
 			cancel: ".variable"
 
 		if element?
-			console.log("setting draggable " + element)
 			element.draggable(draggableProperties)
 		else
 			$(".equation").draggable(draggableProperties)
