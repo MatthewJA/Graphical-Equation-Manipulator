@@ -10,5 +10,6 @@ define ["jquery", "backend/getFormulae", "frontend/addEquation"], ($, getFormula
 
 		target.click ->
 			equationName = $(@).attr("id")
-			equation = getFormulae[equationName]
+			console.log(equationName)
+			equation = getFormulae()[equationName]
 			addEquation(equation)
