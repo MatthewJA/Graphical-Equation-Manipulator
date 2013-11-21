@@ -19,10 +19,10 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 
 			if typeof(term) == 'string' or (term instanceof String)
 				# Parse it.
-				constant = /^\d+(\.\d+)?$/ # 123.456789
+				constant = /^-?\d+(\.\d+)?$/ # 123.456789
 				variable = /^[A-Za-z_]+$/ # Ek
-				fractional = /^\d+(\.\d+)?\/\d+(\.\d+)?$/ # 123.456/78.9
-				power = /^[A-Za-z_]+\*\*\d+(\.\d+)?$/ # Ek**0.5
+				fractional = /^-?\d+(\.\d+)?\/\d+(\.\d+)?$/ # 123.456/78.9
+				power = /^[A-Za-z_]+\*\*-?\d+(\.\d+)?$/ # Ek**0.5
 
 				if term.match(constant)?
 					return new Constant(parseFloat(term))
