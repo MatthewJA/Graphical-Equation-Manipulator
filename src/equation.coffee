@@ -1,9 +1,47 @@
 define ["src/variable", "src/constant", "src/algebraException"], (Variable, Constant, AlgebraException) ->
 	class Equation
 		# Represents an equation. Can only handle multiplication/division at the moment.
-		constructor: (@leftTerms, @rightTerms) ->
+		constructor: (leftTerms, rightTerms) ->
 			# leftTerms: An array of terms on the left side of this equation.
 			# rightTerms: An array of terms on the right side of this equation.
+
+			# These arrays may be of strings or of Variables/Constants (or a mix of both).
+			@leftTerms = []
+			@rightTerms = []
+
+			for term in leftTerms
+				@leftTerms.push(Equation.handleInputTerm(term))
+			for term in rightTerms
+				@rightTerms.push(Equation.handleInputTerm(term))
+
+		@handleInputTerm: (term) ->
+			# Convert strings to Variables or Constants, and return Variables or Constants as-is.
+
+			if typeof term == 'string' or term instanceof String
+				# Parse it.
+				constant = /^\d+(\.\d+)?$/ # 123.456789
+				variable = /^[A-Za-z_]+$/ # Ek
+				fractional = /^\d+(\.\d+)?\/\d+(\.\d+)?$/ # 123.456/78.9
+				power = /^[A-Za-z_]+\*\*\d+(\.\d+)?$/ # Ek**0.5
+
+				if term.match(constant)?
+					return new Constant(parseFloat(term))
+				else if term.match(variable)?
+					return new Variable(term)
+				else if term.match(fractional)?
+					[n, d] = term.split("/")
+					return new Constant(parseFloat(n), parseFloat(d))
+				else if term.match(power)?
+					[v, p] = term.split("**")
+					return new Variable(v, p)
+				else
+					throw new Error("Invalid term in equation: " + term)
+
+			else if term instanceof Variable or term instanceof Constant
+				return term
+
+			else
+				throw new TypeError("Expected Variable, Constant, or string")
 
 		solve: (variable) ->
 			# Solve the equation for a variable.
@@ -69,3 +107,42 @@ define ["src/variable", "src/constant", "src/algebraException"], (Variable, Cons
 			rightHandSide = output.join " * "
 
 			return leftHandSide + " = " + rightHandSide
+
+		toGEMHTML: (equationID) ->
+			if equationID?
+				divID = "equation-" + equationID
+			else
+				divID = "equation"
+
+			html = '<div id="' + divID + '" class="equation">'
+
+			leftTerms = []
+			for term in @leftTerms
+				if term instanceof Variable
+					if term.power == 0 then
+					else
+						if term.power == 1
+							power = ""
+						else
+							power = "**" + term.power
+						leftTerms.push('<span class="variable">' + term.label + '</span>' + power)
+				else
+					leftTerms.push("term")
+
+			rightTerms = []
+
+			for term in @rightTerms
+				if term instanceof Variable
+					if term.power == 0 then
+					else
+						if term.power == 1
+							power = ""
+						else
+							power = "**" + term.power
+						rightTerms.push('<span class="variable">' + term.label + '</span>' + power)
+				else
+					rightTerms.push("term")
+
+			html += leftTerms.join(" * ") + " = " + rightTerms.join(" * ") + "</div>"
+
+			return html
