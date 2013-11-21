@@ -1,19 +1,14 @@
 define [
 	"jquery"
-	"frontend/setDraggables"
-	"frontend/setDoubleClickEvents"
+	"frontend/addExpression"
 	"backend/solveEquation"
-	"backend/getExpressions"
-], ($, setDraggables, setDoubleClickEvents, doSolveEquation, getExpressions) ->
+	"backend/nextExpressionID"
+	"backend/getEquations"
+], ($, setDraggables, setDoubleClickEvents, doSolveEquation, nextExpressionID, getEquations) ->
 	solveEquation = (equationID, variable) ->
 		# Solve the equation with the given ID for the given variable.
 
-		newExpressionID = getExpressions().length
-
-		$("#whiteboard-panel").append('<div id="expression-' + newExpressionID + '" class="expression"><span class="variable">' + variable + '</span>' +
-			' = <span class="variable">' + variable + '</span></div>')
-
-		getExpressions().push("expression we don't care about")
-
-		setDraggables($("#expression-" + newExpressionID))
-		setDoubleClickEvents($("#expression-" + newExpressionID))
+		newExpressionID = nextExpressionID()
+		expression = getEquations()[equationID] # Debugging.
+		addFrontendExpression(expression)
+		addBackendExpression(expression)

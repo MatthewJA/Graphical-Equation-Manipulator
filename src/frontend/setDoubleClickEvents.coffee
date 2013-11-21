@@ -22,8 +22,8 @@ define ["jquery", "require"], ($, require) ->
 			console.log("Double-clicked " + variable + " in " + formulaType + " " + formulaNumber)
 
 			if formulaType == "equation"
-				require ["frontend/solveEquation"], (solveEquation) ->
-					solveEquation(formulaNumber, variable)
+				require ["frontend/solveEquation", "frontend/addExpression"], (solveEquation, addExpression) ->
+					addExpression(solveEquation(formulaNumber, variable))
 		
 		# Disable highlighting on variables.
 		target.disableSelection()

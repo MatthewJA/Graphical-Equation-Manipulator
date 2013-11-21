@@ -1,4 +1,10 @@
-define ["jquery", "backend/getFormulae", "frontend/addEquation"], ($, getFormulae, addEquation) ->
+define [
+	"jquery"
+	"backend/getFormulae"
+	"frontend/addEquation"
+	"backend/addEquation"
+], ($, getFormulae, addEquationToWhiteboard, addEquationToIndex) ->
+
 	# Set up given search elements/all search elements to be clicked upon.
 	# Clicking upon them will add their equation to the whiteboard.
 
@@ -12,4 +18,5 @@ define ["jquery", "backend/getFormulae", "frontend/addEquation"], ($, getFormula
 			equationName = $(@).attr("id")
 			console.log(equationName)
 			equation = getFormulae()[equationName]
-			addEquation(equation)
+			addEquationToWhiteboard(equation)
+			addEquationToIndex(equation)
