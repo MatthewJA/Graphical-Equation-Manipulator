@@ -88,6 +88,19 @@ body {
 
 				background-color: $search-box-colour;
 			}
+
+			#search-results {
+				ul {
+					padding-top: 10px;
+					padding-left: 10px;
+
+					color: $off-white;
+					font-size:20px;
+					font-family: monospace;
+
+					list-style-type: none;
+				}
+			}
 		}
 	}
 }
