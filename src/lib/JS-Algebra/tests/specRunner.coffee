@@ -4,6 +4,7 @@ require.config
 	paths:
 		"spec": "../tests/spec"
 		"jquery": "../tests/jquery.min"
+		"JSAlgebra": "../src"
 	shim:
 		"jquery":
 			exports: ["jquery"]

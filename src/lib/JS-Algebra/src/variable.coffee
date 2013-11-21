@@ -5,6 +5,9 @@ define [], ->
 			# label: The name of this variable.
 			# power: The initial power this variable is raised to.
 
+			@isTerm = true # To avoid instanceof, which doesn't seem to be working.
+			@isVariable = true # "
+
 		pow: (power) ->
 			# Raise this variable to a power.
 			# power: The power to raise this variable to.

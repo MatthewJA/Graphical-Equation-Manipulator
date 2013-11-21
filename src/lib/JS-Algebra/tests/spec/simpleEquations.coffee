@@ -1,4 +1,4 @@
-define ["variable", "constant", "equation"], (Variable, Constant, Equation) ->
+define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/equation"], (Variable, Constant, Equation) ->
 
 	describe "Can solve simple equations", ->
 

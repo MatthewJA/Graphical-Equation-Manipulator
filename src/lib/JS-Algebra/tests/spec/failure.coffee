@@ -1,4 +1,9 @@
-define ["variable", "constant", "equation", "algebraException"], (Variable, Constant, Equation, AlgebraException) ->
+define [
+	"JSAlgebra/variable"
+	"JSAlgebra/constant"
+	"JSAlgebra/equation"
+	"JSAlgebra/algebraException"
+], (Variable, Constant, Equation, AlgebraException) ->
 
 	describe "Fails reasonably when", ->
 
