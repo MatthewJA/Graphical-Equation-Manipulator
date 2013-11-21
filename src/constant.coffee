@@ -5,6 +5,9 @@ define [], ->
 			# numerator: Top half of the fraction.
 			# denominator: Bottom half of the fraction.
 
+			@isTerm = true # To avoid instanceof, which doesn't seem to be working.
+			@isConstant = true # "
+
 		pow: (power) ->
 			# Raise this constant to a power.
 			# power: The power to raise this constant to.

@@ -17,7 +17,7 @@ define ["variable", "constant", "algebraException"], (Variable, Constant, Algebr
 		@handleInputTerm: (term) ->
 			# Convert strings to Variables or Constants, and return Variables or Constants as-is.
 
-			if typeof term == 'string' or term instanceof String
+			if typeof(term) == 'string' or (term instanceof String)
 				# Parse it.
 				constant = /^\d+(\.\d+)?$/ # 123.456789
 				variable = /^[A-Za-z_]+$/ # Ek
@@ -37,11 +37,11 @@ define ["variable", "constant", "algebraException"], (Variable, Constant, Algebr
 				else
 					throw new Error("Invalid term in equation: " + term)
 
-			else if term instanceof Variable or term instanceof Constant
+			else if term.isTerm?
 				return term
 
 			else
-				throw new TypeError("Expected Variable, Constant, or string")
+				throw new TypeError("Expected Variable, Constant, or string, got: " + term)
 
 		solve: (variable) ->
 			# Solve the equation for a variable.
@@ -53,7 +53,7 @@ define ["variable", "constant", "algebraException"], (Variable, Constant, Algebr
 			leftTerms = []
 			rightTerms = []
 			for term in @leftTerms
-				if term instanceof Variable and term.label == variable
+				if term.isVariable? and term.label == variable
 					leftTerm = term.copy()
 					leftTerms.push leftTerm
 				else
@@ -62,7 +62,7 @@ define ["variable", "constant", "algebraException"], (Variable, Constant, Algebr
 					rightTerms.push rightTerm
 
 			for term in @rightTerms
-				if term instanceof Variable and term.label == variable
+				if term.isVariable? and term.label == variable
 					leftTerm = term.copy()
 					leftTerm.pow(-1)
 					leftTerms.push leftTerm
@@ -92,7 +92,7 @@ define ["variable", "constant", "algebraException"], (Variable, Constant, Algebr
 		toString: ->
 			output = []
 			for term in @leftTerms
-				if term instanceof Variable and term.power == 0 then # Skip term.
+				if term.isVariable? and term.power == 0 then # Skip term.
 				else
 					output.push term.toString()
 
@@ -100,7 +100,7 @@ define ["variable", "constant", "algebraException"], (Variable, Constant, Algebr
 
 			output = []
 			for term in @rightTerms
-				if term instanceof Variable and term.power == 0 then # Skip term.
+				if term.isVariable? and term.power == 0 then # Skip term.
 				else
 					output.push term.toString()
 
@@ -118,7 +118,7 @@ define ["variable", "constant", "algebraException"], (Variable, Constant, Algebr
 
 			leftTerms = []
 			for term in @leftTerms
-				if term instanceof Variable
+				if term.isVariable?
 					if term.power == 0 then
 					else
 						if term.power == 1
@@ -132,7 +132,7 @@ define ["variable", "constant", "algebraException"], (Variable, Constant, Algebr
 			rightTerms = []
 
 			for term in @rightTerms
-				if term instanceof Variable
+				if term.isVariable?
 					if term.power == 0 then
 					else
 						if term.power == 1
