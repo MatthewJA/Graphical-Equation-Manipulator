@@ -15,3 +15,10 @@ Coming soon:
 - Addition and subtraction
 - Better interface
 - Parsing equations and expressions
+- Outputting HTML for [MatthewJA]/**[Graphical-Equation-Manipulator]**
+- Outputting LaTeX code
+- Outputting Mathematica code
+
+
+[MatthewJA]: http://github.com/MatthewJA
+[Graphical-Equation-Manipulator]: http://github.com/MatthewJA/Graphical-Equation-Manipulator
