@@ -108,11 +108,17 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 
 			return leftHandSide + " = " + rightHandSide
 
-		toGEMHTML: (equationID) ->
-			if equationID?
-				divID = "equation-" + equationID
+		toGEMHTML: (equationID, expression=false) ->
+			unless expression
+				if equationID?
+					divID = "equation-" + equationID
+				else
+					divID = "equation"
 			else
-				divID = "equation"
+				if equationID?
+					divID = "expression-" + equationID
+				else
+					divID = "expression"
 
 			html = '<div id="' + divID + '" class="equation">'
 
