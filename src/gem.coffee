@@ -6,6 +6,7 @@ require.config
 	shim:
 		"jqueryui": ["jquery"]
 
-require ["jquery", "jqueryui", "frontend/setupFrontend"], ($, ui, setupFrontend) ->
+require ["jquery", "jqueryui", "frontend/setupFrontend", "frontend/finishLoading"], ($, ui, setupFrontend, finishLoading) ->
 	$ ->
 		setupFrontend()
+		finishLoading()

@@ -50,6 +50,20 @@ body {
 		font-size: 30px;
 	}
 
+	#loader {
+		display: block; // We'll make the loader invisible once the JavaScript loads.
+
+		width: $width;
+		height: $height;
+
+		margin: 0 auto;
+		text-align:center;
+
+		color: $off-white;
+
+		background-color: $gem-window-colour;
+	}
+
 	#gem-window {
 		width: $width;
 		height: $height;
@@ -57,6 +71,8 @@ body {
 		margin: 0 auto;
 
 		background-color: $gem-window-colour;
+
+		display: none; // We'll make the window visible once it loads.
 
 		#whiteboard-panel {
 			width: $whiteboard-width;
