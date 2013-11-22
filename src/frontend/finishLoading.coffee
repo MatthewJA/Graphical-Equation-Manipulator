@@ -1,3 +1,4 @@
 define ["jquery"], ($) ->
-	$("#gem-window").show()
-	$("#loader").hide()
+	->
+		$("#gem-window").show()
+		$("#loader").hide()
