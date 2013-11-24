@@ -8,9 +8,11 @@ define [
 
 	addExpression = (expression) ->
 		expressionID = nextExpressionID()
-		html = expression.toGEMHTML(expressionID, true)
+		html = expression.toMathML(expressionID, true)
 		expressionDiv = $(html)
 
 		$("#whiteboard-panel").append(expressionDiv)
 		setDraggables(expressionDiv)
 		setDoubleClickEvents(expressionDiv)
+
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub])

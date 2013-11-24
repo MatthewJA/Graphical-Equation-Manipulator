@@ -8,9 +8,11 @@ define [
 
 	addEquation = (equation) ->
 		equationID = nextEquationID()
-		html = equation.toGEMHTML(equationID)
+		html = equation.toMathML(equationID)
 		equationDiv = $(html)
 
 		$("#whiteboard-panel").append(equationDiv)
 		setDraggables(equationDiv)
 		setDoubleClickEvents(equationDiv)
+
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub])
