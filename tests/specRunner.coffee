@@ -17,6 +17,7 @@ require ["jquery"], ($) ->
 	specs = [
 		"spec/failure"
 		"spec/simpleEquations"
+		"spec/evaluation"
 	]
 
 	jasmineEnv.specFilter = (spec) ->
