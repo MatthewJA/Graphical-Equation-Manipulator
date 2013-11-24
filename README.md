@@ -12,13 +12,13 @@ Coming soon:
 - Addition
 - The cool triangle thing
 - Equation rendering
+- Variable colour schemes for people who find the current one painful
 
 Completed so far:
 - Adding pre-defined equations to the screen
 - Solving equations for some variable
 - Dragging equations around
-- Virtually all the required HTML and CSS
-- Skeleton code
+- Layout code
 
 [BuckShlegeris]: https://github.com/BuckShlegeris
 [Graphical-Equation-Manipulator]: https://github.com/BuckShlegeris/Graphical-equation-manipulator
