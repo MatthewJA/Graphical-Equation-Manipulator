@@ -9,6 +9,5 @@ require.config
 
 require ["jquery", "jqueryui", "frontend/setupFrontend", "frontend/finishLoading"], ($, ui, setupFrontend, finishLoading) ->
 	$ ->
-		require(["MathJax"])
 		setupFrontend()
 		finishLoading()

@@ -11,8 +11,14 @@ define [
 		html = equation.toMathML(equationID)
 		equationDiv = $(html)
 
-		$("#whiteboard-panel").append(equationDiv)
-		setDraggables(equationDiv)
-		setDoubleClickEvents(equationDiv)
+		console.log("HERE")
 
+		$("#whiteboard-panel").append(equationDiv)
+		
+		console.log(equationDiv)
+
+		setDraggables(equationDiv)
+		# setDoubleClickEvents(equationDiv)
+
+		console.log(MathJax)
 		MathJax.Hub.Queue(["Typeset",MathJax.Hub])
