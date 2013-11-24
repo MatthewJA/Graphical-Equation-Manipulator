@@ -282,7 +282,7 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 				else
 					mathID = "expression"
 
-			html = '<math id="' + mathID + '" class="' + mathClass + '">'
+			html = '<math xmlns="http://www.w3.org/1998/Math/MathML" id="' + mathID + '" class="' + mathClass + '">'
 
 			leftTerms = []
 			for term in @leftTerms
