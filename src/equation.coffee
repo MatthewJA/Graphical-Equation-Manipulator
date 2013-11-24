@@ -311,4 +311,4 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 				else
 					rightTerms.push(term.toMathML())
 
-			html += leftTerms.join("<mo>*</mo>") + " = " + rightTerms.join("<mo>*</mo>") + "</math>"
+			html += leftTerms.join("<mo>*</mo>") + "<mo>=</mo>" + rightTerms.join("<mo>*</mo>") + "</math>"
