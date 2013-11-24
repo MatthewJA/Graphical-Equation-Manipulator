@@ -10,15 +10,21 @@ E = m * c**2
 Ek = 1/2 * m * v**2
 ```
 
+These equations can have values substituted into them.
+
+```coffeescript
+equation.toString() # E = m * c**2
+equation.sub({c: 2}) # E = 4 * m
+```
+
+Also outputs as HTML for [MatthewJA]/**[Graphical-Equation-Manipulator]**.
+
 Coming soon:
-- Substituting values into an equation
 - Addition and subtraction
 - Better interface
 - Parsing equations and expressions
-- Outputting HTML for [MatthewJA]/**[Graphical-Equation-Manipulator]**
 - Outputting LaTeX code
 - Outputting Mathematica code
-
 
 [MatthewJA]: http://github.com/MatthewJA
 [Graphical-Equation-Manipulator]: http://github.com/MatthewJA/Graphical-Equation-Manipulator

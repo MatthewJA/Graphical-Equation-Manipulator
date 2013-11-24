@@ -20,9 +20,24 @@ define [], ->
 			@numerator = Math.pow(@numerator, power)
 			@denominator = Math.pow(@denominator, power)
 
+		multiply: (constant) ->
+			# Multiply this constant by another.
+			# constant: The constant to multiply by.
+			return new Constant(@numerator * constant.numerator, @denominator * constant.denominator)
+
+		evaluate: ->
+			# Evaluate this constant and return a float.
+			return @numerator/@denominator
+
 		copy: ->
 			# Return a copy of this constant.
 			new Constant(@numerator, @denominator)
+
+		toMathML: ->
+			# Return this constant as a MathML string.
+			if @denominator == 1
+				return "<mn>#{@numerator}</mn>"
+			return "<mfrac><mrow><mn>#{@numerator}</mn></mrow><mrow><mn>#{@denominator}</mn></mrow></mfrac>"
 
 		toString: ->
 			if @denominator == 1

@@ -33,15 +33,18 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 					return new Constant(parseFloat(n), parseFloat(d))
 				else if term.match(power)?
 					[v, p] = term.split("**")
-					return new Variable(v, p)
+					return new Variable(v, parseFloat(p))
 				else
 					throw new Error("Invalid term in equation: " + term)
 
+			else if typeof(term) == 'number' or (term instanceof Number)
+				return new Constant(term)
+
 			else if term.isTerm?
-				return term
+				return term.copy()
 
 			else
-				throw new TypeError("Expected Variable, Constant, or string, got: " + term)
+				throw new TypeError("Expected Variable, Constant, number, or string, got: " + term)
 
 		solve: (variable) ->
 			# Solve the equation for a variable.
@@ -89,6 +92,116 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 
 			return new Equation(leftTerms, rightTerms)
 
+		collectConstants: ->
+			constant = new Constant(1)
+
+			leftTerms = []
+			rightTerms = []
+
+			for term in @leftTerms
+				if term.isConstant?
+					a = term.copy()
+					a.pow(-1)
+					constant = constant.multiply(a)
+				else
+					leftTerms.push term
+
+			for term in @rightTerms
+				if term.isConstant?
+					constant = constant.multiply(term)
+				else
+					rightTerms.push term
+
+			if constant.evaluate() != 1
+				rightTerms.unshift(constant)
+
+			leftTerms.push(new Constant(1)) if leftTerms.length == 0
+			rightTerms.push(new Constant(1)) if leftTerms.length == 0
+
+			return new Equation(leftTerms, rightTerms)
+
+		sub: (values) ->
+			# Substitute values into the variables of the equation and return a new equation.
+			# Values is an object mapping variable labels to their values.
+			leftTerms = []
+			leftConstant = null
+
+			for term in @leftTerms
+				if term.isVariable?
+					if term.label of values
+						if values[term.label].isConstant?
+							v = values[term.label].copy()
+						else
+							v = new Constant(values[term.label])
+
+						v.pow(term.power)
+
+						if leftConstant?
+							leftConstant = leftConstant.multiply(v)
+						else
+							leftConstant = v
+					else
+						leftTerms.push term
+
+				else if term.isConstant?
+					if leftConstant?
+						leftConstant = leftConstant.multiply(term)
+					else
+						leftConstant = term.copy()
+
+			rightTerms = []
+			rightConstant = null
+
+			for term in @rightTerms
+				if term.isVariable?
+					if term.label of values
+						if values[term.label].isConstant?
+							v = values[term.label].copy()
+						else
+							v = new Constant(values[term.label])
+
+						v.pow(term.power)
+
+						if rightConstant?
+							rightConstant = rightConstant.multiply(v)
+						else
+							rightConstant = v
+					else
+						rightTerms.push term
+
+				else if term.isConstant?
+					if rightConstant?
+						rightConstant = rightConstant.multiply(term)
+					else
+						rightConstant = term.copy()
+
+			if leftTerms.length == 0 and rightTerms.length == 0 and leftConstant? and rightConstant?
+				throw new AlgebraException("Inconsistent numbers substituted into equation.")
+
+			leftTerms.unshift(leftConstant) if leftConstant?
+			rightTerms.unshift(rightConstant) if rightConstant?
+
+			equation = new Equation(leftTerms, rightTerms)
+			console.log(equation.toString())
+			return equation.collectConstants()
+
+		evaluate: (variable, values=null) ->
+			# Substitute in values if they are passed in, then attempt to evaluate
+			# the equation for the given variable. If the result is a number, return it,
+			# otherwise return the equation representing the variable.
+			# variable: The variable to evaluate for.
+			# values: The values to substitute in. Optional.
+
+			if values?
+				f = @solve(variable).sub(values)
+			else
+				f = @solve(variable)
+
+			if f.rightTerms.length == 1 and f.rightTerms[0].isConstant?
+				return f.rightTerms[0].evaluate()
+			else
+				return f
+
 		toString: ->
 			output = []
 			for term in @leftTerms
@@ -108,7 +221,7 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 
 			return leftHandSide + " = " + rightHandSide
 
-		toGEMHTML: (equationID, expression=false) ->
+		toHTML: (equationID, expression=false) ->
 			unless expression
 				divClass = "equation"
 				if equationID?
@@ -154,3 +267,48 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 			html += leftTerms.join(" * ") + " = " + rightTerms.join(" * ") + "</div>"
 
 			return html
+
+		toMathML: (equationID, expression=false) ->
+			unless expression
+				mathClass = "equation"
+				if equationID?
+					mathID = "equation-" + equationID
+				else
+					mathID = "equation"
+			else
+				mathClass = "expression"
+				if equationID?
+					mathID = "expression-" + equationID
+				else
+					mathID = "expression"
+
+			html = '<math id="' + mathID + '" class="' + mathClass + '">'
+
+			leftTerms = []
+			for term in @leftTerms
+				if term.isVariable?
+					if term.power == 0 then
+					else
+						if term.power == 1
+							varOutput = "<mi>" + term.label + "</mi>"
+						else
+							varOutput = "<msup><mi>" + term.label + "</mi><mn>" + term.power + "</mn></msup>"
+						leftTerms.push(varOutput)
+				else
+					leftTerms.push(term.toMathML())
+
+			rightTerms = []
+
+			for term in @rightTerms
+				if term.isVariable?
+					if term.power == 0 then
+					else
+						if term.power == 1
+							varOutput = "<mi>" + term.label + "</mi>"
+						else
+							varOutput = "<msup><mi>" + term.label + "</mi><mn>" + term.power + "</mn></msup>"
+						rightTerms.push(varOutput)
+				else
+					rightTerms.push(term.toMathML())
+
+			html += leftTerms.join("<mo>*</mo>") + " = " + rightTerms.join("<mo>*</mo>") + "</math>"
