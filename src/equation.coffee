@@ -284,31 +284,82 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 
 			html = '<div id="' + mathID + '" class="' + mathClass + '"><math xmlns="http://www.w3.org/1998/Math/MathML">'
 
-			leftTerms = []
+			leftTermsLeft = []
+			leftTermsTop = []
+			leftTermsBottom = []
 			for term in @leftTerms
 				if term.isVariable?
 					if term.power == 0 then
 					else
-						if term.power == 1
-							varOutput = '<mi class="variable">' + term.label + "</mi>"
+						if term.power > 0
+							if term.power == 1
+								varOutput = '<mi class="variable">' + term.label + "</mi>"
+							else if term.power > 0
+								varOutput = '<msup><mi class="variable">' + term.label + "</mi><mn>" + term.power + "</mn></msup>"
+							leftTermsTop.push(varOutput)
 						else
-							varOutput = '<msup><mi class="variable">' + term.label + "</mi><mn>" + term.power + "</mn></msup>"
-						leftTerms.push(varOutput)
+							p = -term.power
+							if p == 1
+								varOutput = '<mi class="variable">' + term.label + "</mi>"
+							else if p > 0
+								varOutput = '<msup><mi class="variable">' + term.label + "</mi><mn>" + p + "</mn></msup>"
+							leftTermsBottom.push(varOutput)
 				else
-					leftTerms.push(term.toMathML())
+					leftTermsLeft.push(term.toMathML())
 
-			rightTerms = []
-
+			rightTermsLeft = []
+			rightTermsTop = []
+			rightTermsBottom = []
 			for term in @rightTerms
 				if term.isVariable?
 					if term.power == 0 then
 					else
-						if term.power == 1
-							varOutput = '<mi class="variable">' + term.label + "</mi>"
+						if term.power > 0
+							if term.power == 1
+								varOutput = '<mi class="variable">' + term.label + "</mi>"
+							else if term.power > 0
+								varOutput = '<msup><mi class="variable">' + term.label + "</mi><mn>" + term.power + "</mn></msup>"
+							rightTermsTop.push(varOutput)
 						else
-							varOutput = '<msup><mi class="variable">' + term.label + "</mi><mn>" + term.power + "</mn></msup>"
-						rightTerms.push(varOutput)
+							p = -term.power
+							if p == 1
+								varOutput = '<mi class="variable">' + term.label + "</mi>"
+							else if p > 0
+								varOutput = '<msup><mi class="variable">' + term.label + "</mi><mn>" + p + "</mn></msup>"
+							rightTermsBottom.push(varOutput)
 				else
-					rightTerms.push(term.toMathML())
+					rightTermsLeft.push(term.toMathML())
 
-			html += leftTerms.join("<mo>*</mo>") + "<mo>=</mo>" + rightTerms.join("<mo>*</mo>") + "</math>"
+			leftSide = []
+			if leftTermsLeft.length > 0
+				leftSide.push(leftTermsLeft.join("<mo>&times;</mo>"))
+
+			if leftTermsTop.length > 0 and leftTermsBottom.length > 0
+				# Display a fraction.
+				leftSide.push("<mfrac><mrow>" + leftTermsTop.join("<mo>&times;</mo>") + "</mrow><mrow>" + leftTermsBottom.join("<mo>&times;</mo>") + "</mrow></mfrac>")
+			else if leftTermsTop.length > 0
+				# Just display a linearly output equation.
+				leftSide.push(leftTermsTop.join("<mo>&times;</mo>"))
+			else if leftTermsBottom.length > 0
+				# We have the bottom half of a fraction, so put a 1 above it and display it as such.
+				leftSide.push("<mfrac><mrow>1</mrow><mrow>" + leftTermsBottom.join("<mo>&times;</mo>") + "</mrow></mfrac>")
+
+			html += leftSide.join("<mo>&times;</mo>") + "<mo>=</mo>"
+
+			rightSide = []
+			if rightTermsLeft.length > 0
+				rightSide.push(rightTermsLeft.join("<mo>&times;</mo>"))
+
+			if rightTermsTop.length > 0 and rightTermsBottom.length > 0
+				# Display a fraction.
+				rightSide.push("<mfrac><mrow>" + rightTermsTop.join("<mo>&times;</mo>") + "</mrow><mrow>" + rightTermsBottom.join("<mo>&times;</mo>") + "</mrow></mfrac>")
+			else if rightTermsTop.length > 0
+				# Just display a linearly output equation.
+				rightSide.push(rightTermsTop.join("<mo>&times;</mo>"))
+			else if rightTermsBottom.length > 0
+				# We have the bottom half of a fraction, so put a 1 above it and display it as such.
+				rightSide.push("<mfrac><mrow>1</mrow><mrow>" + rightTermsBottom.join("<mo>&times;</mo>") + "</mrow></mfrac>")
+
+			html += rightSide.join("<mo>&times;</mo>") + "</math>"
+
+			return html
