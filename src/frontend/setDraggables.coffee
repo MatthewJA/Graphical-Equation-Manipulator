@@ -1,7 +1,8 @@
 define ["jquery"], ($) ->
+
 	setDraggables = (element) ->
 		# Set equations and expressions to be dragged around.
-		# They should only be able to be dragged from non-variable parts.
+		# element: An element to set events for. Optional.		
 
 		draggableProperties =
 			# Constrain movement to within the whiteboard.
