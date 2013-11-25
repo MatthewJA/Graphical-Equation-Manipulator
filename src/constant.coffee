@@ -29,8 +29,8 @@ define [], ->
 			# Simplify the constant to the simplest possible fraction.
 
 			# Find the greatest common divisor of the numerator and the denominator using Euclid's algorithm.
-			a = @numerator, @denominator
-			b = @numerator, @denominator
+			a = @numerator
+			b = @denominator
 
 			until b == 0
 				[a, b] = [b, a % b]
