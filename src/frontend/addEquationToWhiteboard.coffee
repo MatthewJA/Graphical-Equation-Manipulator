@@ -9,14 +9,10 @@ define [
 	addEquation = (equation) ->
 		equationID = nextEquationID()
 		html = equation.toMathML(equationID)
-		equationDiv = $(html)
-
-		console.log("HERE")
+		equationDiv = $('<div><math><mi class="variable">x</mi></math></div>')
 
 		$("#whiteboard-panel").append(equationDiv)
 		
-		console.log(equationDiv)
-
 		setDraggables(equationDiv)
 		# setDoubleClickEvents(equationDiv)
 
