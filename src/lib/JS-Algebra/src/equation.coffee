@@ -282,7 +282,7 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 				else
 					mathID = "expression"
 
-			html = '<math xmlns="http://www.w3.org/1998/Math/MathML" id="' + mathID + '" class="' + mathClass + '">'
+			html = '<div id="' + mathID + '" class="' + mathClass + '"><math xmlns="http://www.w3.org/1998/Math/MathML">'
 
 			leftTerms = []
 			for term in @leftTerms
@@ -290,9 +290,9 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 					if term.power == 0 then
 					else
 						if term.power == 1
-							varOutput = "<mi>" + term.label + "</mi>"
+							varOutput = '<mi class="variable">' + term.label + "</mi>"
 						else
-							varOutput = "<msup><mi>" + term.label + "</mi><mn>" + term.power + "</mn></msup>"
+							varOutput = '<msup><mi class="variable">' + term.label + "</mi><mn>" + term.power + "</mn></msup>"
 						leftTerms.push(varOutput)
 				else
 					leftTerms.push(term.toMathML())
@@ -304,9 +304,9 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 					if term.power == 0 then
 					else
 						if term.power == 1
-							varOutput = "<mi>" + term.label + "</mi>"
+							varOutput = '<mi class="variable">' + term.label + "</mi>"
 						else
-							varOutput = "<msup><mi>" + term.label + "</mi><mn>" + term.power + "</mn></msup>"
+							varOutput = '<msup><mi class="variable">' + term.label + "</mi><mn>" + term.power + "</mn></msup>"
 						rightTerms.push(varOutput)
 				else
 					rightTerms.push(term.toMathML())
