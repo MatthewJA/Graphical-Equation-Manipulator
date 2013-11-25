@@ -29,10 +29,10 @@ define [], ->
 			# Simplify the constant to the simplest possible fraction.
 
 			# Find the greatest common divisor of the numerator and the denominator using Euclid's algorithm.
-			a = Math.max(@numerator, @denominator)
-			b = Math.min(@numerator, @denominator)
+			a = @numerator, @denominator
+			b = @numerator, @denominator
 
-			until b = 0
+			until b == 0
 				[a, b] = [b, a % b]
 			
 			gcd = a
