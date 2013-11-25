@@ -25,12 +25,16 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 				power = /^[A-Za-z_]+\*\*-?\d+(\.\d+)?$/ # Ek**0.5
 
 				if term.match(constant)?
-					return new Constant(parseFloat(term))
+					c = new Constant(parseFloat(term))
+					c.simplify()
+					return c
 				else if term.match(variable)?
 					return new Variable(term)
 				else if term.match(fractional)?
 					[n, d] = term.split("/")
-					return new Constant(parseFloat(n), parseFloat(d))
+					c = new Constant(parseFloat(n), parseFloat(d))
+					c.simplify()
+					return c
 				else if term.match(power)?
 					[v, p] = term.split("**")
 					return new Variable(v, parseFloat(p))
@@ -38,7 +42,9 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 					throw new Error("Invalid term in equation: " + term)
 
 			else if typeof(term) == 'number' or (term instanceof Number)
-				return new Constant(term)
+				c = new Constant(term)
+				c.simplify()
+				return c
 
 			else if term.isTerm?
 				return term.copy()
