@@ -1,3 +1,10 @@
+MathJax.Hub.Config
+	config: ["MMLorHTML.js"]
+	jax: ["input/MathML", "output/HTML-CSS"]
+	extensions: ["mml2jax.js","MathMenu.js","MathZoom.js"]
+	showMathMenu: false
+	showMathMenuMSIE: false
+
 require.config
 	paths:
 		"jquery": "lib/jquery.min"
