@@ -25,6 +25,22 @@ define [], ->
 			# constant: The constant to multiply by.
 			return new Constant(@numerator * constant.numerator, @denominator * constant.denominator)
 
+		simplify: ->
+			# Simplify the constant to the simplest possible fraction.
+
+			# Find the greatest common divisor of the numerator and the denominator using Euclid's algorithm.
+			a = @numerator
+			b = @denominator
+
+			until b = 0
+				[a, b] = [b, a % b]
+			
+			gcd = a
+
+			# Divide out.
+			@numerator /= gcd
+			@denominator /= gcd
+
 		evaluate: ->
 			# Evaluate this constant and return a float.
 			return @numerator/@denominator
