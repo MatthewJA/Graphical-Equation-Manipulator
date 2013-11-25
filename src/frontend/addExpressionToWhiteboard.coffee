@@ -7,8 +7,8 @@ define [
 	# Add an expression to the whiteboard. The expression passed in should be a JS-Algebra equation.
 
 	addExpression = (expression) ->
-		expressionID = expressionID()
-		html = expression.toMathML(expressionID)
+		expressionID = nextExpressionID()
+		html = expression.toMathML(expressionID, true)
 		expressionDiv = $(html)
 
 		$("#whiteboard-panel").append(expressionDiv)
