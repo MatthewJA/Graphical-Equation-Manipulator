@@ -90,7 +90,8 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 			for term in rightTerms
 				term.pow(1/power)
 
-			return new Equation(leftTerms, rightTerms)
+			e = new Equation(leftTerms, rightTerms)
+			return e.collectConstants()
 
 		collectConstants: ->
 			constant = new Constant(1)
@@ -111,6 +112,8 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 					constant = constant.multiply(term)
 				else
 					rightTerms.push term
+
+			constant.simplify()
 
 			if constant.evaluate() != 1
 				rightTerms.unshift(constant)
