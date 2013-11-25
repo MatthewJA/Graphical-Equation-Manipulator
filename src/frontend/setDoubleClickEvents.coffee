@@ -6,15 +6,16 @@ define ["jquery", "require"], ($, require) ->
 		# Set things to happen upon double-clicking.
 
 		if element?
-			target = $(element).children(".variable")
+			target = $(element).find(".variable")
 		else
 			target = $(".variable")
 
 		target.dblclick ->
+			console.log("clicked " + $(@).toString())
 			variable = $(@).text()
 
 			# What equation/expression was it in?
-			formulaID = $(@).parent().attr("id")
+			formulaID = $(@).parents("div").attr("id")
 			# The ID of an equation should be of the form "equation-n" where n is an integer.
 			# The ID of an expression should be of the form "expression-n" in the same way.
 			[formulaType, formulaNumber] = formulaID.split("-")

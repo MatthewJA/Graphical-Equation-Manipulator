@@ -9,12 +9,12 @@ define [
 	addEquation = (equation) ->
 		equationID = nextEquationID()
 		html = equation.toMathML(equationID)
-		equationDiv = $('<div><math><mi class="variable">x</mi></math></div>')
+		equationDiv = $(html)
 
 		$("#whiteboard-panel").append(equationDiv)
 		
-		setDraggables(equationDiv)
-		# setDoubleClickEvents(equationDiv)
-
 		console.log(MathJax)
 		MathJax.Hub.Queue(["Typeset",MathJax.Hub])
+		MathJax.Hub.Queue ->
+			setDraggables(equationDiv)
+			setDoubleClickEvents(equationDiv)

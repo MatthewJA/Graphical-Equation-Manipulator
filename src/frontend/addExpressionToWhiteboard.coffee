@@ -7,12 +7,14 @@ define [
 	# Add an expression to the whiteboard. The expression passed in should be a JS-Algebra equation.
 
 	addExpression = (expression) ->
-		expressionID = nextExpressionID()
-		html = expression.toMathML(expressionID, true)
+		expressionID = expressionID()
+		html = expression.toMathML(expressionID)
 		expressionDiv = $(html)
 
 		$("#whiteboard-panel").append(expressionDiv)
-		setDraggables(expressionDiv)
-		setDoubleClickEvents(expressionDiv)
-
+		
+		console.log(MathJax)
 		MathJax.Hub.Queue(["Typeset",MathJax.Hub])
+		MathJax.Hub.Queue ->
+			setDraggables(expressionDiv)
+			setDoubleClickEvents(expressionDiv)
