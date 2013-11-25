@@ -18,10 +18,10 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/equation"], (Vari
 			equation = new Equation(["E"], ["1/2", "m", "v**2"])
 
 			result = equation.solve("m")
-			expect(result).toEqual new Equation(["m"], ["E", 2, "v**-2"])
+			expect(result).toEqual new Equation(["m"], [2, "E", "v**-2"])
 
 			result = equation.solve("v")
-			expect(result).toEqual new Equation(["v"], ["E**0.5", Math.pow(2, 0.5), "m**-0.5"])
+			expect(result).toEqual new Equation(["v"], [Math.pow(2, 0.5), "E**0.5", "m**-0.5"])
 
 			result = equation.solve("E")
 			expect(result).toEqual equation
