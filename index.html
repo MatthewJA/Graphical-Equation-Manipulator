@@ -16,24 +16,81 @@
 	</div>
 	
 	<div id="gem-window">
-		<div id="whiteboard-panel">
-			<!-- <div class="equation" id="equation-10000">
-				<span class="variable">Ek</span> = 1/2 * <span class="variable">m</span> * <span class="variable">v</span>**2
-			</div>
-
-			<div class="expression" id="expression-10000">
-				<span class="variable">v</span> = &radic;(2 <span class="variable">Ek</span> / <span class="variable">m</span>)
-			</div> -->
-		</div>
+		<div id="whiteboard-panel"></div>
 
 		<div id="search-panel">
 			<input type="text" id="search-box" placeholder="Search for equation">
 			<div id="search-results">
 				<ul>
-					<li id="kinetic-energy" class="search-result">Ek = 1/2 * m * v**2</li>
-					<li id="momentum" class="search-result">p = m * v</li>
-					<li id="gravity" class="search-result">F = G * m * M * r**-2</li>
-					<li id="gravitational-potential-energy" class="search-result">Ep = -1 * G * m * M * r**-2</li>
+					<li id="kinetic-energy" class="search-result">
+						<math>
+							<mi>Ek</mi>
+							<mo>=</mo>
+							<mfrac>
+								<mrow><mn>1</mn></mrow>
+								<mrow><mn>2</mn></mrow>
+							</mfrac>
+							<mo>&times;</mo>
+							<mi>m</mi>
+							<mo>&times;</mo>
+							<msup>
+								<mi>v</mi>
+								<mn>2</mn>
+							</msup>
+						</math>
+					</li>
+					<li id="momentum" class="search-result">
+						<math>
+							<mi>p</mi>
+							<mo>=</mo>
+							<mi>m</mi>
+							<mo>&times;</mo>
+							<mi>v</mi>
+						</math>
+					</li>
+					<li id="gravity" class="search-result">
+						<math>
+							<mi>F</mi>
+							<mo>=</mo>
+							<mfrac>
+								<mrow>
+									<mi>G</mi>
+									<mo>&times;</mo>
+									<mi>m</mi>
+									<mo>&times;</mo>
+									<mi>M</mi>
+								</mrow>
+								<mrow>
+									<msup>
+										<mi>r</mi>
+										<mn>2</mn>
+									</msup>
+								</mrow>
+							</mfrac>
+						</math>
+					</li>
+					<li id="gravitational-potential-energy" class="search-result">
+						<math>
+							<mi>Ep</mi>
+							<mo>=</mo>
+							<mn>-1</mn>
+							<mo>&times;</mo>
+							<mfrac>
+								<mrow>
+									<mi>G</mi>
+									<mo>&times;</mo>
+									<mi>m</mi>
+									<mo>&times;</mo>
+									<mi>M</mi>
+								</mrow>
+								<mrow>
+									<msup>
+										<mi>r</mi>
+										<mn>-1</mn>
+									</msup>
+								</mrow>
+						</math>
+					</li>
 				</ul>
 			</div>
 		</div>
