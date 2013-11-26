@@ -21,7 +21,7 @@ $font-stack: "Source Sans Pro", "Open Sans", Tahoma, Arial, sans-serif;
 // GEM window settings
 
 $width: 850px;
-$height: 600px;
+$height: 500px;
 
 $whiteboard-width: 600px;
 $whiteboard-height: $height;
@@ -34,8 +34,16 @@ $whiteboard-height: $height;
 	box-sizing: border-box;
 }
 
+html, body {
+	width: 100%;
+	height: 100%;
+}
+
 body {
 	background-color: $background-colour;
+
+	font-family: $font-stack;
+	color: $off-white;
 
 	h1, h2, h3, h4, h5, h6 {
 		margin: 10px;
@@ -51,7 +59,7 @@ body {
 	}
 
 	#loader {
-		display: block; // We'll make the loader invisible once the JavaScript loads.
+		display: table; // We'll make the loader invisible once the JavaScript loads.
 
 		width: $width;
 		height: $height;
@@ -62,6 +70,12 @@ body {
 		color: $off-white;
 
 		background-color: $gem-window-colour;
+
+		p {
+			display: table-cell;
+
+			vertical-align: middle;
+		}
 	}
 
 	#gem-window {
@@ -117,6 +131,20 @@ body {
 					list-style-type: none;
 				}
 			}
+		}
+	}
+
+	#footer {
+		text-align: center;
+
+		padding-top:20px;
+
+		a:link, a:visited {
+			color: $off-white;
+		}
+
+		a:hover {
+			color: $equation-colour;
 		}
 	}
 }

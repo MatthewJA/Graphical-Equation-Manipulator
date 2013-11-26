@@ -11,7 +11,7 @@ define ["jquery", "require"], ($, require) ->
 		else
 			target = $(".variable")
 
-		target.dblclick ->
+		doDoubleClick = ->
 			variable = $(@).text()
 
 			# What equation/expression was the variable we clicked in?
@@ -33,6 +33,10 @@ define ["jquery", "require"], ($, require) ->
 					expression = solveEquation(formulaNumber, variable)
 					addExpressionToWhiteboard(expression)
 					addExpressionToIndex(expression)
+
+		# target.dblclick doDoubleClick
+		target.doubletap doDoubleClick
+			
 		
 		# Disable highlighting on variables.
 		target.disableSelection()
