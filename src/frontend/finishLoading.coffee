@@ -1,7 +1,7 @@
 define ["jquery"], ($) ->
 
-	finishLoading = ->
-		# Finish loading by hiding the loader and showing the GEM window.
-
+	# Finish loading by hiding the loader and showing the GEM window.
+	
+	return ->
 		$("#gem-window").show()
 		$("#loader").hide()
