@@ -20,9 +20,9 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 			if typeof(term) == 'string' or (term instanceof String)
 				# Parse it.
 				constant = /^-?\d+(\.\d+)?$/ # 123.456789
-				variable = /^[A-Za-z_]+$/ # Ek
+				variable = /^[A-Za-z_]+([0-9]+)?$/ # Ek
 				fractional = /^-?\d+(\.\d+)?\/\d+(\.\d+)?$/ # 123.456/78.9
-				power = /^[A-Za-z_]+\*\*-?\d+(\.\d+)?$/ # Ek**0.5
+				power = /^[A-Za-z_]+([0-9]+)?\*\*-?\d+(\.\d+)?$/ # Ek**0.5
 
 				if term.match(constant)?
 					c = new Constant(parseFloat(term))
@@ -301,18 +301,11 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 					if term.power == 0 then
 					else
 						if term.power > 0
-							if term.power == 1
-								varOutput = '<mi class="variable">' + term.label + "</mi>"
-							else if term.power > 0
-								varOutput = '<msup><mi class="variable">' + term.label + "</mi><mn>" + term.power + "</mn></msup>"
-							leftTermsTop.push(varOutput)
+							leftTermsTop.push(term.toMathML())
 						else
-							p = -term.power
-							if p == 1
-								varOutput = '<mi class="variable">' + term.label + "</mi>"
-							else if p > 0
-								varOutput = '<msup><mi class="variable">' + term.label + "</mi><mn>" + p + "</mn></msup>"
-							leftTermsBottom.push(varOutput)
+							t = term.copy()
+							t.pow(-1)
+							leftTermsBottom.push(t.toMathML())
 				else
 					leftTermsLeft.push(term.toMathML())
 
