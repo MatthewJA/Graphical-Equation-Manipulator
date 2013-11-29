@@ -4,5 +4,5 @@ define ->
 	# These equivalent variables are represented by strings of their labels.
 	# For example, the equivalencies might be [["Ek", "Ep"], ["m2", "m3", "m4"]]
 
-	equations = []
-	-> equations
+	equivalencies = []
+	-> equivalencies
