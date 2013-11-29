@@ -1,4 +1,4 @@
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 
 MathJax.Hub.Config
 	config: ["MMLorHTML.js"]
@@ -8,7 +8,7 @@ MathJax.Hub.Config
 	showMathMenuMSIE: false
 
 require.config
-	urlArgs: "v={#VERSION}"
+	urlArgs: "v=#{VERSION}"
 	paths:
 		"jquery": "lib/jquery.min"
 		"jqueryui": "lib/jquery-ui.min"
