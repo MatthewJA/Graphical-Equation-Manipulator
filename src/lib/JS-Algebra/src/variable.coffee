@@ -32,7 +32,9 @@ define [], ->
 			else
 				labelOutput = '<mi class="variable">' + @label + '</mi>'
 
-			if term.power == 1
+			if @power == 1
 				return labelOutput
-			else if term.power > 0
+			else if @power > 0
 				return '<msup>' + labelOutput + '<mn>' + @power + "</mn></msup>"
+			else
+				return "1"
