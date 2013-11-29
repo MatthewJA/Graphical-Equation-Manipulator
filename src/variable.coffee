@@ -25,3 +25,14 @@ define [], ->
 					return "1"
 				else
 					return @label + "**" + @power
+
+		toMathML: ->
+			if @label.length > 1
+				labelOutput = '<msub class="variable"><mi>' + @label[0] + '</mi><mi>' + @label[1..] + "</mi></msub>"
+			else
+				labelOutput = '<mi class="variable">' + @label + '</mi>'
+
+			if term.power == 1
+				return labelOutput
+			else if term.power > 0
+				return '<msup>' + labelOutput + '<mn>' + @power + "</mn></msup>"
