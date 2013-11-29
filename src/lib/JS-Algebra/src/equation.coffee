@@ -324,18 +324,11 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 					if term.power == 0 then
 					else
 						if term.power > 0
-							if term.power == 1
-								varOutput = '<mi class="variable">' + term.label + "</mi>"
-							else if term.power > 0
-								varOutput = '<msup><mi class="variable">' + term.label + "</mi><mn>" + term.power + "</mn></msup>"
-							rightTermsTop.push(varOutput)
+							rightTermsTop.push(term.toMathML())
 						else
-							p = -term.power
-							if p == 1
-								varOutput = '<mi class="variable">' + term.label + "</mi>"
-							else if p > 0
-								varOutput = '<msup><mi class="variable">' + term.label + "</mi><mn>" + p + "</mn></msup>"
-							rightTermsBottom.push(varOutput)
+							t = term.copy()
+							t.pow(-1)
+							rightTermsBottom.push(t.toMathML())
 				else
 					rightTermsLeft.push(term.toMathML())
 
