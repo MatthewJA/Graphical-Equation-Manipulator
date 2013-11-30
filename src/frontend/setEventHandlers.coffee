@@ -3,9 +3,9 @@ define ["jquery", "require"], ($, require) ->
 	# Set the event handlers of either a specific element
 	# or every element on the page.
 
-	setDraggables = (element=null) ->
+	setEquationDraggables = (element=null) ->
 		# Set equations and expressions to be dragged around.
-		# element: An element to set events for. Optional.		
+		# element: A formula (expression or equation div) to set events for. Optional.		
 
 		draggableProperties =
 			# Constrain movement to within the whiteboard.
@@ -23,7 +23,7 @@ define ["jquery", "require"], ($, require) ->
 
 	setDoubleClickEvents = (element=null) ->
 		# Set events to happen upon double-clicking.
-		# element: An element to set events for. Optional.
+		# element: A formula (expression or equation div) to set events for. Optional.
 
 		if element?
 			target = $(element).find(".variable")
@@ -54,8 +54,33 @@ define ["jquery", "require"], ($, require) ->
 		# Disable highlighting on variables.
 		target.disableSelection()
 
-	return (element=null) ->
-		# element: An element to set events for. Optional.
+	setVariableDraggables = (element=null) ->
+		# Set variables to have drag events such that you can drag one variable to another variable to equate them.
+		# element: A formula (expression or equation div) to set events for. Optional.
 
-		setDraggables(element)
+		if element?
+			target = $(element).find(".variable")
+		else
+			target = $(".variable")
+
+		target.draggable
+			start: ->
+				# do start stuff:
+				# make a new line element?
+
+			drag: ->
+				# do drag stuff:
+				# update the line element?
+
+			stop: ->
+				# do end stuff:
+				# fix the line element to whatever we dropped it on
+
+			revert: true
+
+	return (element=null) ->
+		# element: A formula (expression or equation div) to set events for. Optional.
+
+		setEquationDraggables(element)
 		setDoubleClickEvents(element)
+		setVariableDraggables(element)
