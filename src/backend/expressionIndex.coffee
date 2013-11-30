@@ -20,6 +20,9 @@ define ->
 			# expressionID: The ID of the expression to return.
 			# -> The expression with the given ID.
 
+			if expressionID >= expressions.length or expressionID < 0
+				throw new Error("No expression with ID #{expressionID} exists.")
+
 			return expressions[expressionID]
 
 		size: ->

@@ -20,6 +20,9 @@ define ->
 			# equationID: The ID of the equation to return.
 			# -> The equation with the given ID.
 
+			if equationID >= equations.length or equationID < 0
+				throw new Error("No equation with ID #{equationID} exists.")
+
 			return equations[equationID]
 
 		size: ->

@@ -64,4 +64,8 @@ define ->
 			for equivalency in equivalencies
 				if variable in equivalency
 					return equivalency
+
+		clear: ->
+			# Clear the index.
+			equivalencies.splice(0)
 	}
