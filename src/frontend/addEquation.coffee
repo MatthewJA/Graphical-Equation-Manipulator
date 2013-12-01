@@ -13,7 +13,7 @@ define [
 		# Add an equation to the whiteboard.
 		# equation: A JS-Algebra equation to add to the whiteboard.
 
-		if settings.mathJaxEnabled
+		if settings.get("mathJaxEnabled")
 			# Generate the div representing the equation.
 			html = equation.toMathML(equationID)
 			equationDiv = $(html)

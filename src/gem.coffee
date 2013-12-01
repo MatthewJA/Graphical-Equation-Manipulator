@@ -21,8 +21,23 @@ require.config
 		"TouchPunch": ["jquery"]
 		"MobileEvents": ["jquery"]
 
-require ["jquery", "jqueryui", "MobileEvents", "frontend/setupFrontend", "frontend/finishLoading"], ($, ui, me, setupFrontend, finishLoading) ->
+require [
+	"jquery"
+	"jqueryui"
+	"MobileEvents"
+	"frontend/setupFrontend"
+	"frontend/finishLoading"
+	"frontend/setupSettings"
+], ($, ui, me, setupFrontend, finishLoading, setupSettings) ->
 	$ ->
+		# Handle settings.
+		setupSettings()
+
+		# Setup the frontend.
 		setupFrontend()
+
+		# Load Touch Punch to handle jQuery UI events on mobile devices.
 		require ["TouchPunch"]
+
+		# Tell the user that we have finished loading.
 		finishLoading()

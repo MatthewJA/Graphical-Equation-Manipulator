@@ -66,7 +66,13 @@ define ["jquery", "require"], ($, require) ->
 		target.draggable
 			start: (event, ui) ->
 				# Resize the helper element to make it the same size as the draggable target.
-				$(ui.helper).addClass("equationVariableHelper");
+				if $(event.target).parents(".equation").length != 0
+					# Target is an equation variable.
+					$(ui.helper).addClass("equationVariableHelper");
+				else if $(event.target).parents(".expression").length != 0
+					# Target is an expression variable.
+					$(ui.helper).addClass("expressionVariableHelper");
+
 				$(ui.helper).css("font-size", $(event.target).css("font-size"))
 
 				# Hide the original variable we are dragging.

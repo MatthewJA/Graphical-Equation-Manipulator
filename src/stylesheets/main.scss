@@ -164,6 +164,7 @@ body {
 
 	.variable {
 		color: $equation-colour;
+		outline: 1px solid transparent;
 	}
 }
 
@@ -177,4 +178,8 @@ body {
 
 .equationVariableHelper {
 	color: $equation-colour;
+}
+
+.expressionVariableHelper {
+	color: $expression-colour;
 }
