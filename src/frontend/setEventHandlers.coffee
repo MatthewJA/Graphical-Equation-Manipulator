@@ -64,19 +64,29 @@ define ["jquery", "require"], ($, require) ->
 			target = $(".variable")
 
 		target.draggable
-			start: ->
-				# do start stuff:
-				# make a new line element?
+			start: (event, ui) ->
+				# Resize the helper element to make it the same size as the draggable target.
+				$(ui.helper).addClass("equationVariableHelper");
+				$(ui.helper).css("font-size", $(event.target).css("font-size"))
 
-			drag: ->
+				# Hide the original variable we are dragging.
+				$(event.target).fadeTo(0, 0)
+
+			drag: (event, ui) ->
 				# do drag stuff:
 				# update the line element?
 
-			stop: ->
-				# do end stuff:
+			stop: (event, ui) ->
 				# fix the line element to whatever we dropped it on
 
+				# Show the original variable we are dragging.
+				$(event.target).fadeTo(0, 1)
+
+			containment: "#whiteboard-panel"
+
 			revert: true
+			helper: "clone"
+			appendTo: "#whiteboard-panel"
 
 	return (element=null) ->
 		# element: A formula (expression or equation div) to set events for. Optional.
