@@ -129,6 +129,30 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 
 			return new Equation(leftTerms, rightTerms)
 
+		replaceVariables: (replacements) ->
+			# Replace variables in this equation with differently named ones, according to a map.
+			# replacements: {original: replacement} variable labels.
+
+			for term in @leftTerms
+				if term.isVariable? and term.label of replacements
+					term.label = replacements[term.label]
+			for term in @rightTerms
+				if term.isVariable? and term.label of replacements
+					term.label = replacements[term.label]
+
+		getAllVariables: ->
+			# Get all variable labels in this equation.
+			# -> An array of all variable labels in this equation.
+			variableLabels = []
+			for term in @leftTerms
+				if term.isVariable?
+					variableLabels.push(term.label)
+			for term in @rightTerms
+				if term.isVariable?
+					variableLabels.push(term.label)
+
+			return variableLabels
+
 		sub: (values) ->
 			# Substitute values into the variables of the equation and return a new equation.
 			# Values is an object mapping variable labels to their values.
