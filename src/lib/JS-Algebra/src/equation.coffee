@@ -299,7 +299,13 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 							power = ""
 						else
 							power = "**" + term.power
-						rightTerms.push('<span class="variable">' + term.label + '</span>' + power)
+
+						# Strip off any IDs that may be on the variable.
+						# These are delimited by a "-".
+						labelArray = term.label.split("-")
+						label = labelArray[0]
+						labelID = if labelArray[1]? then 'id="variable-' + term.label + '"' else ""
+						rightTerms.push('<span class="variable"' + labelID + '>' + labelArray[0] + '</span>' + power)
 				else
 					rightTerms.push(term)
 
