@@ -27,10 +27,16 @@ define [], ->
 					return @label + "**" + @power
 
 		toMathML: ->
-			if @label.length > 1
-				labelOutput = '<msub class="variable"><mi>' + @label[0] + '</mi><mi>' + @label[1..] + "</mi></msub>"
+			# Strip off the ID of this variable if it has one.
+			# IDs are separated by -'s.
+			labelArray = @label.split("-")
+			label = labelArray[0]
+			labelID = if labelArray[1]? then 'id="' + @label + '"' else ""
+
+			if label.length > 1
+				labelOutput = '<msub class="variable"' + labelID + '><mi>' + label[0] + '</mi><mi>' + label[1..] + "</mi></msub>"
 			else
-				labelOutput = '<mi class="variable">' + @label + '</mi>'
+				labelOutput = '<mi class="variable"' + labelID + '>' + label + '</mi>'
 
 			if @power == 1
 				return labelOutput
