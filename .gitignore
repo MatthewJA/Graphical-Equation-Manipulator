@@ -1,6 +1,7 @@
 .sass-cache/
 *.css
 *.js
+*.sublime-workspace
 !src/require.js
 !src/lib/jquery.min.js
 !src/lib/jquery-ui.min.js
