@@ -35,7 +35,7 @@ define ["jquery", "frontend/settings", "require"], ($, settings, require) ->
 			# has an extra "variable-" appended to the start.
 
 			if /variable-/.test(variable)
-				variable = variable.split("-")[1..].join("")
+				variable = variable.split("-")[1..].join("-")
 
 			# What equation/expression was the variable we clicked in?
 			formulaID = $(@).parents("div").attr("id")
