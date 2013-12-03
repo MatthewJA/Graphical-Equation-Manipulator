@@ -34,13 +34,18 @@ define ->
 			# Increase the count for the given label by one.
 			# label: A label to increase the count of.
 
-			variableLabels[label] += 1
+			if label of variableLabels
+				variableLabels[label] += 1
+			else
+				variableLabels[label] = 0
 
 		getNextUniqueID: (label) ->
 			# Convert a label into a unique ID.
 			# label: The label of the variable to generate a unique ID for.
 			# -> A unique ID.
 
-			incrementLabelCount(label)
-			return label + "_" + getLabelCount(label)
+			@incrementLabelCount(label)
+			variableID = label + "-" + @getLabelCount(label)
+			@add(variableID, label)
+			return variableID
 	}

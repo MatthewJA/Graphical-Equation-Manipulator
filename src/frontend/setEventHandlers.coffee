@@ -31,7 +31,7 @@ define ["jquery", "frontend/settings", "require"], ($, settings, require) ->
 			target = $(".variable")
 
 		target.doubletap ->
-			variable = $(@).text()
+			variable = $(@).attr("id") # The ID of the variable element is also the variableID.
 
 			# What equation/expression was the variable we clicked in?
 			formulaID = $(@).parents("div").attr("id")
