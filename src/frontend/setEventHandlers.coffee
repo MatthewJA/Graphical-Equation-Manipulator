@@ -1,4 +1,4 @@
-define ["jquery", "require"], ($, require) ->
+define ["jquery", "frontend/settings", "require"], ($, settings, require) ->
 
 	# Set the event handlers of either a specific element
 	# or every element on the page.
@@ -65,7 +65,7 @@ define ["jquery", "require"], ($, require) ->
 
 		target.draggable
 			start: (event, ui) ->
-				# Resize the helper element to make it the same size as the draggable target.
+				# Add CSS to make the helper look like the draggable target.
 				if $(event.target).parents(".equation").length != 0
 					# Target is an equation variable.
 					$(ui.helper).addClass("equationVariableHelper");
@@ -74,6 +74,9 @@ define ["jquery", "require"], ($, require) ->
 					$(ui.helper).addClass("expressionVariableHelper");
 
 				$(ui.helper).css("font-size", $(event.target).css("font-size"))
+
+				unless settings.get("mathJaxEnabled")
+					$(ui.helper).css("font-family", "monospace")
 
 				# Hide the original variable we are dragging.
 				$(event.target).fadeTo(0, 0)
@@ -93,6 +96,12 @@ define ["jquery", "require"], ($, require) ->
 			revert: true
 			helper: "clone"
 			appendTo: "#whiteboard-panel"
+
+		target.droppable
+			tolerance: "pointer"
+
+			drop: (event, ui) ->
+				# Set an equivalency between this variable and the other variable.
 
 	return (element=null) ->
 		# element: A formula (expression or equation div) to set events for. Optional.

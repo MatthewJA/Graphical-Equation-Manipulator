@@ -164,7 +164,7 @@ body {
 
 	.variable {
 		color: $equation-colour;
-		outline: 1px solid transparent;
+		outline: 1px solid transparent; // Fix for dragged variables leaving a trail on webkit.
 	}
 }
 

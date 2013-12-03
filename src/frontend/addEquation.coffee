@@ -3,15 +3,25 @@ define [
 	"frontend/setEventHandlers"
 	"frontend/settings"
 	"backend/equationIndex"
-], ($, setEventHandlers, settings, equationIndex) ->
+	"backend/variableIndex"
+], ($, setEventHandlers, settings, equationIndex, variableIndex) ->
 
 	# Add an equation to the program.
 	# This involves adding it to the whiteboard and adding it
-	# to the backend.
+	# to the backend. The equation being added will have its variables replaced
+	# with unique ones.
 
 	addEquationToWhiteboard = (equation, equationID) ->
 		# Add an equation to the whiteboard.
 		# equation: A JS-Algebra equation to add to the whiteboard.
+
+		# Replace the variables in the equation with their unique IDs.
+		replacements = {}
+		for variable in equation.getAllVariables()
+			# Make a unique ID for this variable.
+			replacements[variable] = variableIndex.getNextUniqueID(variable)
+
+		equation.replaceVariables(replacements)
 
 		if settings.get("mathJaxEnabled")
 			# Generate the div representing the equation.

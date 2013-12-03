@@ -2,8 +2,8 @@ define ->
 
 	# Stores variables which are equivalent.
 
-	# These equivalent variables are represented by strings of their labels.
-	# For example, the equivalencies might be [["Ek", "Ep"], ["m2", "m3", "m4"]]
+	# These equivalent variables are represented by strings - their IDs.
+	# For example, the equivalencies might be [["Ek_0", "Ep_0"], ["m_1", "m_2", "M"]]
 	equivalencies = []
 
 	return {
