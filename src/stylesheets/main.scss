@@ -88,6 +88,12 @@ body {
 
 		display: none; // We'll make the window visible once it loads.
 
+		-ms-user-select: none;
+		-moz-user-select: none;
+		-khtml-user-select: none;
+		-webkit-user-select: none;
+		user-select: none;
+
 		#whiteboard-panel {
 			width: $whiteboard-width;
 			height: $height;
@@ -178,8 +184,10 @@ body {
 
 .equationVariableHelper {
 	color: $equation-colour;
+	cursor: default;
 }
 
 .expressionVariableHelper {
 	color: $expression-colour;
+	cursor: default;
 }
