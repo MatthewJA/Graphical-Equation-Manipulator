@@ -105,6 +105,15 @@ define ["jquery", "frontend/settings", "require"], ($, settings, require) ->
 					$(ui.draggable).css("color", colour)
 					$(ui.helper).css("color", colour)
 
+					# Draw a line between them to show their equivalency.
+					droppableOffset = $(event.target).offset()
+					draggableOffset = $(ui.draggable).offset()
+					$("#whiteboard-panel").line(
+						droppableOffset.left + $(event.target).width()/2,
+						droppableOffset.top + $(event.target).height()/2,
+						draggableOffset.left + $(ui.draggable).width()/2,
+						draggableOffset.top + $(ui.draggable).height()/2)
+
 	getInfo = (variableElement) ->
 		# Get information about the variable represented by the given element.
 		# vairableElement: A jQuery element representing a variable.

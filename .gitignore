@@ -3,5 +3,5 @@
 *.js
 *.sublime-workspace
 !src/require.js
-!src/lib/jquery.min.js
-!src/lib/jquery-ui.min.js
+!src/lib/jQuery/*
+!src/lib/Touch-Punch/*
