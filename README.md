@@ -12,6 +12,7 @@ Coming soon:
 - Addition
 - The cool triangle thing
 - Variable colour schemes for people who find the current one painful
+- Linking variables
 
 Completed so far:
 - Layout code
@@ -19,6 +20,7 @@ Completed so far:
 - Solving equations for some variable
 - Adding pre-defined equations to the screen
 - Equation rendering with [MathJax]
+- Dragging variables around
 
 
 [BuckShlegeris]: https://github.com/BuckShlegeris
