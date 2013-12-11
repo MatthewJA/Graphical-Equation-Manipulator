@@ -1,4 +1,4 @@
-define ["jquery", "frontend/settings", "require"], ($, settings, require) ->
+define ["jquery", "frontend/settings", "jsPlumb", "require"], ($, settings, jsPlumb, require) ->
 
 	# Set the event handlers of either a specific element
 	# or every element on the page.
@@ -56,6 +56,7 @@ define ["jquery", "frontend/settings", "require"], ($, settings, require) ->
 		else
 			target = $(".variable")
 
+		jsPlumb.draggable(target)
 		target.draggable
 			start: (event, ui) ->
 				# Add CSS to make the helper look like the draggable target.
@@ -108,11 +109,14 @@ define ["jquery", "frontend/settings", "require"], ($, settings, require) ->
 					# Draw a line between them to show their equivalency.
 					droppableOffset = $(event.target).offset()
 					draggableOffset = $(ui.draggable).offset()
-					$("#whiteboard-panel").line(
-						droppableOffset.left + $(event.target).width()/2,
-						droppableOffset.top + $(event.target).height()/2,
-						draggableOffset.left + $(ui.draggable).width()/2,
-						draggableOffset.top + $(ui.draggable).height()/2)
+					jsPlumb.connect
+						source: $(event.target)
+						target: $(ui.draggable)
+					# $("#whiteboard-panel").line(
+					# 	droppableOffset.left + $(event.target).width()/2,
+					# 	droppableOffset.top + $(event.target).height()/2,
+					# 	draggableOffset.left + $(ui.draggable).width()/2,
+					# 	draggableOffset.top + $(ui.draggable).height()/2)
 
 	getInfo = (variableElement) ->
 		# Get information about the variable represented by the given element.

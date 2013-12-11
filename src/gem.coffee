@@ -13,7 +13,7 @@ require.config
 		"jquery": "lib/jQuery/jquery.min"
 		"jqueryui": "lib/jQuery/jquery-ui.min"
 		"JSAlgebra": "lib/JS-Algebra/src/"
-		"MathJax": "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML"
+		"MathJax": "lib/MathJax/MathJax"
 		"TouchPunch": "lib/Touch-Punch/jquery.ui.touch-punch.min"
 		"MobileEvents": "lib/jQuery/jquery.mobile-events.min"
 		"jsPlumb": "lib/jsPlumb/jquery.jsPlumb.min"
