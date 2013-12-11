@@ -46,7 +46,8 @@ require [
 		setupFrontend()
 
 		# Setup jsPlumb.
-		jsPlumb.Defaults.Container = $("#whiteboard-panel")
+		jsPlumb.ready ->
+			jsPlumb.Defaults.Container = $("#whiteboard-panel")
 
 		# Tell the user that we have finished loading.
 		finishLoading()
