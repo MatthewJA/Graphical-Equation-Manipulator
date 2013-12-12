@@ -34,7 +34,8 @@ require [
 	"frontend/setupFrontend"
 	"frontend/finishLoading"
 	"frontend/setupSettings"
-], ($, ui, me, jsPlumb, setupFrontend, finishLoading, setupSettings) ->
+	"frontend/connectionHelpers"
+], ($, ui, me, jsPlumb, setupFrontend, finishLoading, setupSettings, connectionHelpers) ->
 	$ ->
 		# Handle settings.
 		setupSettings()
@@ -46,8 +47,7 @@ require [
 		setupFrontend()
 
 		# Setup jsPlumb.
-		jsPlumb.ready ->
-			jsPlumb.Defaults.Container = $("#whiteboard-panel")
+		connectionHelpers.setupJsPlumb()
 
 		# Tell the user that we have finished loading.
 		finishLoading()

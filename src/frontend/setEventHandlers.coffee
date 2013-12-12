@@ -1,4 +1,4 @@
-define ["jquery", "frontend/settings", "jsPlumb", "require"], ($, settings, jsPlumb, require) ->
+define ["jquery", "frontend/settings", "jsPlumb", "frontend/connectionHelpers", "require"], ($, settings, jsPlumb, connectionHelpers, require) ->
 
 	# Set the event handlers of either a specific element
 	# or every element on the page.
@@ -14,6 +14,15 @@ define ["jquery", "frontend/settings", "jsPlumb", "require"], ($, settings, jsPl
 
 			# Ensure only non-variable parts can be dragged.
 			cancel: ".variable"
+
+			drag: (event, ui) ->
+				connectionHelpers.repaintVariables($(event.target))
+
+			stop: (event, ui) ->
+				# For some reason, stopping the drag sometimes makes the variable
+				# become detached from its connection - so as a fix for that, we
+				# call repaint again.
+				connectionHelpers.repaintVariables($(event.target))
 
 		if element?
 			element.draggable(draggableProperties)
@@ -56,7 +65,6 @@ define ["jquery", "frontend/settings", "jsPlumb", "require"], ($, settings, jsPl
 		else
 			target = $(".variable")
 
-		jsPlumb.draggable(target)
 		target.draggable
 			start: (event, ui) ->
 				# Add CSS to make the helper look like the draggable target.
@@ -77,13 +85,14 @@ define ["jquery", "frontend/settings", "jsPlumb", "require"], ($, settings, jsPl
 
 			drag: (event, ui) ->
 				# do drag stuff:
-				# update the line element?
+				# (apparently, nothing at all)
 
 			stop: (event, ui) ->
-				# fix the line element to whatever we dropped it on
-
 				# Show the original variable we are dragging.
 				$(event.target).fadeTo(0, 1)
+
+				# I haven't the slightest why this works, but it fixes a graphical bug.
+				connectionHelpers.setVisibleBetween($(event.target), $(ui.draggable), false)
 
 			containment: "#whiteboard-panel"
 
@@ -107,16 +116,10 @@ define ["jquery", "frontend/settings", "jsPlumb", "require"], ($, settings, jsPl
 					$(ui.helper).css("color", colour)
 
 					# Draw a line between them to show their equivalency.
-					droppableOffset = $(event.target).offset()
-					draggableOffset = $(ui.draggable).offset()
-					jsPlumb.connect
-						source: $(event.target)
-						target: $(ui.draggable)
-					# $("#whiteboard-panel").line(
-					# 	droppableOffset.left + $(event.target).width()/2,
-					# 	droppableOffset.top + $(event.target).height()/2,
-					# 	draggableOffset.left + $(ui.draggable).width()/2,
-					# 	draggableOffset.top + $(ui.draggable).height()/2)
+					connectionHelpers.connect($(event.target), $(ui.draggable))
+
+					# Hide that line, to fix a graphical bug. We will reshow it later.
+					connectionHelpers.setVisibleBetween($(event.target), $(ui.draggable), false)
 
 	getInfo = (variableElement) ->
 		# Get information about the variable represented by the given element.

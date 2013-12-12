@@ -2,9 +2,12 @@ define ->
 	
 	# A singleton object storing frontend settings, usually boolean.
 
-	settings = {
+	settings =
 		mathJaxEnabled: true
-	}
+		connectionSettings:
+			connector: "Straight"
+			anchor: "Center"
+			endpoint: "Blank"
 
 	return {
 		get: (name) ->
