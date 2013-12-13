@@ -51,7 +51,7 @@ body {
 		font-family: $font-stack;
 		color: $off-white;
 		
-		text-align:center;
+		text-align: center;
 	}
 
 	h1 {
@@ -65,7 +65,7 @@ body {
 		height: $height;
 
 		margin: 0 auto;
-		text-align:center;
+		text-align: center;
 
 		color: $off-white;
 
@@ -193,4 +193,11 @@ body {
 .expressionVariableHelper {
 	color: $expression-colour;
 	cursor: default;
+}
+
+.line {
+	background-color: transparent;
+	background-image: url("./checkerboard.png");
+	background-repeat: repeat;
+	background-position: center;
 }

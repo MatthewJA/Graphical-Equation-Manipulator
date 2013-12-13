@@ -4,10 +4,7 @@ define ->
 
 	settings =
 		mathJaxEnabled: true
-		connectionSettings:
-			connector: "Straight"
-			anchor: "Center"
-			endpoint: "Blank"
+		connectionWidth: 3
 
 	return {
 		get: (name) ->

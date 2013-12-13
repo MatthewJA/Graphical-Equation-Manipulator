@@ -11,6 +11,8 @@ define ["frontend/getParameter", "frontend/settings"], (getParameter, settings) 
 					g = false
 				else if g == "true"
 					g = true
+				else if g.match /^\d+$/
+					g = parseInt(g)
 
 				settings.set(key, g)
 			console.log(key, settings.get(key))

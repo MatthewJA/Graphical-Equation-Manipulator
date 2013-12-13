@@ -46,8 +46,5 @@ require [
 		# Setup the frontend.
 		setupFrontend()
 
-		# Setup jsPlumb.
-		connectionHelpers.setupJsPlumb()
-
 		# Tell the user that we have finished loading.
 		finishLoading()
