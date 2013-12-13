@@ -90,9 +90,11 @@ define ["jquery", "frontend/settings", "jsPlumb", "frontend/connectionHelpers", 
 			stop: (event, ui) ->
 				# Show the original variable we are dragging.
 				$(event.target).fadeTo(0, 1)
+				
 
 				# I haven't the slightest why this works, but it fixes a graphical bug.
-				connectionHelpers.setVisibleBetween($(event.target), $(ui.draggable), false)
+				connectionHelpers.setVisibleBetween(null, $(event.target), true)
+				jsPlumb.repaintEverything()
 
 			containment: "#whiteboard-panel"
 
@@ -118,8 +120,9 @@ define ["jquery", "frontend/settings", "jsPlumb", "frontend/connectionHelpers", 
 					# Draw a line between them to show their equivalency.
 					connectionHelpers.connect($(event.target), $(ui.draggable))
 
-					# Hide that line, to fix a graphical bug. We will reshow it later.
+					# Hide that line! Fixing a bug where the jsPlumb line appears below where it should for some reason.
 					connectionHelpers.setVisibleBetween($(event.target), $(ui.draggable), false)
+					jsPlumb.repaintEverything()
 
 	getInfo = (variableElement) ->
 		# Get information about the variable represented by the given element.

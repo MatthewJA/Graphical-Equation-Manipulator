@@ -31,8 +31,13 @@ define ["jsPlumb", "frontend/settings", "jquery"], (jsPlumb, settings, $) ->
 			# Set the visibility of a connection between source and target.
 			# source, target: The source and target of the connection.
 			# visibility: Boolean. True for visible, false for invisible.
-			for connection in (jsPlumb.getConnections
-				source: source
-				target: target)
-				connection.setVisible(visibility)
+			if source?
+				for connection in (jsPlumb.getConnections
+					source: source
+					target: target)
+					connection.setVisible(visibility)
+			else
+				for connection in (jsPlumb.getConnections
+					target: target)
+					connection.setVisible(visibility)
 	}
