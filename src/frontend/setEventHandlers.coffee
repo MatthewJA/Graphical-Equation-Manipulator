@@ -1,4 +1,4 @@
-define ["jquery", "frontend/settings", "require"], ($, settings, require) ->
+define ["jquery", "frontend/settings", "jsPlumb", "frontend/connections", "require"], ($, settings, jsPlumb, connections, require) ->
 
 	# Set the event handlers of either a specific element
 	# or every element on the page.
@@ -14,6 +14,15 @@ define ["jquery", "frontend/settings", "require"], ($, settings, require) ->
 
 			# Ensure only non-variable parts can be dragged.
 			cancel: ".variable"
+
+			drag: (event, ui) ->
+				connections.repaintVariables($(event.target))
+
+			stop: (event, ui) ->
+				# For some reason, stopping the drag sometimes makes the variable
+				# become detached from its connection - so as a fix for that, we
+				# call repaint again.
+				connections.repaintVariables($(event.target))
 
 		if element?
 			element.draggable(draggableProperties)
@@ -76,11 +85,9 @@ define ["jquery", "frontend/settings", "require"], ($, settings, require) ->
 
 			drag: (event, ui) ->
 				# do drag stuff:
-				# update the line element?
+				# (apparently, nothing at all)
 
 			stop: (event, ui) ->
-				# fix the line element to whatever we dropped it on
-
 				# Show the original variable we are dragging.
 				$(event.target).fadeTo(0, 1)
 
@@ -100,19 +107,10 @@ define ["jquery", "frontend/settings", "require"], ($, settings, require) ->
 
 				if droppableFormulaType == "equation" and draggableFormulaType == "equation"
 					# Set an equivalency between this variable and the other variable.
-					colour = "rgb(#{Math.floor(Math.random()*256)}, #{Math.floor(Math.random()*256)}, #{Math.floor(Math.random()*256)})"
-					$(event.target).css("color", colour)
-					$(ui.draggable).css("color", colour)
-					$(ui.helper).css("color", colour)
+					# TODO
 
 					# Draw a line between them to show their equivalency.
-					droppableOffset = $(event.target).offset()
-					draggableOffset = $(ui.draggable).offset()
-					$("#whiteboard-panel").line(
-						droppableOffset.left + $(event.target).width()/2,
-						droppableOffset.top + $(event.target).height()/2,
-						draggableOffset.left + $(ui.draggable).width()/2,
-						draggableOffset.top + $(ui.draggable).height()/2)
+					connections.connect($(event.target), $(ui.draggable))
 
 	getInfo = (variableElement) ->
 		# Get information about the variable represented by the given element.

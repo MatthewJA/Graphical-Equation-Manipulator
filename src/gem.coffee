@@ -13,7 +13,7 @@ require.config
 		"jquery": "lib/jQuery/jquery.min"
 		"jqueryui": "lib/jQuery/jquery-ui.min"
 		"JSAlgebra": "lib/JS-Algebra/src/"
-		"MathJax": "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML"
+		"MathJax": "lib/MathJax/MathJax"
 		"TouchPunch": "lib/Touch-Punch/jquery.ui.touch-punch.min"
 		"MobileEvents": "lib/jQuery/jquery.mobile-events.min"
 		"jsPlumb": "lib/jsPlumb/jquery.jsPlumb.min"
@@ -34,7 +34,8 @@ require [
 	"frontend/setupFrontend"
 	"frontend/finishLoading"
 	"frontend/setupSettings"
-], ($, ui, me, jsPlumb, setupFrontend, finishLoading, setupSettings) ->
+	"frontend/connectionHelpers"
+], ($, ui, me, jsPlumb, setupFrontend, finishLoading, setupSettings, connectionHelpers) ->
 	$ ->
 		# Handle settings.
 		setupSettings()
@@ -44,10 +45,6 @@ require [
 
 		# Setup the frontend.
 		setupFrontend()
-
-		# Setup jsPlumb.
-		jsPlumb.ready ->
-			jsPlumb.Defaults.Container = $("#whiteboard-panel")
 
 		# Tell the user that we have finished loading.
 		finishLoading()
