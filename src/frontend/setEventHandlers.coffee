@@ -107,10 +107,9 @@ define ["jquery", "frontend/settings", "jsPlumb", "frontend/connections", "requi
 
 				if droppableFormulaType == "equation" and draggableFormulaType == "equation"
 					# Set an equivalency between this variable and the other variable.
-					# TODO
-
-					# Draw a line between them to show their equivalency.
-					connections.connect($(event.target), $(ui.draggable))
+					[variableIDa] = getInfo($(event.target))
+					[variableIDb] = getInfo($(ui.draggable))
+					connections.setEquivalency(variableIDa, variableIDb)
 
 	getInfo = (variableElement) ->
 		# Get information about the variable represented by the given element.

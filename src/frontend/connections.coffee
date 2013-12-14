@@ -1,4 +1,4 @@
-define ["frontend/settings", "jquery"], (settings, $) ->
+define ["frontend/settings", "jquery", "backend/equivalenciesIndex"], (settings, $, equivalenciesIndex) ->
 
 	# Store and manage 
 
@@ -97,4 +97,31 @@ define ["frontend/settings", "jquery"], (settings, $) ->
 			connections.push(connection)
 
 			return element
+
+		setEquivalency: (a, b) ->
+			# Set a equivalent to b.
+			# a, b: Variable IDs.
+
+			# Add the equivalency.
+			equivalency = equivalenciesIndex.add(a, b)
+
+			# Draw lines between every equivalency of a and b.
+			for c in equivalency
+				cID = "variable-#{c}"
+				for d in equivalency
+					dID = "variable-#{d}"
+					# Does a line exist already?
+					exists = false
+					for connection in connections
+						sourceID = connection.source.attr("id")
+						targetID = connection.target.attr("id")
+						if (
+							(sourceID == cID and targetID == dID) or
+							(sourceID == dID and targetID == cID)
+						)
+							exists = true
+							break
+
+					unless exists
+						@connect($("#variable-#{c}"), $("#variable-#{d}"))
 	}

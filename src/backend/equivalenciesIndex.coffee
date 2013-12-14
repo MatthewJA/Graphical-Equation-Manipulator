@@ -11,6 +11,7 @@ define ->
 			# Add an equivalency.
 			# a: A string representing a variable which is equivalent to b.
 			# b: A string representing a variable which is equivalent to a.
+			# -> An array of variables equivalent to a and b.
 
 			# Are a or b already in the equivalency list?
 			# If so, where?
@@ -25,7 +26,7 @@ define ->
 			if aStored? and bStored?
 				# Merge the equivalencies.
 				if aStored == bStored
-					return
+					return equivalencies[aStored]
 
 				newEquivalency = []
 				for variable in equivalencies[aStored]
@@ -43,18 +44,22 @@ define ->
 					equivalencies.splice(aStored, 1)
 
 				equivalencies.push(newEquivalency)
+				return equivalencies[equivalencies.length-1]
 
 			else if aStored?
 				# Store b where a is stored.
 				equivalencies[aStored].push(b)
+				return equivalencies[aStored]
 
 			else if bStored?
 				# Store a where b is stored.
 				equivalencies[bStored].push(a)
+				return equivalencies[bStored]
 
 			else
 				# Add a new equivalency.
 				equivalencies.push([a, b])
+				return equivalencies[equivalencies.length-1]
 
 		get: (variable) ->
 			# Return all the equivalencies for a particular variable.
