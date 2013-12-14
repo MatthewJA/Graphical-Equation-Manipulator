@@ -72,7 +72,8 @@ define ["frontend/settings", "jquery", "backend/equivalenciesIndex"], (settings,
 					if connection.source.attr("id") in variables or connection.target.attr("id") in variables
 						repaint(connection)
 			else
-				throw new Exception("repaintVariables not implemented")
+				for connection in connections
+					repaint(connection)
 
 		connect: (source, target) ->
 			# Connect two elements with a connection.

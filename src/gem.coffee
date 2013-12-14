@@ -28,7 +28,8 @@ require [
 	"frontend/setupFrontend"
 	"frontend/finishLoading"
 	"frontend/setupSettings"
-], ($, ui, me, setupFrontend, finishLoading, setupSettings) ->
+	"frontend/settings"
+], ($, ui, me, setupFrontend, finishLoading, setupSettings, settings) ->
 	$ ->
 		# Handle settings.
 		setupSettings()
@@ -39,5 +40,6 @@ require [
 		# Setup the frontend.
 		setupFrontend()
 
-		# Tell the user that we have finished loading.
-		finishLoading()
+		unless settings.get("loadForever")
+			# Tell the user that we have finished loading.
+			finishLoading()

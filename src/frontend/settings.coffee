@@ -4,7 +4,8 @@ define ->
 
 	settings =
 		mathJaxEnabled: true
-		connectionWidth: 3
+		connectionWidth: 1
+		loadForever: false
 
 	return {
 		get: (name) ->
