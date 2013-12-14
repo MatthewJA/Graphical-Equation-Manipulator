@@ -5,3 +5,4 @@ define ["jquery"], ($) ->
 	return ->
 		$("#gem-window").show()
 		$("#loader").hide()
+		window.loadedGEM = true

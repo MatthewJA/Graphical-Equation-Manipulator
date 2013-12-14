@@ -1,4 +1,4 @@
-define ["jquery", "frontend/settings", "jsPlumb", "frontend/connections", "require"], ($, settings, jsPlumb, connections, require) ->
+define ["jquery", "frontend/settings", "frontend/connections", "require"], ($, settings, connections, require) ->
 
 	# Set the event handlers of either a specific element
 	# or every element on the page.

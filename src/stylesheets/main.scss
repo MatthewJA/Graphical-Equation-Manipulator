@@ -71,10 +71,25 @@ body {
 
 		background-color: $gem-window-colour;
 
-		p {
-			display: table-cell;
+		position: relative;
 
-			vertical-align: middle;
+		p {
+			padding-top: 20pt;
+		}
+
+		#preloader {
+			width: 500px;
+			height: 500px;
+
+			position: absolute;
+			top: 0;
+			left: 175px;
+
+			margin: 0 auto;
+
+			img {
+				position: absolute;
+			}
 		}
 	}
 

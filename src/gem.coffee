@@ -1,4 +1,4 @@
-VERSION = "0.0.4"
+VERSION = "0.0.5"
 
 MathJax.Hub.Config
 	config: ["MMLorHTML.js"]
@@ -16,26 +16,19 @@ require.config
 		"MathJax": "lib/MathJax/MathJax"
 		"TouchPunch": "lib/Touch-Punch/jquery.ui.touch-punch.min"
 		"MobileEvents": "lib/jQuery/jquery.mobile-events.min"
-		"jsPlumb": "lib/jsPlumb/jquery.jsPlumb.min"
 	shim:
 		"jqueryui": ["jquery"]
 		"TouchPunch": ["jquery"]
 		"MobileEvents": ["jquery"]
-		"jsPlumb": {
-			deps: ["jquery"],
-			exports: "jsPlumb"
-		}
 
 require [
 	"jquery"
 	"jqueryui"
 	"MobileEvents"
-	"jsPlumb"
 	"frontend/setupFrontend"
 	"frontend/finishLoading"
 	"frontend/setupSettings"
-	"frontend/connectionHelpers"
-], ($, ui, me, jsPlumb, setupFrontend, finishLoading, setupSettings, connectionHelpers) ->
+], ($, ui, me, setupFrontend, finishLoading, setupSettings) ->
 	$ ->
 		# Handle settings.
 		setupSettings()
