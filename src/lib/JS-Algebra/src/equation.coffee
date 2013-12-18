@@ -20,6 +20,7 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 			if typeof(term) == 'string' or (term instanceof String)
 				# Parse it.
 				constant = /^-?\d+(\.\d+)?$/ # 123.456789
+				constantWithPower = /^-?\d+(\.\d+)?\*\*-?\d+(\.\d+)?$/ # 123.456789**0.5
 				variable = /^[A-Za-z_]+([0-9]+)?(-\d+)?$/ # Ek
 				fractional = /^-?\d+(\.\d+)?\/\d+(\.\d+)?$/ # 123.456/78.9
 				power = /^[A-Za-z_]+([0-9]+)?(-\d+)?\*\*-?\d+(\.\d+)?$/ # Ek**0.5
@@ -38,6 +39,11 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 				else if term.match(power)?
 					[v, p] = term.split("**")
 					return new Variable(v, parseFloat(p))
+				else if term.match(constantWithPower)?
+					[v, p] = term.split("**")
+					v = new Constant(parseFloat(v))
+					v.pow(parseFloat(p))
+					return v
 				else
 					throw new Error("Invalid term in equation: " + term)
 
