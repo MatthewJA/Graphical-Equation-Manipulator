@@ -92,15 +92,20 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 			# To do this, we will divide all powers by the power of our variable on the left hand side.
 
 			power = 1
-			for term in leftTerms
-				# We expect only one term in leftTerms, and it should be a variable (the variable we want).
-				# Might add more checking for this later.
-				power = term.power
+			# We expect only one term in leftTerms, and it should be a variable (the variable we want).
+			# Might add more checking for this later.
+			power = leftTerms[0].power
+			leftTerms[0].pow(1/power)
 
-			for term in leftTerms
-				term.pow(1/power)
 			for term in rightTerms
 				term.pow(1/power)
+
+			for root of leftTerms[0].roots
+				if leftTerms[0].roots[root] > 0
+					for term in rightTerms
+						for i in [1..leftTerms[0].roots[root]]
+							term.pow(root)
+					leftTerms[0].roots[root] = 0
 
 			e = new Equation(leftTerms, rightTerms)
 			return e.collectConstants()

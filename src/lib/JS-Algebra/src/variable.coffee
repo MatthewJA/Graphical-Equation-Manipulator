@@ -1,30 +1,87 @@
 define [], ->
 	class Variable
 		# A variable in an equation.
-		constructor: (@label, @power=1) ->
+		constructor: (@label, @power=1, roots=null) ->
 			# label: The name of this variable.
 			# power: The initial power this variable is raised to.
+			# roots: Maps a root to how many times this variable is rooted by it.
 
 			@isTerm = true # To avoid instanceof, which doesn't seem to be working.
 			@isVariable = true # "
 
+			if roots?
+				@roots = roots
+			else
+				@roots = {}
+
 		pow: (power) ->
 			# Raise this variable to a power.
 			# power: The power to raise this variable to.
+
+			if power of @roots
+				@roots[power] -= 1
+				return
+
+			# Is the power fractional?
+			[num, den] = @fractionSimplify(power)
+
+			unless den == 1
+				# It is a fractional power, so we need to root this.
+				# What is the root?
+				# For now, we're going to use a number guesser to find what number it is.
+				for i in [1..9] # We'll ignore larger roots.
+					if 0 <= power - (1/i) < 0.000001
+						# Good enough!
+						power *= i
+						den = i
+
+						if den of @roots
+							@roots[den] += 1
+						else
+							@roots[den] = 1
+
+						break
+
 			@power *= power
+
+			console.log("ROOTS: #{@roots}")
 
 		copy: ->
 			# Return a copy of this variable.
-			new Variable(@label, @power)
+			new Variable(@label, @power, @roots)
 
 		toString: ->
 			switch @power
 				when 1
-					return @label
+					str = @label
 				when 0
 					return "1"
 				else
-					return @label + "**" + @power
+					str = @label + "**" + @power
+
+			for root of @roots
+				if @roots[root] > 0
+					str = "(#{str})**(1/#{root})"
+
+			return str
+
+		fractionSimplify: (num, den=1) ->
+			# Convert a numerator and a denominator into a reduced fraction.
+			# Find the GCD of num and den using Euclid's algorithm.
+
+			a = num
+			b = den
+
+			until b == 0
+				[a, b] = [b, a % b]
+
+			gcd = a
+
+			# Divide out.
+			num /= gcd
+			den /= gcd
+
+			return [num, den]
 
 		toMathML: ->
 			# Strip off the ID of this variable if it has one.
@@ -39,8 +96,14 @@ define [], ->
 				labelOutput = '<mi class="variable"' + labelID + '>' + label + '</mi>'
 
 			if @power == 1
-				return labelOutput
+				str = labelOutput
 			else if @power > 0
-				return '<msup>' + labelOutput + '<mn>' + @power + "</mn></msup>"
+				str = '<msup>' + labelOutput + '<mn>' + @power + "</mn></msup>"
 			else
 				return "1"
+
+			for root of @roots
+				if @roots[root] > 0
+					str = "<mroot><mrow>#{str}</mrow><mn>#{root}</mn></mroot>"
+
+			return str

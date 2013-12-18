@@ -4,6 +4,7 @@ define [], ->
 		constructor: (@numerator, @denominator=1, roots=null) ->
 			# numerator: Top half of the fraction.
 			# denominator: Bottom half of the fraction.
+			# roots: Maps a root to how many times this constant is rooted by it.
 
 			@isTerm = true # To avoid instanceof, which doesn't seem to be working.
 			@isConstant = true # "
@@ -16,8 +17,7 @@ define [], ->
 
 		pow: (power) ->
 			# Raise this constant to a power.
-			# power: The power to raise this constant to.
-
+			# power: The power to raise this constant to.\
 
 			if power < 0
 				# Reciprocate, then evaluate.
@@ -85,21 +85,21 @@ define [], ->
 
 		fractionSimplify: (num, den=1) ->
 			# Convert a numerator and a denominator into a reduced fraction.
-				# Find the GCD of num and den using Euclid's algorithm.
+			# Find the GCD of num and den using Euclid's algorithm.
 
-				a = num
-				b = den
+			a = num
+			b = den
 
-				until b == 0
-					[a, b] = [b, a % b]
+			until b == 0
+				[a, b] = [b, a % b]
 
-				gcd = a
+			gcd = a
 
-				# Divide out.
-				num /= gcd
-				den /= gcd
+			# Divide out.
+			num /= gcd
+			den /= gcd
 
-				return [num, den]
+			return [num, den]
 
 		evaluate: ->
 			# Evaluate this constant and return a float.
