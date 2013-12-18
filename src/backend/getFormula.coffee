@@ -11,6 +11,7 @@ define ["JSAlgebra/equation"], (Equation) ->
 		"force": -> new Equation(["F"], ["m", "a"])
 		"centripetal-force": -> new Equation(["F"], ["m", "v**2", "r**-1"])
 		"product": -> new Equation(["a"], ["b", "c"])
+		"contrived-example": -> new Equation(["3", "z", "x"], ["y", "w**3"])
 
 	return (name) ->
 		# name: The name of the equation to return.
