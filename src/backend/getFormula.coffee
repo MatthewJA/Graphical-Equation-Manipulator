@@ -7,6 +7,10 @@ define ["JSAlgebra/equation"], (Equation) ->
 		"momentum": -> new Equation(["p"], ["m", "v"])
 		"gravity": -> new Equation(["F"], ["G", "m", "M", "r**-2"])
 		"gravitational-potential-energy": -> new Equation(["Ep"], ["-1", "G", "m", "M", "r**-1"])
+		"gravitational-potential-energy-simple": -> new Equation(["Ep"], ["m", "g", "h"])
+		"force": -> new Equation(["F"], ["m", "a"])
+		"centripetal-force": -> new Equation(["F"], ["m", "v**2", "r**-1"])
+		"product": -> new Equation(["a"], ["b", "c"])
 
 	return (name) ->
 		# name: The name of the equation to return.

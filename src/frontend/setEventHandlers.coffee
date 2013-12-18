@@ -3,6 +3,8 @@ define ["jquery", "frontend/settings", "frontend/connections", "require"], ($, s
 	# Set the event handlers of either a specific element
 	# or every element on the page.
 
+	initialised = false
+
 	setEquationDraggables = (element=null) ->
 		# Set equations and expressions to be dragged around.
 		# element: A formula (expression or equation div) to set events for. Optional.		

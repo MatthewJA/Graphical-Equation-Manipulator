@@ -11,9 +11,10 @@ define [
 	# to the backend. The equation being added will have its variables replaced
 	# with unique ones.
 
-	addEquationToWhiteboard = (equation, equationID) ->
+	addEquationToWhiteboard = (equation, equationID, position=null) ->
 		# Add an equation to the whiteboard.
 		# equation: A JS-Algebra equation to add to the whiteboard.
+		# position: {top, left} position to add the equation. Optional.
 
 		# Replace the variables in the equation with their unique IDs.
 		replacements = {}
@@ -41,18 +42,30 @@ define [
 				# the equation. So we want to add event handlers to the
 				# resultant HTML, after typesetting is done.
 				setEventHandlers(equationDiv)
+				if position?
+					$("#equation-#{equationID}").css
+						top: "#{position.top}px"
+						left: "#{position.left}px"
+						position: "absolute"
+
 		else
 			html = equation.toHTML(equationID)
 			equationDiv = $(html)
+			if position?
+				equationDiv.css
+					top: "#{position.top}px"
+					left: "#{position.left}px"
+					position: "absolute"
 
 			# Add the div to the whiteboard.
 			$("#whiteboard-panel").append(equationDiv)
 			setEventHandlers(equationDiv)
 
-	return (equation) ->
+	return (equation, position=null) ->
 		# equation: The equation to add.
+		# position: {top, left} position of the equation to add. Optional.
 		# -> The ID of the newly-added equation.
 
 		equationID = equationIndex.add(equation)
-		addEquationToWhiteboard(equation, equationID)
+		addEquationToWhiteboard(equation, equationID, position)
 		return equationID
