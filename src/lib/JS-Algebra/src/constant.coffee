@@ -29,11 +29,20 @@ define [], ->
 
 			unless den == 1
 				# It is, so we need to root this.
-				if den of @roots
-					@roots[den] += 1
-				else
-					@roots[den] = 1
-				power = num
+				# What is the root?
+				# For now, we're going to use a number guesser to find what number it is.
+				for i in [1..9] # We'll ignore larger roots.
+					if 0 <= power - (1/i) < 0.000001
+						# Good enough!
+						power *= i
+						den = i
+
+						if den of @roots
+							@roots[den] += 1
+						else
+							@roots[den] = 1
+
+						break
 
 			console.log("ROOTS", @roots)
 
