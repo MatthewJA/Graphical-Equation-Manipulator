@@ -238,6 +238,53 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 			equation = new Equation(leftTerms, rightTerms)
 			return equation.collectConstants()
 
+		substituteEquation: (sourceEquation, variable, equivalencies=null) ->
+			# Substitute an equation into this one, eliminating a variable.
+			# sourceEquation: The equation to sub in.
+			# variable: The variable to eliminate.
+			# equivalencies: Variables which are equivalent to each other.
+			# It should be an object with a get method which returns the equivalencies for a given variable.
+
+			if not equivalencies?
+				equivalencies = {get: []}
+
+			solvedSource = sourceEquation.solve(variable)
+			# The right terms of solvedSource will be the variables to substitute in.
+
+			variableEquivalencies = equivalencies.get(variable)
+
+			leftTerms = []
+			for term in @leftTerms
+				if term.isVariable? and (term.label == variable or term.label in variableEquivalencies)
+					for item in solvedSource.rightTerms
+						item = item.copy()
+						item.pow(term.power)
+						for root of term.roots
+							if root of item.roots
+								item.roots[root] += root
+							else
+								item.roots[root] = root
+						leftTerms.push(item)
+				else
+					leftTerms.push(term)
+			rightTerms = []
+			for term in @rightTerms
+				if term.isVariable? and (term.label == variable or term.label in variableEquivalencies)
+					for item in solvedSource.rightTerms
+						item = item.copy()
+						item.pow(term.power)
+						for root of term.roots
+							if root of item.roots
+								item.roots[root] += root
+							else
+								item.roots[root] = root
+						rightTerms.push(item)
+				else
+					rightTerms.push(term)
+
+			equation = new Equation(leftTerms, rightTerms)
+			return equation.collectConstants()
+
 		evaluate: (variable, values=null) ->
 			# Substitute in values if they are passed in, then attempt to evaluate
 			# the equation for the given variable. If the result is a number, return it,

@@ -30,4 +30,15 @@ define ->
 			# -> The number of equations.
 
 			return equations.length
+
+		set: (equationID, equation) ->
+			# Replace an equation with another.
+			# equationID: The ID of the equation to replace.
+			# equation: The new equation.
+
+			if equationID >= equation.length or equationID < 0
+				throw new Error("No equation with ID #{equationID} exists.")
+
+			equations[equationID] = equation
+			return equations[equationID]
 	}

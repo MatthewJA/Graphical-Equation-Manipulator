@@ -30,4 +30,15 @@ define ->
 			# -> The number of expressions.
 
 			return expressions.length
+
+		set: (expressionID, expression) ->
+			# Replace an expression with another.
+			# expressionID: The ID of the expression to replace.
+			# expression: The new expression.
+
+			if expressionID >= expression.length or expressionID < 0
+				throw new Error("No expression with ID #{expressionID} exists.")
+
+			expressions[expressionID] = expression
+			return expressions[expressionID]
 	}

@@ -1,4 +1,9 @@
-define ["jquery", "frontend/settings", "frontend/connections", "require"], ($, settings, connections, require) ->
+define ["jquery"
+		"frontend/settings"
+		"frontend/connections"
+		"require"
+		"frontend/substituteEquation"
+], ($, settings, connections, require, substituteEquation) ->
 
 	# Set the event handlers of either a specific element
 	# or every element on the page.
@@ -112,6 +117,9 @@ define ["jquery", "frontend/settings", "frontend/connections", "require"], ($, s
 					[variableIDa] = getInfo($(event.target))
 					[variableIDb] = getInfo($(ui.draggable))
 					connections.setEquivalency(variableIDa, variableIDb)
+				else if droppableFormulaType == "expression" and draggableFormulaType == "equation"
+					# Substitute the equation into this expression.
+					substituteEquation(droppableFormulaID, draggableFormulaID, draggableID)
 
 	getInfo = (variableElement) ->
 		# Get information about the variable represented by the given element.
