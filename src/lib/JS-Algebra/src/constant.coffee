@@ -26,13 +26,14 @@ define [], ->
 
 			# Is the power fractional?
 			[num, den] = @fractionSimplify(power)
+			console.log(num, den)
 
 			unless den == 1
 				# It is, so we need to root this.
 				# What is the root?
 				# For now, we're going to use a number guesser to find what number it is.
-				for i in [1..9] # We'll ignore larger roots.
-					if 0 <= power - (1/i) < 0.000001
+				for i in [2..9] # We'll ignore larger roots.
+					if -0.000001 <= power - (1/i) < 0.000001
 						# Good enough!
 						power *= i
 						den = i
@@ -134,7 +135,7 @@ define [], ->
 				str = "#{@numerator}/#{@denominator}"
 
 			for root of @roots
-				if root > 0
-					str = "(#{str})**(1/#{root})"
+				if @roots[root] > 0
+					str = "(#{str})**(1/#{Math.pow(root, @roots[root])})"
 
 			return str

@@ -91,21 +91,21 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 			# Now we have to get the variable we want by itself, independent of any powers.
 			# To do this, we will divide all powers by the power of our variable on the left hand side.
 
-			power = 1
-			# We expect only one term in leftTerms, and it should be a variable (the variable we want).
-			# Might add more checking for this later.
-			power = leftTerms[0].power
-			leftTerms[0].pow(1/power)
-
-			for term in rightTerms
-				term.pow(1/power)
-
+			# First get rid of roots.
 			for root of leftTerms[0].roots
 				if leftTerms[0].roots[root] > 0
 					for term in rightTerms
-						for i in [1..leftTerms[0].roots[root]]
-							term.pow(root)
+						term.pow(Math.pow(root, leftTerms[0].roots[root]))
 					leftTerms[0].roots[root] = 0
+
+			# We expect only one term in leftTerms, and it should be a variable (the variable we want).
+			# Might add more checking for this later.
+			power = leftTerms[0].power
+
+			for term in leftTerms
+				term.pow(1/power)
+			for term in rightTerms
+				term.pow(1/power)
 
 			e = new Equation(leftTerms, rightTerms)
 			return e.collectConstants()
@@ -179,6 +179,11 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 							v = new Constant(values[term.label])
 
 						v.pow(term.power)
+						for root of term.roots
+							if root of v.roots
+								v.roots[root] += term.roots[root]
+							else
+								v.roots[root] = term.roots[root]
 
 						if leftConstant?
 							leftConstant = leftConstant.multiply(v)
@@ -205,6 +210,11 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 							v = new Constant(values[term.label])
 
 						v.pow(term.power)
+						for root of term.roots
+							if root of v.roots
+								v.roots[root] += term.roots[root]
+							else
+								v.roots[root] = term.roots[root]
 
 						if rightConstant?
 							rightConstant = rightConstant.multiply(v)
@@ -226,7 +236,6 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 			rightTerms.unshift(rightConstant) if rightConstant?
 
 			equation = new Equation(leftTerms, rightTerms)
-			console.log(equation.toString())
 			return equation.collectConstants()
 
 		evaluate: (variable, values=null) ->
@@ -291,12 +300,21 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 						else
 							power = "**" + term.power
 
+						# Handle roots.
+						rootStart = ""
+						rootEnd = ""
+						for root of term.roots
+							if term.roots[root] > 0
+								for i in [1..term.roots[root]]
+									rootStart += "("
+									rootEnd += ")**(1/#{root})"
+
 						# Strip off any IDs that may be on the variable.
 						# These are delimited by a "-".
 						labelArray = term.label.split("-")
 						label = labelArray[0]
 						labelID = if labelArray[1]? then 'id="variable-' + term.label + '"' else ""
-						leftTerms.push('<span class="variable"' + labelID + '>' + labelArray[0] + '</span>' + power)
+						leftTerms.push(rootStart + '<span class="variable"' + labelID + '>' + labelArray[0] + '</span>' + power + rootEnd)
 				else
 					leftTerms.push(term)
 
@@ -316,7 +334,17 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 						labelArray = term.label.split("-")
 						label = labelArray[0]
 						labelID = if labelArray[1]? then 'id="variable-' + term.label + '"' else ""
-						rightTerms.push('<span class="variable"' + labelID + '>' + labelArray[0] + '</span>' + power)
+
+						# Handle roots.
+						rootStart = ""
+						rootEnd = ""
+						for root of term.roots
+							if term.roots[root] > 0
+								for i in [1..term.roots[root]]
+									rootStart += "("
+									rootEnd += ")**(1/#{root})"
+
+						rightTerms.push(rootStart + '<span class="variable"' + labelID + '>' + labelArray[0] + '</span>' + power + rootEnd)
 				else
 					rightTerms.push(term)
 
