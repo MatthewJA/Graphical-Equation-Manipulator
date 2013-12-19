@@ -13,6 +13,7 @@ define [
 			# Generate the div representing the equation.
 			html = newEquation.toMathML(equationID)
 			equationDiv = $(html)
+			position = $("#equation-#{equationID}").position()
 
 			# Add the div to the whiteboard.
 			$("#equation-#{equationID}").replaceWith(equationDiv)
@@ -26,6 +27,10 @@ define [
 				# and typesetting involves replacing all the HTML for
 				# the equation. So we want to add event handlers to the
 				# resultant HTML, after typesetting is done.
+				$("#equation-#{equationID}").css
+					top: "#{position.top}px"
+					left: "#{position.left}px"
+					position: "absolute"
 				require ["frontend/setEventHandlers"], (setEventHandlers) ->
 					setEventHandlers(equationDiv)
 		else
@@ -34,6 +39,10 @@ define [
 
 			# Add the div to the whiteboard.
 			$("#equation-#{equationID}").replaceWith(equationDiv)
+			$("#equation-#{equationID}").css
+				top: "#{position.top}px"
+				left: "#{position.left}px"
+				position: "absolute"
 			require ["frontend/setEventHandlers"], (setEventHandlers) ->
 				setEventHandlers(equationDiv)
 
@@ -45,6 +54,7 @@ define [
 			# Generate the div representing the expression.
 			html = newExpression.toMathML(expressionID, true)
 			expressionDiv = $(html)
+			position = $("#expression-#{expressionID}").position()
 
 			# Add the div to the whiteboard.
 			$("#expression-#{expressionID}").replaceWith(expressionDiv)
@@ -58,6 +68,10 @@ define [
 				# and typesetting involves replacing all the HTML for
 				# the expression. So we want to add event handlers to the
 				# resultant HTML, after typesetting is done.
+				$("#expression-#{expressionID}").css
+					top: "#{position.top}px"
+					left: "#{position.left}px"
+					position: "absolute"
 				require ["frontend/setEventHandlers"], (setEventHandlers) ->
 					setEventHandlers(expressionDiv)
 		else
@@ -66,6 +80,10 @@ define [
 
 			# Add the div to the whiteboard.
 			$("#expression-#{expressionID}").replaceWith(expressionDiv)
+			$("#expression-#{expressionID}").css
+				top: "#{position.top}px"
+				left: "#{position.left}px"
+				position: "absolute"
 			require ["frontend/setEventHandlers"], (setEventHandlers) ->
 				setEventHandlers(expressionDiv)
 
