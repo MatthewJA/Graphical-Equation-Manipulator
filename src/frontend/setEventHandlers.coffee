@@ -126,10 +126,10 @@ define ["jquery"
 		# vairableElement: A jQuery element representing a variable.
 		# -> [variableID, formulaType, formulaID]
 		variable = variableElement.attr("id") # The ID of the variable element is also the variableID, but the element ID
-		# has an extra "variable-" appended to the start.
+		# has an extra "variable-equation-equationID-" appended to the start.
 
 		if /variable-/.test(variable)
-			variable = variable.split("-")[1..].join("-")
+			variable = variable.split("-")[3..].join("-")
 
 		# What equation/expression was the variable we clicked in?
 		formulaID = variableElement.parents("div").attr("id")

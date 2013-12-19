@@ -423,11 +423,11 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 					if term.power == 0 then
 					else
 						if term.power > 0
-							leftTermsTop.push(term.toMathML())
+							leftTermsTop.push(term.toMathML(mathID))
 						else
 							t = term.copy()
 							t.pow(-1)
-							leftTermsBottom.push(t.toMathML())
+							leftTermsBottom.push(t.toMathML(mathID))
 				else
 					leftTermsLeft.push(term.toMathML())
 
@@ -439,11 +439,11 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 					if term.power == 0 then
 					else
 						if term.power > 0
-							rightTermsTop.push(term.toMathML())
+							rightTermsTop.push(term.toMathML(mathID))
 						else
 							t = term.copy()
 							t.pow(-1)
-							rightTermsBottom.push(t.toMathML())
+							rightTermsBottom.push(t.toMathML(mathID))
 				else
 					rightTermsLeft.push(term.toMathML())
 

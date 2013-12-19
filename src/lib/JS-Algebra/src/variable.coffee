@@ -91,12 +91,16 @@ define [], ->
 
 			return [num, den]
 
-		toMathML: ->
+		toMathML: (mathID) ->
 			# Strip off the ID of this variable if it has one.
+			# mathID: ID of the equation this variable is in. Optional.
+
+			unless mathID? then mathID = "" else mathID += "-"
+
 			# IDs are separated by -'s.
 			labelArray = @label.split("-")
 			label = labelArray[0]
-			labelID = if labelArray[1]? then 'id="variable-' + @label + '"' else ""
+			labelID = if labelArray[1]? then 'id="variable-' + mathID + @label + '"' else ""
 
 			if label.length > 1
 				labelOutput = '<msub class="variable"' + labelID + '><mi>' + label[0] + '</mi><mi>' + label[1..] + "</mi></msub>"
