@@ -4,6 +4,7 @@ define [], ->
 		constructor: (@numerator, @denominator=1, roots=null) ->
 			# numerator: Top half of the fraction.
 			# denominator: Bottom half of the fraction.
+			# roots: Maps a root to how many times this constant is rooted by it.
 
 			@isTerm = true # To avoid instanceof, which doesn't seem to be working.
 			@isConstant = true # "
@@ -16,8 +17,7 @@ define [], ->
 
 		pow: (power) ->
 			# Raise this constant to a power.
-			# power: The power to raise this constant to.
-
+			# power: The power to raise this constant to.\
 
 			if power < 0
 				# Reciprocate, then evaluate.
@@ -26,13 +26,14 @@ define [], ->
 
 			# Is the power fractional?
 			[num, den] = @fractionSimplify(power)
+			console.log(num, den)
 
 			unless den == 1
 				# It is, so we need to root this.
 				# What is the root?
 				# For now, we're going to use a number guesser to find what number it is.
-				for i in [1..9] # We'll ignore larger roots.
-					if 0 <= power - (1/i) < 0.000001
+				for i in [2..9] # We'll ignore larger roots.
+					if -0.000001 <= power - (1/i) < 0.000001
 						# Good enough!
 						power *= i
 						den = i
@@ -85,21 +86,21 @@ define [], ->
 
 		fractionSimplify: (num, den=1) ->
 			# Convert a numerator and a denominator into a reduced fraction.
-				# Find the GCD of num and den using Euclid's algorithm.
+			# Find the GCD of num and den using Euclid's algorithm.
 
-				a = num
-				b = den
+			a = num
+			b = den
 
-				until b == 0
-					[a, b] = [b, a % b]
+			until b == 0
+				[a, b] = [b, a % b]
 
-				gcd = a
+			gcd = a
 
-				# Divide out.
-				num /= gcd
-				den /= gcd
+			# Divide out.
+			num /= gcd
+			den /= gcd
 
-				return [num, den]
+			return [num, den]
 
 		evaluate: ->
 			# Evaluate this constant and return a float.
@@ -134,7 +135,7 @@ define [], ->
 				str = "#{@numerator}/#{@denominator}"
 
 			for root of @roots
-				if root > 0
-					str = "(#{str})**(1/#{root})"
+				if @roots[root] > 0
+					str = "(#{str})**(1/#{Math.pow(root, @roots[root])})"
 
 			return str
