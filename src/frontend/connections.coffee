@@ -108,21 +108,21 @@ define ["frontend/settings", "jquery", "backend/equivalenciesIndex"], (settings,
 
 			# Draw lines between every equivalency of a and b.
 			for c in equivalency
-				cID = "variable-#{c}"
+				cID = new RegExp("^variable-equation-\d+-#{c}$")
 				for d in equivalency
-					dID = "variable-#{d}"
+					dID = new RegExp("^variable-equation-\d+-#{d}$")
 					# Does a line exist already?
 					exists = false
 					for connection in connections
 						sourceID = connection.source.attr("id")
 						targetID = connection.target.attr("id")
 						if (
-							(sourceID == cID and targetID == dID) or
-							(sourceID == dID and targetID == cID)
+							(sourceID.match(cID) and targetID.match(dID)) or
+							(sourceID.match(dID) and targetID.match(cID))
 						)
 							exists = true
 							break
 
 					unless exists
-						@connect($("#variable-#{c}"), $("#variable-#{d}"))
+						@connect($('[id^="variable-equation"][id$="-' + c + '"]'), $('[id^="variable-equation"][id$="-' + d + '"]'))
 	}
