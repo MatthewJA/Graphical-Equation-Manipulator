@@ -18,23 +18,19 @@ define [], ->
 			# Raise this variable to a power.
 			# power: The power to raise this variable to.
 
-			console.log("Raising #{@} to the power of #{power}")
-
-			if power of @roots
+			if power of @roots and @roots[power] > 0
 				@roots[power] -= 1
 				return
 
 			# Is the power fractional?
 			[num, den] = @fractionSimplify(power)
-
-			console.log("found #{num}/#{den}")
+			console.log(den)
 
 			unless den == 1
 				# It is a fractional power, so we need to root this.
 				# What is the root?
 				# For now, we're going to use a number guesser to find what number it is.
 				for i in [2..9] # We'll ignore larger roots.
-					console.log(1/i, power)
 					if -0.000001 <= (unless power < 0 then power else -power) - (1/i) < 0.000001
 						# Good enough!
 						power *= i
@@ -52,6 +48,7 @@ define [], ->
 								@roots[den] = 1
 						return
 
+			console.log("power of #{power} times #{@power}")
 			@power *= power
 
 		copy: ->

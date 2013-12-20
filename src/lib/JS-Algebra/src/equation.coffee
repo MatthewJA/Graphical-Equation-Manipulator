@@ -136,9 +136,83 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 				rightTerms.unshift(constant)
 
 			leftTerms.push(new Constant(1)) if leftTerms.length == 0
-			rightTerms.push(new Constant(1)) if leftTerms.length == 0
+			rightTerms.push(new Constant(1)) if rightTerms.length == 0
 
 			return new Equation(leftTerms, rightTerms)
+
+		collectTerms: (equivalencies=null) ->
+			# equivalencies: Variables which are equivalent to each other. Optional.
+			# It should be an object with a get method which returns the equivalencies for a given variable.
+
+			unless equivalencies?
+				equivalencies = {get: []}
+
+			# Collect constants to ensure that each side only has one constant.
+			refEquation = @collectConstants()
+
+			leftTerms = {}
+			leftConstant = null
+
+			for term in refEquation.leftTerms
+				if term.isVariable?
+					# Get all equivalencies.
+					termEquivalencies = equivalencies.get(term.label)
+
+					# If any of those equivalencies are in leftTerms...
+					for equivalency in termEquivalencies
+						if equivalency of leftTerms
+							equivalentTerm = equivalency
+							break
+
+					if equivalentTerm?
+						leftTerms[equivalentTerm].power += term.power
+						for root of term.roots
+							leftTerms[equivalentTerm].roots[root] += term.roots[root]
+					else
+						leftTerms[term.label] = term.copy()
+				else
+					leftConstant = term
+
+			rightTerms = {}
+			rightConstant = null
+
+			for term in refEquation.rightTerms
+				if term.isVariable?
+					# Get all equivalencies.
+					termEquivalencies = equivalencies.get(term.label)
+
+					# If any of those equivalencies are in rightTerms...
+					for equivalency in termEquivalencies
+						if equivalency of rightTerms
+							console.log("Found equivalent term #{equivalency}")
+							equivalentTerm = equivalency
+							break
+
+					if equivalentTerm?
+						console.log("Power of existing: #{rightTerms[equivalentTerm].power}, powerifying by #{term.power}")
+						rightTerms[equivalentTerm].power += term.power
+						for root of term.roots
+							if term.roots[root] > 0
+								rightTerms[equivalentTerm].roots[root] += term.roots[root]
+					else
+						rightTerms[term.label] = term.copy()
+				else
+					rightConstant = term
+
+			leftTermsList = []
+			rightTermsList = []
+
+			for term of leftTerms
+				leftTermsList.push(leftTerms[term])
+			for term of rightTerms
+				rightTermsList.push(rightTerms[term])
+
+			if leftConstant?
+				leftTermsList.unshift(leftConstant)
+			if rightConstant?
+				rightTermsList.unshift(rightConstant)
+
+			return new Equation(leftTermsList, rightTermsList)
 
 		replaceVariables: (replacements) ->
 			# Replace variables in this equation with differently named ones, according to a map.
@@ -283,7 +357,7 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 					rightTerms.push(term)
 
 			equation = new Equation(leftTerms, rightTerms)
-			return equation.collectConstants()
+			return equation.collectTerms(equivalencies)
 
 		evaluate: (variable, values=null) ->
 			# Substitute in values if they are passed in, then attempt to evaluate
