@@ -165,9 +165,9 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 							break
 
 					if equivalentTerm?
-						leftTerms[equivalency].pow(term.power)
+						leftTerms[equivalentTerm].power += term.power
 						for root of term.roots
-							leftTerms[equivalency].roots[root] += term.roots[root]
+							leftTerms[equivalentTerm].roots[root] += term.roots[root]
 					else
 						leftTerms[term.label] = term.copy()
 				else
@@ -184,14 +184,16 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 					# If any of those equivalencies are in rightTerms...
 					for equivalency in termEquivalencies
 						if equivalency of rightTerms
+							console.log("Found equivalent term #{equivalency}")
 							equivalentTerm = equivalency
 							break
 
 					if equivalentTerm?
-						rightTerms[equivalency].pow(term.power)
+						console.log("Power of existing: #{rightTerms[equivalentTerm].power}, powerifying by #{term.power}")
+						rightTerms[equivalentTerm].power += term.power
 						for root of term.roots
 							if term.roots[root] > 0
-								rightTerms[equivalency].roots[root] += term.roots[root]
+								rightTerms[equivalentTerm].roots[root] += term.roots[root]
 					else
 						rightTerms[term.label] = term.copy()
 				else
@@ -209,8 +211,6 @@ define ["JSAlgebra/variable", "JSAlgebra/constant", "JSAlgebra/algebraException"
 				leftTermsList.unshift(leftConstant)
 			if rightConstant?
 				rightTermsList.unshift(rightConstant)
-
-			console.log(leftTermsList, rightTermsList)
 
 			return new Equation(leftTermsList, rightTermsList)
 

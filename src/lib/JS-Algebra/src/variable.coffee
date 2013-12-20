@@ -18,12 +18,13 @@ define [], ->
 			# Raise this variable to a power.
 			# power: The power to raise this variable to.
 
-			if power of @roots
+			if power of @roots and @roots[power] > 0
 				@roots[power] -= 1
 				return
 
 			# Is the power fractional?
 			[num, den] = @fractionSimplify(power)
+			console.log(den)
 
 			unless den == 1
 				# It is a fractional power, so we need to root this.
@@ -47,6 +48,7 @@ define [], ->
 								@roots[den] = 1
 						return
 
+			console.log("power of #{power} times #{@power}")
 			@power *= power
 
 		copy: ->

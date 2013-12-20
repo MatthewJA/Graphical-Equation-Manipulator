@@ -45,8 +45,6 @@ define [], ->
 
 						break
 
-			console.log("ROOTS", @roots)
-
 			@numerator = Math.pow(@numerator, power)
 			@denominator = Math.pow(@denominator, power)
 
