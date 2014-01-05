@@ -49,6 +49,9 @@
 		if (name = (new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
 			decodeURIComponent(name[1])
 
+	if window.getParameter("realisticSun") == "true"
+		bodies.sun.element.src = "./static/preloader/sun.png"
+
 	sim()
 
 ).call(@)
