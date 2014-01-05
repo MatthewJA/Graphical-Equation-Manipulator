@@ -6,7 +6,7 @@ require.config
 		"jquery": "lib/jQuery/jquery.min"
 		"jqueryui": "lib/jQuery/jquery-ui.min"
 		"JSAlgebra": "lib/JS-Algebra/src"
-		"MathJax": "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML"
+		"MathJax": if window.getParameter("mathJaxEnabled") == "false" then "frontend/blank" else "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML"
 		"TouchPunch": "lib/Touch-Punch/jquery.ui.touch-punch.min"
 		"MobileEvents": "lib/jQuery/jquery.mobile-events.min"
 	shim:
