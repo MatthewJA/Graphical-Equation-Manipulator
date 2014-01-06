@@ -9,7 +9,7 @@ define ->
 	return {
 		add: (expression) ->
 			# Store an expression in the expressions index.
-			# expression: The JS-Algebra equation to store as an expression.
+			# expression: The Coffeequate expression to store as an expression.
 			# -> The ID of the newly-stored expression.
 
 			expressions.push(expression)

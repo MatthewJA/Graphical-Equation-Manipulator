@@ -15,7 +15,7 @@ define [
 
 		if settings.get("mathJaxEnabled")
 			# Generate the div representing the expression.
-			html = expression.toMathML(expressionID, true)
+			html = expression.toMathML(expressionID, true, "0", true)
 			expressionDiv = $(html)
 
 			# Add the div to the whiteboard.

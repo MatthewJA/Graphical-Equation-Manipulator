@@ -26,7 +26,7 @@ define [
 
 		if settings.get("mathJaxEnabled")
 			# Generate the div representing the equation.
-			html = equation.toMathML(equationID)
+			html = equation.toMathML(equationID, false, "0", true)
 			equationDiv = $(html)
 
 			# Add the div to the whiteboard.

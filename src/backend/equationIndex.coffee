@@ -9,7 +9,7 @@ define ->
 	return {
 		add: (equation) ->
 			# Store an equation in the equations index.
-			# equation: The JS-Algebra equation to store as an equation.
+			# equation: The Coffeequate equatoin to store as an equation.
 			# -> The ID of the newly-stored equation.
 
 			equations.push(equation)

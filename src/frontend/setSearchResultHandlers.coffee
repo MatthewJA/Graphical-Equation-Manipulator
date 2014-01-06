@@ -36,6 +36,8 @@ define [
 
 			# Add the equation to the frontend and the backend.
 			equation = getFormula(equationName)
+			console.log(equation.toString())
+			console.log(equation.toMathML())
 			addEquation(equation)
 
 		target.draggable
