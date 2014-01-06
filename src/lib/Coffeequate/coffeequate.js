@@ -539,7 +539,7 @@ define("requireLib", function(){});
         }
         labelArray = this.label.split("-");
         label = labelArray[0];
-        labelID = labelArray[1] != null ? 'id="variable-' + this.label + '"' : "";
+        labelID = labelArray[1] != null ? 'id="variable-' + (expression ? "expression" : "equation") + ("-" + equationID + "-") + this.label + '"' : "";
         if (label.length > 1) {
           return html + '<msub class="variable"' + labelID + '><mi>' + label[0] + '</mi><mi>' + label.slice(1) + "</mi></msub>" + closingHTML;
         } else {
@@ -1124,7 +1124,9 @@ define("requireLib", function(){});
         for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
           child = _ref[index];
           if (child instanceof terminals.Variable && child.label in replacements) {
-            _results.push(this.children[index] = replacements[child.label]);
+            _results.push(this.children[index].label = replacements[child.label]);
+          } else if (child.replaceVariables != null) {
+            _results.push(child.replaceVariables(replacements));
           } else {
             _results.push(void 0);
           }
@@ -1200,7 +1202,7 @@ define("requireLib", function(){});
           closingHTML = "</math></div>";
         }
         return html + "<mrow>" + this.children.map(function(child) {
-          return "<mfenced>" + child.toMathML() + "</mfenced>";
+          return "<mfenced>" + child.toMathML(equationID, expression) + "</mfenced>";
         }).join("<mo>+</mo>") + "</mrow>" + closingHTML;
       };
 
@@ -1652,7 +1654,9 @@ define("requireLib", function(){});
         for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
           child = _ref[index];
           if (child instanceof terminals.Variable && child.label in replacements) {
-            _results.push(this.children[index] = replacements[child.label]);
+            _results.push(this.children[index].label = replacements[child.label]);
+          } else if (child.replaceVariables != null) {
+            _results.push(child.replaceVariables(replacements));
           } else {
             _results.push(void 0);
           }
@@ -1728,7 +1732,7 @@ define("requireLib", function(){});
           closingHTML = "</math></div>";
         }
         return html + "<mrow>" + this.children.map(function(child) {
-          return "<mfenced>" + child.toMathML() + "</mfenced>";
+          return "<mfenced>" + child.toMathML(equationID, expression) + "</mfenced>";
         }).join("<mo>&middot;</mo>") + "</mrow>" + closingHTML;
       };
 
@@ -2035,9 +2039,13 @@ define("requireLib", function(){});
       Pow.prototype.replaceVariables = function(replacements) {
         if (this.children.left instanceof terminals.Variable && this.children.left.label in replacements) {
           this.children.left.label = replacements[this.children.left.label];
+        } else if (this.children.left.replaceVariables != null) {
+          this.children.left.replaceVariables(replacements);
         }
         if (this.children.right instanceof terminals.Variable && this.children.right.label in replacements) {
           return this.children.right.label = replacements[this.children.right.label];
+        } else if (this.children.right.replaceVariables != null) {
+          return this.children.right.replaceVariables(replacements);
         }
       };
 
@@ -2082,11 +2090,11 @@ define("requireLib", function(){});
           closingHTML = "</math></div>";
         }
         if ((typeof (_base = this.children.right).evaluate === "function" ? _base.evaluate() : void 0) === 1) {
-          return html + this.children.left.toMathML() + closingHTML;
+          return html + this.children.left.toMathML(equationID, expression) + closingHTML;
         } else if ((typeof (_base1 = this.children.right).evaluate === "function" ? _base1.evaluate() : void 0) === 0) {
           return html + "<mn>1</mn>" + closingHTML;
         } else {
-          innerHTML = "<mfenced>" + (this.children.left.toMathML()) + "</mfenced>" + (this.children.right.toMathML());
+          innerHTML = "<mfenced>" + (this.children.left.toMathML(equationID, expression)) + "</mfenced>" + (this.children.right.toMathML(equationID, expression));
           innerHTML = "<msup>" + innerHTML + "</msup>";
           if ((typeof (_base2 = this.children.right).evaluate === "function" ? _base2.evaluate() : void 0) < 0) {
             right = this.children.right.copy();

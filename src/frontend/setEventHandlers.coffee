@@ -127,7 +127,6 @@ define ["jquery"
 		# -> [variableID, formulaType, formulaID]
 		variable = variableElement.attr("id") # The ID of the variable element is also the variableID, but the element ID
 		# has an extra "variable-equation-equationID-" appended to the start.
-
 		if /variable-/.test(variable)
 			variable = variable.split("-")[3..].join("-")
 
