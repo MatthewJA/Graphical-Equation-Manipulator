@@ -1,14 +1,14 @@
-VERSION = "0.0.6"
+VERSION = "0.0.7"
 
 require.config
 	urlArgs: "v=#{VERSION}"
 	paths:
 		"jquery": "lib/jQuery/jquery.min"
 		"jqueryui": "lib/jQuery/jquery-ui.min"
-		"JSAlgebra": "lib/JS-Algebra/src"
 		"MathJax": if window.getParameter("mathJaxEnabled") == "false" then "frontend/blank" else "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML"
 		"TouchPunch": "lib/Touch-Punch/jquery.ui.touch-punch.min"
 		"MobileEvents": "lib/jQuery/jquery.mobile-events.min"
+		"coffeequate": "lib/coffeequate/coffeequate"
 	shim:
 		"jqueryui": ["jquery"]
 		"TouchPunch": ["jquery"]
@@ -32,7 +32,7 @@ require [
 	"frontend/setupFrontend"
 	"frontend/finishLoading"
 	"frontend/setupSettings"
-	"frontend/settings",
+	"frontend/settings"
 	"MathJax"
 ], ($, ui, me, setupFrontend, finishLoading, setupSettings, settings, MathJax) ->
 	$ ->
