@@ -3,13 +3,14 @@ VERSION = "0.0.7"
 require.config
 	urlArgs: "v=#{VERSION}"
 	baseUrl: "./src"
+	catchError: true
 	paths:
+		"coffeequate": "lib/Coffeequate/coffeequate"
 		"jquery": "lib/jQuery/jquery.min"
-		"jqueryui": "lib/jQuery/jquery-ui.min"
-		"MathJax": if window.getParameter("mathJaxEnabled") == "false" then "frontend/blank" else "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML"
-		"TouchPunch": "./src/lib/Touch-Punch/jquery.ui.touch-punch.min"
-		"MobileEvents": "lib/jQuery/jquery.mobile-events.min"
-		"coffeequate": "lib/coffeequate/coffeequate"
+		"jqueryui": "lib/jQuery/jquery.ui.min"
+		"MobileEvents": "lib/jQuery/jquery.mobile.events.min"
+		"TouchPunch": "lib/TouchPunch/jquery.ui.touchpunch.min"
+		"MathJax": (if window.getParameter("mathJaxEnabled") == "false" then "frontend/blank" else "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML")
 	shim:
 		"jqueryui": ["jquery"]
 		"TouchPunch": ["jquery"]
@@ -25,6 +26,11 @@ require.config
 					showMathMenuMSIE: false
 				MathJax.Hub.Startup.onload()
 				return MathJax
+
+require.onError = (err) ->
+    console.log(err.requireType)
+    console.log('modules: ' + err.requireModules)
+    throw err
 
 require [
 	"jquery"

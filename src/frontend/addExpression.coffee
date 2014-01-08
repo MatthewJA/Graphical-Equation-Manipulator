@@ -32,7 +32,7 @@ define [
 				# resultant HTML, after typesetting is done.
 				setEventHandlers(expressionDiv)
 		else
-			html = expression.toHTML(expressionID, true)
+			html = expression.toHTML(expressionID, true, "0", true)
 			expressionDiv = $(html)
 
 			# Add the div to the whiteboard.

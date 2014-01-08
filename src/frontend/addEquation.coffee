@@ -22,9 +22,7 @@ define [
 			# Make a unique ID for this variable.
 			replacements[variable] = variableIndex.getNextUniqueID(variable)
 
-		console.log(replacements)
 		equation.replaceVariables(replacements)
-		console.log(equation.toString())
 
 		if settings.get("mathJaxEnabled")
 			# Generate the div representing the equation.
@@ -51,7 +49,7 @@ define [
 						position: "absolute"
 
 		else
-			html = equation.toHTML(equationID)
+			html = equation.toHTML(equationID, false, "0", true)
 			equationDiv = $(html)
 			if position?
 				equationDiv.css

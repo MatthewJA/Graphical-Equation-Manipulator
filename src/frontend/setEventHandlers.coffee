@@ -57,8 +57,9 @@ define ["jquery"
 					"backend/solveEquation"
 					"frontend/addExpression"
 				], (solveEquation, addExpression) ->
-					expression = solveEquation(formulaID, variable)
-					addExpression(expression)
+					solutions = solveEquation(formulaID, variable)
+					for solution in solutions
+						addExpression(solution)
 		
 		# Disable highlighting on variables.
 		target.disableSelection()
