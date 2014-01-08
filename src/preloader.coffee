@@ -42,6 +42,16 @@
 		unless window.loadedGEM?
 			setTimeout(sim, 0)
 
+	# Shoving this here because it's kind of preloader-related.
+	# http://stackoverflow.com/a/831060/1105803
+
+	window.getParameter = (name) ->
+		if (name = (new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+			decodeURIComponent(name[1])
+
+	if window.getParameter("realisticSun") == "true"
+		bodies.sun.element.src = "./static/preloader/sun.png"
+
 	sim()
 
 ).call(@)

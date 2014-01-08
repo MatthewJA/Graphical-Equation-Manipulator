@@ -5,3 +5,4 @@
 !src/require.js
 !src/lib/jQuery/*
 !src/lib/Touch-Punch/*
+!src/lib/**/*

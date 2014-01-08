@@ -5,7 +5,7 @@ define ["backend/equationIndex"], (equationIndex) ->
 	solveEquation = (equationID, variable) ->
 		# equationID: The ID of the equation to solve.
 		# variable: The variable to solve for.
-		# -> The solved JS-Algebra equation.
+		# -> The solved Coffeequate equation.
 
 		equation = equationIndex.get(equationID)
 		return equation.solve(variable)

@@ -1,17 +1,19 @@
-define ["JSAlgebra/equation"], (Equation) ->
+define ["coffeequate"], (coffeequate) ->
 
-	# Retrieve a JS-Algebra equation by its name.
+	# Retrieve a Coffeequate expression by its name.
 
 	formulae =
-		"kinetic-energy": -> new Equation(["Ek"], ["1/2", "m", "v**2"]) # These are all functions, so they return new copies each time.
-		"momentum": -> new Equation(["p"], ["m", "v"])
-		"gravity": -> new Equation(["F"], ["G", "m", "M", "r**-2"])
-		"gravitational-potential-energy": -> new Equation(["Ep"], ["-1", "G", "m", "M", "r**-1"])
-		"gravitational-potential-energy-simple": -> new Equation(["Ep"], ["m", "g", "h"])
-		"force": -> new Equation(["F"], ["m", "a"])
-		"centripetal-force": -> new Equation(["F"], ["m", "v**2", "r**-1"])
-		"product": -> new Equation(["a"], ["b", "c"])
-		"contrived-example": -> new Equation(["3", "z", "x"], ["y", "w**3"])
+		"kinetic-energy": -> new coffeequate.Equation("Ek", "m * v**2 * 1/2") # These are all functions, so they return new copies each time.
+		"momentum": -> new coffeequate.Equation("p", "m * v")
+		"gravity": -> new coffeequate.Equation("F", "G * m * M * r**-2")
+		"gravitational-potential-energy": -> new coffeequate.Equation("-1 * G * m * M * r**-1 + -Ep")
+		"gravitational-potential-energy-simple": -> new coffeequate.Equation("m * g * h + -Ep")
+		"force": -> new coffeequate.Equation("F", "m * a")
+		"centripetal-force": -> new coffeequate.Equation("F", "m * v**2 * r**-1")
+		"product": -> new coffeequate.Equation("a * b + -c")
+		"contrived-example": -> new coffeequate.Equation("3 * z * x + -y * w**3")
+		"contrived-pow-example": -> new coffeequate.Equation("a", "(b**-1)")
+		"projectile-motion": -> new coffeequate.Equation("s", "u * t + 1/2 * a * t**2")
 
 	return (name) ->
 		# name: The name of the equation to return.

@@ -17,7 +17,7 @@
 		</p>
 
 		<div id="preloader">
-			<img src="./static/preloader/sun.png" id="preloader-sun">
+			<img src="./static/preloader/fakesun.png" id="preloader-sun">
 			<img src="./static/preloader/venus.png" id="preloader-venus">
 			<img src="./static/preloader/earth.png" id="preloader-earth">
 			<img src="./static/preloader/mars.png" id="preloader-mars">
@@ -164,6 +164,31 @@
 							</msup>
 						</math>
 					</li>
+					<li id="formula-contrived-pow-example" class="search-result">
+						<math>
+							<mi>a</mi>
+							<mo>=</mo>
+							<mfrac><mn>1</mn><mi>b</mi></mfrac>
+						</math>
+					</li>
+					<li id="formula-projectile-motion" class="search-result">
+						<math>
+							<mi>s</mi>
+							<mo>=</mo>
+							<mi>u</mi>
+							<mo>&middot;</mo>
+							<mi>t</mi>
+							<mo>+</mo>
+							<mfrac><mn>1</mn><mn>2</mn></mfrac>
+							<mo>&middot;</mo>
+							<mi>a</mi>
+							<mo>&middot;</mo>
+							<msup>
+								<mi>t</mi>
+								<mn>2</mn>
+							</msup>
+						</math>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -171,10 +196,9 @@
 
 	<div id="footer">
 		Fork me on GitHub! <a href="http://github.com/MatthewJA">MatthewJA</a>/<strong><a href="http://github.com/MatthewJA/Graphical-Equation-Manipulator">Graphical-Equation-Manipulator</a></strong><br>
-		Utilises <a href="http://github.com/MatthewJA/JS-Algebra">JS-Algebra</a>, <a href="http://jquery.com">jQuery</a>, <a href="http://jqueryui.com">jQuery UI</a>, <a href="http://touchpunch.furf.com/">jQuery UI Touch Punch</a>, <a href="http://github.com/benmajor/jQuery-Mobile-Events">jQuery Mobile Events</a>, and <a href="http://requirejs.org">RequireJS</a>.
+		Utilises <a href="http://github.com/MatthewJA/Coffeequate">Coffeequate</a>, <a href="http://jquery.com">jQuery</a>, <a href="http://jqueryui.com">jQuery UI</a>, <a href="http://touchpunch.furf.com/">jQuery UI Touch Punch</a>, <a href="http://github.com/benmajor/jQuery-Mobile-Events">jQuery Mobile Events</a>, and <a href="http://requirejs.org">RequireJS</a>.
 	</div>
 
-	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML"></script>
-	<script data-main="./src/gem.js" src="./src/require.js"></script>
+	<script data-main="src/gem" src="./src/require.js"></script>
 </body>
 </html>

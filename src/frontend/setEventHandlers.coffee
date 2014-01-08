@@ -57,8 +57,9 @@ define ["jquery"
 					"backend/solveEquation"
 					"frontend/addExpression"
 				], (solveEquation, addExpression) ->
-					expression = solveEquation(formulaID, variable)
-					addExpression(expression)
+					solutions = solveEquation(formulaID, variable)
+					for solution in solutions
+						addExpression(solution)
 		
 		# Disable highlighting on variables.
 		target.disableSelection()
@@ -127,7 +128,6 @@ define ["jquery"
 		# -> [variableID, formulaType, formulaID]
 		variable = variableElement.attr("id") # The ID of the variable element is also the variableID, but the element ID
 		# has an extra "variable-equation-equationID-" appended to the start.
-
 		if /variable-/.test(variable)
 			variable = variable.split("-")[3..].join("-")
 
