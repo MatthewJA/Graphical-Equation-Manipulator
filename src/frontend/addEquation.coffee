@@ -63,8 +63,10 @@ define [
 			unless position?
 				padding = 10
 				position =
-					top: Math.floor(Math.random() * Math.max(0, $("#whiteboard-panel").height()-equationDiv.height()-padding) + padding)
-					left: Math.floor(Math.random() * Math.max(0, $("#whiteboard-panel").width()-equationDiv.width()-padding) + padding)
+					top: Math.floor(Math.random() * Math.max(0, $("#whiteboard-panel").height()-equationDiv.height()-padding) + padding +
+						$("#whiteboard-panel").offset().top)
+					left: Math.floor(Math.random() * Math.max(0, $("#whiteboard-panel").width()-equationDiv.width()-padding) + padding +
+						$("#whiteboard-panel").offset().left)
 			$(equationDiv).css
 				top: "#{position.top}px"
 				left: "#{position.left}px"
