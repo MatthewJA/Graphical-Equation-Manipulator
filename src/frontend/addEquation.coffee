@@ -13,7 +13,7 @@ define [
 
 	addEquationToWhiteboard = (equation, equationID, position=null) ->
 		# Add an equation to the whiteboard.
-		# equation: A JS-Algebra equation to add to the whiteboard.
+		# equation: A Coffeequate equation to add to the whiteboard.
 		# position: {top, left} position to add the equation. Optional.
 
 		# Replace the variables in the equation with their unique IDs.
@@ -42,23 +42,33 @@ define [
 				# the equation. So we want to add event handlers to the
 				# resultant HTML, after typesetting is done.
 				setEventHandlers(equationDiv)
-				if position?
-					$("#equation-#{equationID}").css
-						top: "#{position.top}px"
-						left: "#{position.left}px"
-						position: "absolute"
-
-		else
-			html = equation.toHTML(equationID, false, "0", true)
-			equationDiv = $(html)
-			if position?
-				equationDiv.css
+				unless position?
+					padding = 10
+					position =
+						top: Math.floor(Math.random() * Math.max(0, $("#whiteboard-panel").height()-equationDiv.height()-padding) + padding +
+							$("#whiteboard-panel").offset().top)
+						left: Math.floor(Math.random() * Math.max(0, $("#whiteboard-panel").width()-equationDiv.width()-padding) + padding +
+							$("#whiteboard-panel").offset().left)
+				$(equationDiv).css
 					top: "#{position.top}px"
 					left: "#{position.left}px"
 					position: "absolute"
 
+		else
+			html = equation.toHTML(equationID, false, "0", true)
+			equationDiv = $(html)
+
 			# Add the div to the whiteboard.
 			$("#whiteboard-panel").append(equationDiv)
+			unless position?
+				padding = 10
+				position =
+					top: Math.floor(Math.random() * Math.max(0, $("#whiteboard-panel").height()-equationDiv.height()-padding) + padding)
+					left: Math.floor(Math.random() * Math.max(0, $("#whiteboard-panel").width()-equationDiv.width()-padding) + padding)
+			$(equationDiv).css
+				top: "#{position.top}px"
+				left: "#{position.left}px"
+				position: "absolute"
 			setEventHandlers(equationDiv)
 
 	return (equation, position=null) ->

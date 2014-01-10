@@ -9,9 +9,10 @@ define [
 	# This involves adding it to the whiteboard and adding it
 	# to the backend.
 
-	addExpressionToWhiteboard = (expression, expressionID) ->
+	addExpressionToWhiteboard = (expression, expressionID, position=null) ->
 		# Add an expression to the whiteboard.
-		# expression: A JS-Algebra equation to add to the whiteboard.
+		# expression: A Coffeequate equation to add to the whiteboard.
+		# position: {top, left} position to add the expression. Optional.
 
 		if settings.get("mathJaxEnabled")
 			# Generate the div representing the expression.
@@ -31,6 +32,17 @@ define [
 				# the expression. So we want to add event handlers to the
 				# resultant HTML, after typesetting is done.
 				setEventHandlers(expressionDiv)
+				unless position?
+					padding = 10
+					position =
+						top: Math.floor(Math.random() * Math.max(0, $("#whiteboard-panel").height()-expressionDiv.height()-padding) + padding +
+							$("#whiteboard-panel").offset().top)
+						left: Math.floor(Math.random() * Math.max(0, $("#whiteboard-panel").width()-expressionDiv.width()-padding) + padding +
+							$("#whiteboard-panel").offset().left)
+				$(expressionDiv).css
+					top: "#{position.top}px"
+					left: "#{position.left}px"
+					position: "absolute"
 		else
 			html = expression.toHTML(expressionID, true, "0", true)
 			expressionDiv = $(html)
@@ -38,6 +50,17 @@ define [
 			# Add the div to the whiteboard.
 			$("#whiteboard-panel").append(expressionDiv)
 			setEventHandlers(expressionDiv)
+			unless position?
+				padding = 10
+				position =
+					top: Math.floor(Math.random() * Math.max(0, $("#whiteboard-panel").height()-expressionDiv.height()-padding) + padding +
+						$("#whiteboard-panel").offset().top)
+					left: Math.floor(Math.random() * Math.max(0, $("#whiteboard-panel").width()-expressionDiv.width()-padding) + padding +
+						$("#whiteboard-panel").offset().left)
+			$(expressionDiv).css
+				top: "#{position.top}px"
+				left: "#{position.left}px"
+				position: "absolute"
 
 	return (expression) ->
 		# expression: The expression to add.
