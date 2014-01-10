@@ -10,7 +10,7 @@ define ["coffeequate"], (coffeequate) ->
 		"gravitational-potential-energy-simple": -> new coffeequate.Equation("Ep", "m * g * h")
 		"force": -> new coffeequate.Equation("F", "m * a")
 		"centripetal-force": -> new coffeequate.Equation("F", "m * v**2 * r**-1")
-		"product": -> new coffeequate.Equation("c", "a * b")
+		"product": -> new coffeequate.Equation("a", "b * c")
 		"contrived-pow-example": -> new coffeequate.Equation("a", "(b**-1)")
 		"projectile-motion": -> new coffeequate.Equation("s", "u * t + 1/2 * a * t**2")
 
