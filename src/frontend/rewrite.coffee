@@ -11,7 +11,7 @@ define [
 		# Rewrite the equation with the given ID as a new equation.
 		if settings.get("mathJaxEnabled")
 			# Generate the div representing the equation.
-			html = newEquation.toMathML(equationID)
+			html = newEquation.toMathML(equationID, false, "0", true)
 			equationDiv = $(html)
 			position = $("#equation-#{equationID}").position()
 
@@ -34,7 +34,7 @@ define [
 				require ["frontend/setEventHandlers"], (setEventHandlers) ->
 					setEventHandlers(equationDiv)
 		else
-			html = equation.toHTML(equationID)
+			html = equation.toHTML(equationID, false, "0", true)
 			equationDiv = $(html)
 
 			# Add the div to the whiteboard.
@@ -52,7 +52,7 @@ define [
 		# Rewrite the expression with the given ID as a new expression.
 		if settings.get("mathJaxEnabled")
 			# Generate the div representing the expression.
-			html = newExpression.toMathML(expressionID, true)
+			html = newExpression.toMathML(expressionID, true, "0", true)
 			expressionDiv = $(html)
 			position = $("#expression-#{expressionID}").position()
 
@@ -75,7 +75,7 @@ define [
 				require ["frontend/setEventHandlers"], (setEventHandlers) ->
 					setEventHandlers(expressionDiv)
 		else
-			html = expression.toHTML(expressionID)
+			html = expression.toHTML(expressionID, true, "0", true)
 			expressionDiv = $(html)
 
 			# Add the div to the whiteboard.
@@ -94,4 +94,5 @@ define [
 		rewriteExpression: rewriteExpression
 		rewriteVariable: (equationID, variableID, newLabel, newVariableID=null) ->
 			# Rewrite a variable.
+			throw new Error("Not implemented.")
 	}
