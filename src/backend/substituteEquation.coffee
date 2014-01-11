@@ -7,4 +7,4 @@ define ["backend/equivalenciesIndex"], (equivalenciesIndex) ->
 		# sourceExpression: The expression to sub from.
 		# variable: Which variable to cancel out.
 
-		return targetEquation.substituteExpression(sourceExpression, variable, equivalenciesIndex)
+		return targetEquation.substituteExpression(sourceExpression, variable, equivalenciesIndex, true)

@@ -52,6 +52,8 @@ define [
 		# Rewrite the expression with the given ID as a new expression.
 		if settings.get("mathJaxEnabled")
 			# Generate the div representing the expression.
+			console.log newExpression
+			console.log newExpression.toMathML(expressionID, true, "0", true)
 			html = newExpression.toMathML(expressionID, true, "0", true)
 			expressionDiv = $(html)
 			position = $("#expression-#{expressionID}").position()
