@@ -69,7 +69,7 @@ define ->
 			for equivalency in equivalencies
 				if variable in equivalency
 					return equivalency
-			return []
+			return [variable]
 
 		clear: ->
 			# Clear the index.
