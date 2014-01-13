@@ -1,14 +1,14 @@
 define [
 	"backend/solveEquation"
-	"backend/getFormula"
+	"backend/formulae"
 	"backend/equationIndex"
 	"JSAlgebra/equation"
-], (solveEquation, getFormula, equationIndex, Equation) ->
+], (solveEquation, formulae, equationIndex, Equation) ->
 
 	describe "Can solve", ->
 
 		it "physics equations linearly", ->
-			equation = getFormula("momentum")
+			equation = formulae.get("momentum")
 			equationID = equationIndex.add(equation)
 			expect(solveEquation(equationID, "p")).toEqual equation
 			expect(solveEquation(equationID, "m")).toEqual (new Equation(["m"], ["p", "v**-1"]))

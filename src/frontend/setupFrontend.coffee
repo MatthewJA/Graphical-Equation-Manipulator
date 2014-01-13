@@ -3,7 +3,8 @@ define [
 	"frontend/setEventHandlers"
 	"frontend/setSearchResultHandlers"
 	"frontend/connections"
-], ($, setEventHandlers, setSearchResultHandlers, connections) ->
+	"frontend/generateSearchResults"
+], ($, setEventHandlers, setSearchResultHandlers, connections, generateSearchResults) ->
 
 	# Initialise the frontend.
 	# This will be called by $(document).ready.
@@ -12,4 +13,5 @@ define [
 		$(window).resize ->
 			connections.repaintVariables()
 		setEventHandlers()
+		generateSearchResults()
 		setSearchResultHandlers()

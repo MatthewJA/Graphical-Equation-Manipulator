@@ -34,6 +34,16 @@ $whiteboard-height: $height;
 	box-sizing: border-box;
 }
 
+@mixin formula {
+	display: inline-block;
+
+	font-family: monospace;
+	font-size: 30px;
+	color: $off-white;
+
+	cursor: default;
+}
+
 html, body {
 	width: 100%;
 	height: 100%;
@@ -114,6 +124,22 @@ body {
 			height: $height;
 
 			float: left;
+
+			.equation {
+				@include formula;
+
+				.variable {
+					color: $equation-colour;
+				}
+			}
+
+			.expression {
+				@include formula;
+
+				.variable {
+					color: $expression-colour;
+				}
+			}
 		}
 
 		#search-panel {
@@ -170,35 +196,10 @@ body {
 	}
 }
 
-@mixin formula {
-	display: inline-block;
-
-	font-family: monospace;
-	font-size: 30px;
-	color: $off-white;
-
-	cursor: default;
-}
-
 .variable {
 	outline: 1px solid transparent; // Fix for dragged variables leaving a trail on webkit.
 }
 
-.equation {
-	@include formula;
-
-	.variable {
-		color: $equation-colour;
-	}
-}
-
-.expression {
-	@include formula;
-
-	.variable {
-		color: $expression-colour;
-	}
-}
 
 .equationVariableHelper {
 	color: $equation-colour;

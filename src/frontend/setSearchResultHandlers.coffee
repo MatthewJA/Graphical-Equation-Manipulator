@@ -1,8 +1,8 @@
 define [
 	"jquery"
-	"backend/getFormula"
+	"backend/formulae"
 	"frontend/addEquation"
-], ($, getFormula, addEquation) ->
+], ($, formulae, addEquation) ->
 
 	# Set up given search elements/all search elements to be dragged onto the whiteboard (or clicked).
 	# Clicking upon (or dragging) them will add their equation to the whiteboard.
@@ -25,7 +25,7 @@ define [
 				drop: (event, ui) ->
 					equationName = $(ui.draggable).attr("id").split("-")[1..].join("-")
 
-					equation = getFormula(equationName)
+					equation = formulae.get(equationName)
 					addEquation(equation, ui.position)
 
 			initialised = true
@@ -35,7 +35,7 @@ define [
 			equationName = $(@).attr("id").split("-")[1..].join("-")
 
 			# Add the equation to the frontend and the backend.
-			equation = getFormula(equationName)
+			equation = formulae.get(equationName)
 			addEquation(equation)
 
 		target.draggable

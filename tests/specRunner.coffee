@@ -18,7 +18,7 @@ require ["jquery"], ($) ->
 		# "spec/equationIndex"
 		# "spec/expressionIndex"
 		"spec/equivalenciesIndex"
-		# "spec/getFormula"
+		# "spec/formulae"
 		"spec/solveEquation"
 	]
 
