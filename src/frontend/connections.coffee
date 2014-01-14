@@ -10,15 +10,15 @@ define ["frontend/settings", "jquery", "backend/equivalenciesIndex"], (settings,
 	generateLineCSS = (x1, y1, x2, y2) ->
 		# Generate CSS for a line element.
 		height = settings.get("connectionWidth")
-		width = Math.floor(distance(x1, y1, x2, y2))
+		width = Math.floor(distance(x1, y1, x2, y2)) - settings.get("variablePadding") * 2
 
 		# Rotate the box.
 		angle = Math.atan2(y2-y1, x2-x1)
 
 		# Translate the box.
 		# (0, 0) -> (x1, y1)
-		translateX = x1
-		translateY = y1
+		translateX = x1 + Math.cos(angle) * settings.get("variablePadding")
+		translateY = y1 + Math.sin(angle) * settings.get("variablePadding")
 
 		# Make the CSS.
 		css =
@@ -35,8 +35,8 @@ define ["frontend/settings", "jquery", "backend/equivalenciesIndex"], (settings,
 			"position": "absolute"
 			"top": "#{translateY}px"
 			"left": "#{translateX}px"
-			"height": height
-			"width": width
+			"height": "#{height}px"
+			"width": "#{width}px"
 
 		return css
 

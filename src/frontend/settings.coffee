@@ -5,6 +5,7 @@ define ->
 	settings =
 		mathJaxEnabled: true
 		connectionWidth: 1
+		variablePadding: 10
 		loadForever: false
 
 	return {
