@@ -66,7 +66,7 @@ define ["jquery"
 		# Disable highlighting on variables.
 		target.disableSelection()
 
-	setVariableContextMenus = (element=null) ->
+	setContextMenus = (element=null) ->
 		# Set context menus to appear when right-clicking a variable.
 
 		if element?
@@ -75,7 +75,7 @@ define ["jquery"
 			target = $(".variable")
 
 		target.contextMenu("context-menu-variable", {
-			"Set numerical value...":
+			"Set numerical value":
 				click: (variableElement) ->
 					[variable, formulaType, formulaID] = getInfo(variableElement)
 					value = window.prompt("Enter a numerical value for this variable.", "1")
@@ -84,11 +84,31 @@ define ["jquery"
 					# Set an equivalency between the left hand side of this equation and the original variable.
 					leftHandSide = equation.left.label
 					connections.setEquivalency(leftHandSide, variable)
+			"Delete formula":
+				click: (variableElement) ->
+					[variable, formulaType, formulaID] = getInfo(variableElement)
+					$("##{formulaType}-#{formulaID}").remove()
 			},
 			{
 				disable_native_context_menu: true
 				# showMenu: function() { alert("Showing menu"); },
 				# hideMenu: function() { alert("Hiding menu"); },
+				leftClick: false
+			}
+		)
+
+		if element?
+			target = $(element).find(".equation, .expression").addBack(".equation, .expression")
+		else
+			target = $(".equation, .expression")
+
+		target.contextMenu("context-menu-variable", {
+			"Delete formula":
+				click: (variableElement) ->
+					variableElement.remove()
+			},
+			{
+				disable_native_context_menu: true
 				leftClick: false
 			}
 		)
@@ -181,4 +201,4 @@ define ["jquery"
 		setEquationDraggables(element)
 		setDoubleClickEvents(element)
 		setVariableDraggables(element)
-		setVariableContextMenus(element)
+		setContextMenus(element)

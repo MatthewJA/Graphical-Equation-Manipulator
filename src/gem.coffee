@@ -16,6 +16,7 @@ require.config
 		"jqueryui": ["jquery"]
 		"TouchPunch": ["jquery"]
 		"MobileEvents": ["jquery"]
+		"ContextMenu": ["jquery"]
 		"MathJax":
 			exports: "MathJax",
 			init: ->
