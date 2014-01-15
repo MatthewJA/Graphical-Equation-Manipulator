@@ -13,9 +13,11 @@ define ["coffeequate"], (coffeequate) ->
 		"product": -> new coffeequate.Equation("a", "b * c")
 		"contrived-pow-example": -> new coffeequate.Equation("a", "(b**-1)")
 		"projectile-motion": -> new coffeequate.Equation("s", "u * t + 1/2 * a * t**2")
+		"projectile-velocity": -> new coffeequate.Equation("v", "u + a * t")
 		"energy-mass-relation": -> new coffeequate.Equation("E", "m * \\c ** 2")
 		"differential-velocity": -> new coffeequate.Equation("a", "@v")
-		"double-differential-location": -> new coffeequate.Equation("a", "@@s")
+		"distance-over-time": -> new coffeequate.Equation("v", "d * t**-1")
+		"velocity-over-time": -> new coffeequate.Equation("a", "v * t**-1")
 
 	return {
 		get: (name) ->
