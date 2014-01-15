@@ -3,7 +3,8 @@ define ["jquery"
 		"frontend/connections"
 		"require"
 		"frontend/substituteEquation"
-], ($, settings, connections, require, substituteEquation) ->
+		"backend/expressionIndex"
+], ($, settings, connections, require, substituteEquation, expressionIndex) ->
 
 	# Set the event handlers of either a specific element
 	# or every element on the page.
@@ -118,6 +119,12 @@ define ["jquery"
 					[variableIDa] = getInfo($(event.target))
 					[variableIDb] = getInfo($(ui.draggable))
 					connections.setEquivalency(variableIDa, variableIDb)
+					# Force simplify any expressions involved. I'm going to cheat here a bit
+					# and just force simplify *all* expressions.
+					require ["frontend/rewrite", "backend/equivalenciesIndex"], (rewrite, equivalenciesIndex) ->
+						for i in [0...expressionIndex.size()]
+							expression = expressionIndex.get(i)
+							rewrite.rewriteExpression(i, expression.expandAndSimplify(equivalenciesIndex).simplify(equivalenciesIndex))
 				else if droppableFormulaType == "expression" and draggableFormulaType == "equation"
 					# Substitute the equation into this expression.
 					substituteEquation(droppableFormulaID, draggableFormulaID, draggableID)

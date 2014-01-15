@@ -8,4 +8,5 @@ define ["backend/equationIndex"], (equationIndex) ->
 		# -> The solved Coffeequate equation.
 
 		equation = equationIndex.get(equationID)
+		console.log "solution is #{equation.solve(variable)}"
 		return equation.solve(variable)

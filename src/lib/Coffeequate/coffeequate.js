@@ -452,9 +452,9 @@ define("lib/almond", function(){});
       terminals = require("terminals");
       if (/^-?\d+(\.\d+)?$/.test(string) || /^-?\d+(\.\d+)?\/\d+(\.\d+)?$/.test(string)) {
         return new terminals.Constant(string);
-      } else if (/^[a-zA-Z][a-zA-Z_\-\d]*$/.test(string)) {
+      } else if (/^@*[a-zA-Z][a-zA-Z_\-\d]*$/.test(string)) {
         return new terminals.Variable(string);
-      } else if (/^\\[a-zA-Z][a-zA-Z_\-\d]*$/.test(string)) {
+      } else if (/^\\@*[a-zA-Z][a-zA-Z_\-\d]*$/.test(string)) {
         return new terminals.SymbolicConstant(string.slice(1));
       } else {
         throw new ParseError(string, "terminal");
@@ -994,7 +994,7 @@ define("lib/almond", function(){});
       };
 
       Variable.prototype.toMathML = function(equationID, expression, equality, topLevel) {
-        var closingHTML, html, label, labelArray, labelID, mathClass, mathID, _ref;
+        var atCount, atEnd, atStart, closingHTML, html, i, label, labelArray, labelID, mathClass, mathID, _ref;
         if (expression == null) {
           expression = false;
         }
@@ -1014,10 +1014,24 @@ define("lib/almond", function(){});
         labelArray = this.label.split("-");
         label = labelArray[0];
         labelID = labelArray[1] != null ? 'id="variable-' + (expression ? "expression" : "equation") + ("-" + equationID + "-") + this.label + '"' : "";
+        atCount = 0;
+        while (label[0] === "@") {
+          atCount += 1;
+          label = label.slice(1);
+        }
+        atStart = "<mover accent=\"true\">";
+        atEnd = "<mrow><mo>" + ((function() {
+          var _i, _results;
+          _results = [];
+          for (i = _i = 0; 0 <= atCount ? _i < atCount : _i > atCount; i = 0 <= atCount ? ++_i : --_i) {
+            _results.push(".");
+          }
+          return _results;
+        })()).join("") + "</mo></mrow></mover>";
         if (label.length > 1) {
-          return html + '<msub class="variable"' + labelID + '><mi>' + label[0] + '</mi><mi>' + label.slice(1) + "</mi></msub>" + closingHTML;
+          return html + atStart + '<msub class="variable"' + labelID + '><mi>' + label[0] + '</mi><mi>' + label.slice(1) + "</mi></msub>" + atEnd + closingHTML;
         } else {
-          return html + '<mi class="variable"' + labelID + '>' + label + '</mi>' + closingHTML;
+          return html + atStart + '<mi class="variable"' + labelID + '>' + label + '</mi>' + atEnd + closingHTML;
         }
       };
 
@@ -1849,7 +1863,6 @@ define("lib/almond", function(){});
           var child = new ctor, result = func.apply(child, args);
           return Object(result) === result ? result : child;
         })(Add, children, function(){});
-        console.log(newAdd.toString());
         return newAdd.expandAndSimplify(equivalencies);
       };
 
@@ -2422,7 +2435,7 @@ define("lib/almond", function(){});
       };
 
       Mul.prototype.toMathML = function(equationID, expression, equality, topLevel) {
-        var closingHTML, html, mathClass, mathID, _ref;
+        var child, closingHTML, denominator, denominatorWithoutNegatives, html, i, mathClass, mathID, negativeCount, numerator, numeratorWithoutNegatives, _ref;
         if (expression == null) {
           expression = false;
         }
@@ -2439,13 +2452,91 @@ define("lib/almond", function(){});
         } else {
           closingHTML = "</math></div>";
         }
-        return html + "<mrow>" + this.children.map(function(child) {
-          if (child instanceof Add) {
-            return "<mfenced>" + child.toMathML(equationID, expression) + "</mfenced>";
-          } else {
-            return child.toMathML(equationID, expression);
+        denominator = (function() {
+          var _i, _len, _ref1, _results;
+          _ref1 = this.children;
+          _results = [];
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            child = _ref1[_i];
+            if (child instanceof Pow && (child.children.right.evaluate != null) && child.children.right.evaluate() < 0) {
+              _results.push((new Pow(child, "-1")).simplify());
+            }
           }
-        }).join("<mo>&middot;</mo>") + "</mrow>" + closingHTML;
+          return _results;
+        }).call(this);
+        numerator = (function() {
+          var _i, _len, _ref1, _results;
+          _ref1 = this.children;
+          _results = [];
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            child = _ref1[_i];
+            if (!(child instanceof Pow && (child.children.right.evaluate != null) && child.children.right.evaluate() < 0)) {
+              _results.push(child);
+            }
+          }
+          return _results;
+        }).call(this);
+        numeratorWithoutNegatives = numerator.filter(function(child) {
+          return !(child instanceof terminals.Constant && (typeof child.evaluate === "function" ? child.evaluate() : void 0) === -1);
+        });
+        denominatorWithoutNegatives = denominator.filter(function(child) {
+          return !(child instanceof terminals.Constant && (typeof child.evaluate === "function" ? child.evaluate() : void 0) === -1);
+        });
+        negativeCount = denominator.length - denominatorWithoutNegatives.length + numerator.length - numeratorWithoutNegatives.length;
+        if (denominator.length > 0 && numerator.length > 0) {
+          return html + ((function() {
+            var _i, _results;
+            _results = [];
+            for (i = _i = 0; 0 <= negativeCount ? _i < negativeCount : _i > negativeCount; i = 0 <= negativeCount ? ++_i : --_i) {
+              _results.push("<mo>-</mo>");
+            }
+            return _results;
+          })()).join("") + "<mfrac><mrow>" + numeratorWithoutNegatives.map(function(child) {
+            if (child instanceof Add) {
+              return "<mfenced>" + child.toMathML(equationID, expression) + "</mfenced>";
+            } else {
+              return child.toMathML(equationID, expression);
+            }
+          }).join("<mo>&middot;</mo>") + "</mrow><mrow>" + denominatorWithoutNegatives.map(function(child) {
+            if (child instanceof Add) {
+              return "<mfenced>" + child.toMathML(equationID, expression) + "</mfenced>";
+            } else {
+              return child.toMathML(equationID, expression);
+            }
+          }).join("<mo>&middot;</mo>") + "</mrow></mfrac>" + closingHTML;
+        } else if (denominator.length > 0) {
+          return html + ((function() {
+            var _i, _results;
+            _results = [];
+            for (i = _i = 0; 0 <= negativeCount ? _i < negativeCount : _i > negativeCount; i = 0 <= negativeCount ? ++_i : --_i) {
+              _results.push("<mo>-</mo>");
+            }
+            return _results;
+          })()).join("") + "<mfrac><mn>1</mn><mrow>" + denominatorWithoutNegatives.map(function(child) {
+            if (child instanceof Add) {
+              return "<mfenced>" + child.toMathML(equationID, expression) + "</mfenced>";
+            } else {
+              return child.toMathML(equationID, expression);
+            }
+          }).join("<mo>&middot;</mo>") + "</mrow></mfrac>" + closingHTML;
+        } else if (numerator.length > 0) {
+          return html + ((function() {
+            var _i, _results;
+            _results = [];
+            for (i = _i = 0; 0 <= negativeCount ? _i < negativeCount : _i > negativeCount; i = 0 <= negativeCount ? ++_i : --_i) {
+              _results.push("<mo>-</mo>");
+            }
+            return _results;
+          })()).join("") + "<mrow>" + numeratorWithoutNegatives.map(function(child) {
+            if (child instanceof Add) {
+              return "<mfenced>" + child.toMathML(equationID, expression) + "</mfenced>";
+            } else {
+              return child.toMathML(equationID, expression);
+            }
+          }).join("<mo>&middot;</mo>") + "</mrow>" + closingHTML;
+        } else {
+          throw new Error("No terms in Mul node.");
+        }
       };
 
       Mul.prototype.toHTML = function(equationID, expression, equality, topLevel) {
@@ -3085,6 +3176,27 @@ define("lib/almond", function(){});
         } else {
           return new Equation(this.left, this.right.substituteExpression(source, variable, equivalencies).expandAndSimplify(equivalencies));
         }
+      };
+
+      Equation.prototype.expandAndSimplify = function(equivalencies) {
+        var left, right;
+        left = this.left.expandAndSimplify(equivalencies);
+        right = this.right.expandAndSimplify(equivalencies);
+        return new Equation(left, right);
+      };
+
+      Equation.prototype.simplify = function(equivalencies) {
+        var left, right;
+        left = this.left.simplify(equivalencies);
+        right = this.right.simplify(equivalencies);
+        return new Equation(left, right);
+      };
+
+      Equation.prototype.expand = function(equivalencies) {
+        var left, right;
+        left = this.left.expand(equivalencies);
+        right = this.right.expand(equivalencies);
+        return new Equation(left, right);
       };
 
       Equation.prototype.toMathML = function(equationID, expression, equality, topLevel) {
