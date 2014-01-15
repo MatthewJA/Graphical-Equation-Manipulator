@@ -34,4 +34,8 @@ define ["coffeequate"], (coffeequate) ->
 
 			return names
 
+		makeEquation: (left, right) ->
+			# Make a new equation. Wrapper.
+			return new coffeequate.Equation(left, right)
+
 	}

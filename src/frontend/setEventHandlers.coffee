@@ -4,7 +4,8 @@ define ["jquery"
 		"require"
 		"frontend/substituteEquation"
 		"backend/expressionIndex"
-], ($, settings, connections, require, substituteEquation, expressionIndex) ->
+		"frontend/makeEquation"
+], ($, settings, connections, require, substituteEquation, expressionIndex, makeEquation) ->
 
 	# Set the event handlers of either a specific element
 	# or every element on the page.
@@ -64,6 +65,33 @@ define ["jquery"
 		
 		# Disable highlighting on variables.
 		target.disableSelection()
+
+	setVariableContextMenus = (element=null) ->
+		# Set context menus to appear when right-clicking a variable.
+
+		if element?
+			target = $(element).find(".variable")
+		else
+			target = $(".variable")
+
+		target.contextMenu("context-menu-variable", {
+			"Set numerical value...":
+				click: (variableElement) ->
+					[variable, formulaType, formulaID] = getInfo(variableElement)
+					value = window.prompt("Enter a numerical value for this variable.", "1")
+					# Spawn a new equation equating this variable to a number.
+					[equationID, equation] = makeEquation(variable, value)
+					# Set an equivalency between the left hand side of this equation and the original variable.
+					leftHandSide = equation.left.label
+					connections.setEquivalency(leftHandSide, variable)
+			},
+			{
+				disable_native_context_menu: true
+				# showMenu: function() { alert("Showing menu"); },
+				# hideMenu: function() { alert("Hiding menu"); },
+				leftClick: false
+			}
+		)
 
 	setVariableDraggables = (element=null) ->
 		# Set variables to have drag events such that you can drag one variable to another variable to equate them.
@@ -153,3 +181,4 @@ define ["jquery"
 		setEquationDraggables(element)
 		setDoubleClickEvents(element)
 		setVariableDraggables(element)
+		setVariableContextMenus(element)

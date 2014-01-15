@@ -41,7 +41,8 @@ define [
 				# and typesetting involves replacing all the HTML for
 				# the equation. So we want to add event handlers to the
 				# resultant HTML, after typesetting is done.
-				setEventHandlers(equationDiv)
+				require ["frontend/setEventHandlers"], (setEventHandlers) ->
+					setEventHandlers(equationDiv)
 				unless position?
 					padding = 10
 					position =

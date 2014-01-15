@@ -6,3 +6,4 @@
 !src/lib/jQuery/*
 !src/lib/Touch-Punch/*
 !src/lib/**/*
+!static/jquery.contextMenu.css
