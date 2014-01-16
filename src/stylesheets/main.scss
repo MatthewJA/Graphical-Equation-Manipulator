@@ -10,11 +10,11 @@ $background-colour: #151613;
 
 $equation-colour: #A6E22E;
 $equation-colour-dark: #44A61F;
-$equation-symbolic-constant-colour: #F09A2E;
+$equation-constant-colour: #F09A2E;
 
 $expression-colour: #66D9EF;
 $expression-colour-dark: #1FA6A6;
-$expression-symbolic-constant-colour: #C97BE7;
+$expression-constant-colour: #C97BE7;
 
 
 // Fonts
@@ -131,8 +131,8 @@ body {
 			.equation {
 				@include formula;
 
-				.symbolic-constant {
-					color: $equation-symbolic-constant-colour;
+				.constant {
+					color: $equation-constant-colour;
 				}
 
 				.variable {
@@ -143,8 +143,8 @@ body {
 			.expression {
 				@include formula;
 
-				.symbolic-constant {
-					color: $expression-symbolic-constant-colour;
+				.constant {
+					color: $expression-constant-colour;
 				}
 
 				.variable {

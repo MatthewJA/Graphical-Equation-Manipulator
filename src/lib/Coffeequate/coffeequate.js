@@ -737,9 +737,9 @@ define("lib/almond", function(){});
           closingHTML = "";
         }
         if (this.denominator === 1) {
-          return html + ("<mn>" + this.numerator + "</mn>") + closingHTML;
+          return html + ("<mn class=\"constant\">" + this.numerator + "</mn>") + closingHTML;
         }
-        return html + ("<mfrac><mrow><mn>" + this.numerator + "</mn></mrow><mrow><mn>" + this.denominator + "</mn></mrow></mfrac>") + closingHTML;
+        return html + ("<mfrac class=\"constant\"><mrow><mn>" + this.numerator + "</mn></mrow><mrow><mn>" + this.denominator + "</mn></mrow></mfrac>") + closingHTML;
       };
 
       Constant.prototype.toHTML = function(equationID, expression, equality, topLevel) {
@@ -863,7 +863,7 @@ define("lib/almond", function(){});
           html = "";
           closingHTML = "";
         }
-        return html + "<span class=\"symbolic-constant\">" + this.toString() + "</span>" + closingHTML;
+        return html + "<span class=\"constant symbolic-constant\">" + this.toString() + "</span>" + closingHTML;
       };
 
       SymbolicConstant.prototype.toMathML = function(equationID, expression, equality, topLevel) {
@@ -884,7 +884,7 @@ define("lib/almond", function(){});
           html = "";
           closingHTML = "";
         }
-        return "" + html + "<mn class=\"symbolic-constant\">" + this.label + "</mn>" + closingHTML;
+        return "" + html + "<mn class=\"constant symbolic-constant\">" + this.label + "</mn>" + closingHTML;
       };
 
       SymbolicConstant.prototype.toLaTeX = function() {
