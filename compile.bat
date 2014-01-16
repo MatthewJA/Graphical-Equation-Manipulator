@@ -1,6 +1,6 @@
-rem Sass 3.2.12 (Media Mark)
-call sass "src/stylesheets/main.scss" --style compressed > "static/styles.min.css"
-call sass "src/stylesheets/main.scss" --style expanded > "static/styles.css"
+rem Sass 3.2.13 (Media Mark)
+call sass --style compressed "src\stylesheets\main.scss" "static\styles.min.css"
+call sass --style expanded "src\stylesheets\main.scss" "static\styles.css"
 
 rem CoffeeScript version 1.6.3
 call coffee --output "src" --compile "src"
