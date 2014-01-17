@@ -449,12 +449,13 @@ define("lib/almond", function(){});
     })(Error);
     stringToTerminal = function(string) {
       var terminals;
+      string = string.trim();
       terminals = require("terminals");
       if (/^-?\d+(\.\d+)?$/.test(string) || /^-?\d+(\.\d+)?\/\d+(\.\d+)?$/.test(string)) {
         return new terminals.Constant(string);
-      } else if (/^@*[a-zA-Z][a-zA-Z_\-\d]*$/.test(string)) {
+      } else if (/^@*[a-zA-Zα-ω][a-zA-Zα-ω_\-\d]*$/.test(string)) {
         return new terminals.Variable(string);
-      } else if (/^\\@*[a-zA-Z][a-zA-Z_\-\d]*$/.test(string)) {
+      } else if (/^\\@*[a-zA-Zα-ω][a-zA-Zα-ω_\-\d]*$/.test(string)) {
         return new terminals.SymbolicConstant(string.slice(1));
       } else {
         throw new ParseError(string, "terminal");

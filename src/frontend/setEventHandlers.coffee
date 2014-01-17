@@ -88,6 +88,15 @@ define ["jquery"
 				click: (variableElement) ->
 					[variable, formulaType, formulaID] = getInfo(variableElement)
 					$("##{formulaType}-#{formulaID}").remove()
+			"Convert to LaTeX code":
+				click: (variableElement) ->
+					[variable, formulaType, formulaID] = getInfo(variableElement)
+					if formulaType == "expression"
+						require ["backend/expressionIndex"], (expressionIndex) ->
+							window.prompt("LaTeX output.", expressionIndex.get(formulaID).toLaTeX())
+					else if formulaType == "equation"
+						require ["backend/equationIndex"], (equationIndex) ->
+							window.prompt("LaTeX output.", equationIndex.get(formulaID).toLaTeX())
 			},
 			{
 				disable_native_context_menu: true
@@ -106,6 +115,15 @@ define ["jquery"
 			"Delete formula":
 				click: (variableElement) ->
 					variableElement.remove()
+			"Convert to LaTeX code":
+				click: (variableElement) ->
+					[formulaType, formulaID] = variableElement.attr("id").split("-")
+					if formulaType == "expression"
+						require ["backend/expressionIndex"], (expressionIndex) ->
+							window.prompt("LaTeX output.", expressionIndex.get(formulaID).toLaTeX())
+					else if formulaType == "equation"
+						require ["backend/equationIndex"], (equationIndex) ->
+							window.prompt("LaTeX output.", equationIndex.get(formulaID).toLaTeX())
 			},
 			{
 				disable_native_context_menu: true

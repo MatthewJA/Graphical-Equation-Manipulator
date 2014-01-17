@@ -18,6 +18,7 @@ define ["coffeequate"], (coffeequate) ->
 		"differential-velocity": -> new coffeequate.Equation("a", "@v")
 		"distance-over-time": -> new coffeequate.Equation("v", "d * t**-1")
 		"velocity-over-time": -> new coffeequate.Equation("a", "v * t**-1")
+		"radius-circumference": -> new coffeequate.Equation("c", "2 * \\π * r")
 
 	return {
 		get: (name) ->
