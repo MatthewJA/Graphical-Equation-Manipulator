@@ -71,6 +71,10 @@ body {
 		font-size: 30px;
 	}
 
+	li {
+		list-style-type: none;
+	}
+
 	#loader {
 		display: table; // We'll make the loader invisible once the JavaScript loads.
 
@@ -127,10 +131,6 @@ body {
 			height: $height;
 
 			float: left;
-
-			li {
-				list-style-type: none;
-			}
 
 			.equation {
 				@include formula;
