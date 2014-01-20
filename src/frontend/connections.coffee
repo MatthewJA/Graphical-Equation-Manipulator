@@ -125,4 +125,5 @@ define ["frontend/settings", "jquery", "backend/equivalenciesIndex"], (settings,
 
 					unless exists
 						@connect($('[id^="variable-equation"][id$="-' + c + '"]'), $('[id^="variable-equation"][id$="-' + d + '"]'))
+
 	}

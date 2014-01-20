@@ -61,7 +61,7 @@ define ["jquery"
 				], (solveEquation, addExpression) ->
 					solutions = solveEquation(formulaID, variable)
 					for solution in solutions
-						addExpression(solution)
+						expressionID = addExpression(solution)
 		
 		# Disable highlighting on variables.
 		target.disableSelection()
@@ -79,11 +79,12 @@ define ["jquery"
 				click: (variableElement) ->
 					[variable, formulaType, formulaID] = getInfo(variableElement)
 					value = window.prompt("Enter a numerical value for this variable.", "1")
-					# Spawn a new equation equating this variable to a number.
-					[equationID, equation] = makeEquation(variable, value)
-					# Set an equivalency between the left hand side of this equation and the original variable.
-					leftHandSide = equation.left.label
-					connections.setEquivalency(leftHandSide, variable)
+					if /^\d+$/.test(value)
+						# Spawn a new equation equating this variable to a number.
+						[equationID, equation] = makeEquation(variable, value)
+						# Set an equivalency between the left hand side of this equation and the original variable.
+						leftHandSide = equation.left.label
+						connections.setEquivalency(leftHandSide, variable)
 			"Delete formula":
 				click: (variableElement) ->
 					[variable, formulaType, formulaID] = getInfo(variableElement)
