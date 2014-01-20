@@ -79,7 +79,7 @@ define ["jquery"
 				click: (variableElement) ->
 					[variable, formulaType, formulaID] = getInfo(variableElement)
 					value = window.prompt("Enter a numerical value for this variable.", "1")
-					if /^\d+$/.test(value)
+					if /^\d+(\.\d+)?$/.test(value)
 						# Spawn a new equation equating this variable to a number.
 						[equationID, equation] = makeEquation(variable, value)
 						# Set an equivalency between the left hand side of this equation and the original variable.
