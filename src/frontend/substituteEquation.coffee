@@ -4,7 +4,8 @@ define [
 	"backend/substituteEquation"
 	"backend/equationIndex"
 	"backend/expressionIndex"
-], ($, rewrite, substituteEquation, equationIndex, expressionIndex) ->
+	"frontend/addExpression"
+], ($, rewrite, substituteEquation, equationIndex, expressionIndex, addExpression) ->
 
 	# Sub an equation into an expression.
 
@@ -16,5 +17,8 @@ define [
 		targetExpression = expressionIndex.get(targetExpressionID)
 		sourceEquation = equationIndex.get(sourceEquationID)
 		
-		subbedEquation = substituteEquation(targetExpression, sourceEquation, variableID)
-		rewrite.rewriteExpression(targetExpressionID, subbedEquation)
+		subbedEquations = substituteEquation(targetExpression, sourceEquation, variableID)
+
+		rewrite.rewriteExpression(targetExpressionID, subbedEquations[0])
+		for expression in subbedEquations[1..]
+			addExpression(expression)

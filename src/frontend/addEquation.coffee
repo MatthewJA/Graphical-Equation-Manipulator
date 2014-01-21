@@ -4,7 +4,8 @@ define [
 	"frontend/settings"
 	"backend/equationIndex"
 	"backend/variableIndex"
-], ($, setEventHandlers, settings, equationIndex, variableIndex) ->
+	"require"
+], ($, setEventHandlers, settings, equationIndex, variableIndex, require) ->
 
 	# Add an equation to the program.
 	# This involves adding it to the whiteboard and adding it

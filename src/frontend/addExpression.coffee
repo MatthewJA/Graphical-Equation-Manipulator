@@ -3,7 +3,8 @@ define [
 	"frontend/setEventHandlers"
 	"frontend/settings"
 	"backend/expressionIndex"
-], ($, setEventHandlers, settings, expressionIndex) ->
+	"require"
+], ($, setEventHandlers, settings, expressionIndex, require) ->
 
 	# Add an expression to the program.
 	# This involves adding it to the whiteboard and adding it
@@ -31,7 +32,8 @@ define [
 				# and typesetting involves replacing all the HTML for
 				# the expression. So we want to add event handlers to the
 				# resultant HTML, after typesetting is done.
-				setEventHandlers(expressionDiv)
+				require ["frontend/setEventHandlers"], (setEventHandlers) ->
+					setEventHandlers(expressionDiv)
 				unless position?
 					padding = 10
 					position =
@@ -49,7 +51,8 @@ define [
 
 			# Add the div to the whiteboard.
 			$("#whiteboard-panel").append(expressionDiv)
-			setEventHandlers(expressionDiv)
+			require ["frontend/setEventHandlers"], (setEventHandlers) ->
+				setEventHandlers(expressionDiv)
 			unless position?
 				padding = 10
 				position =
