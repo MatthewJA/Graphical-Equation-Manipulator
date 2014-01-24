@@ -3500,9 +3500,8 @@ define("differentiate", function(){});
               return new Equation(expr.sub(substitutions, equivalencies));
             }
           }
-        } else {
-          return new Equation(this.left, this.right.sub(substitutions, equivalencies));
         }
+        return new Equation(this.left, this.right.sub(substitutions, equivalencies));
       };
 
       Equation.prototype.substituteExpression = function(source, variable, equivalencies, eliminate) {
