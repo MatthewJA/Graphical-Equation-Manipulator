@@ -5,7 +5,8 @@ define ["jquery"
 		"frontend/substituteEquation"
 		"backend/expressionIndex"
 		"frontend/makeEquation"
-], ($, settings, connections, require, substituteEquation, expressionIndex, makeEquation) ->
+		"backend/numericalValues"
+], ($, settings, connections, require, substituteEquation, expressionIndex, makeEquation, numericalValues) ->
 
 	# Set the event handlers of either a specific element
 	# or every element on the page.
@@ -80,11 +81,15 @@ define ["jquery"
 					[variable, formulaType, formulaID] = getInfo(variableElement)
 					value = window.prompt("Enter a numerical value for this variable.", "1")
 					if /^\d+(\.\d+)?$/.test(value)
-						# Spawn a new equation equating this variable to a number.
+						# Make an equation equating this variable to a number.
 						[equationID, equation] = makeEquation(variable, value)
-						# Set an equivalency between the left hand side of this equation and the original variable.
-						leftHandSide = equation.left.label
-						connections.setEquivalency(leftHandSide, variable)
+						# If we already have an expression showing the equation, then rewrite it.
+						if numericalValues.getExpression(variable)?
+							require ["frontend/rewrite"], (rewrite) -> rewrite.rewriteExpression(numericalValues.getExpression(variable), equation)
+						else
+							require ["frontend/addExpression"], (addExpression) ->
+								eID = addExpression(equation)
+								numericalValues.set(variable, value, eID)
 			"Delete formula":
 				click: (variableElement) ->
 					[variable, formulaType, formulaID] = getInfo(variableElement)
@@ -113,6 +118,19 @@ define ["jquery"
 			target = $(".equation, .expression")
 
 		target.contextMenu("context-menu-variable", {
+			"Evaluate":
+				click: (variableElement) ->
+					[formulaType, formulaID] = variableElement.attr("id").split("-")
+					if formulaType == "expression"
+						require [
+							"backend/expressionIndex", "frontend/addExpression", "backend/equivalenciesIndex"
+						], (expressionIndex, addExpression, equivalenciesIndex) ->
+							addExpression(expressionIndex.get(formulaID).sub(numericalValues.getNumericalValues(), equivalenciesIndex))
+					else if formulaType == "equation"
+						require [
+							"backend/equationIndex", "frontend/addExpression", "backend/equivalenciesIndex"
+						], (equationIndex, addExpression, equivalenciesIndex) ->
+							addExpression(equationIndex.get(formulaID).sub(numericalValues.getNumericalValues(), equivalenciesIndex))
 			"Delete formula":
 				click: (variableElement) ->
 					variableElement.remove()

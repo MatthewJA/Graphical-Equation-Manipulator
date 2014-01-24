@@ -1,6 +1,7 @@
 define ["frontend/addEquation", "backend/formulae"], (addEquation, formulae) ->
 
-	return (left, right) ->
+	return (left, right, add=false) ->
 		equation = formulae.makeEquation(left, right)
-		equationID = addEquation(equation)
+		if add
+			equationID = addEquation(equation)
 		return [equationID, equation]
