@@ -6,7 +6,8 @@ define ["jquery"
 		"backend/expressionIndex"
 		"frontend/makeEquation"
 		"backend/numericalValues"
-], ($, settings, connections, require, substituteEquation, expressionIndex, makeEquation, numericalValues) ->
+		"frontend/alert"
+], ($, settings, connections, require, substituteEquation, expressionIndex, makeEquation, numericalValues, alert) ->
 
 	# Set the event handlers of either a specific element
 	# or every element on the page.
@@ -215,7 +216,7 @@ define ["jquery"
 								expression = expressionIndex.get(i)
 								rewrite.rewriteExpression(i, expression.expandAndSimplify(equivalenciesIndex).simplify(equivalenciesIndex))
 						else
-							window.alert("Units do not match: #{variableIDa} has units #{aUnits}, #{variableIDb} has units #{bUnits}.")
+							alert(event.target, "Units do not match: #{variableIDa} has units #{aUnits}, #{variableIDb} has units #{bUnits}.")
 				else if droppableFormulaType == "expression" and draggableFormulaType == "equation"
 					# Substitute the equation into this expression.
 					substituteEquation(droppableFormulaID, draggableFormulaID, draggableID)

@@ -7,3 +7,5 @@
 !src/lib/Touch-Punch/*
 !src/lib/**/*
 !static/jquery.contextMenu.css
+!static/jquery-ui.css
+!static/jquery-ui.min.css
