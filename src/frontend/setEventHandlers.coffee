@@ -201,15 +201,21 @@ define ["jquery"
 
 				if droppableFormulaType == "equation" and draggableFormulaType == "equation"
 					# Set an equivalency between this variable and the other variable.
-					[variableIDa] = getInfo($(event.target))
-					[variableIDb] = getInfo($(ui.draggable))
-					connections.setEquivalency(variableIDa, variableIDb)
-					# Force simplify any expressions involved. I'm going to cheat here a bit
-					# and just force simplify *all* expressions.
-					require ["frontend/rewrite", "backend/equivalenciesIndex"], (rewrite, equivalenciesIndex) ->
-						for i in [0...expressionIndex.size()]
-							expression = expressionIndex.get(i)
-							rewrite.rewriteExpression(i, expression.expandAndSimplify(equivalenciesIndex).simplify(equivalenciesIndex))
+					require ["frontend/rewrite", "backend/equivalenciesIndex", "backend/equationIndex"], (rewrite, equivalenciesIndex, equationIndex) ->
+						[variableIDa, variableIDb] = [droppableID, draggableID]
+						console.log("getting units for #{variableIDa} and #{variableIDb}")
+						aUnits = equationIndex.get(droppableFormulaID).getVariableUnits(variableIDa)
+						bUnits = equationIndex.get(draggableFormulaID).getVariableUnits(variableIDb)
+						console.log(aUnits, bUnits)
+						if (aUnits? and bUnits? and aUnits.equals(bUnits)) or (aUnits == bUnits)
+							connections.setEquivalency(variableIDa, variableIDb)
+							# Force simplify any expressions involved. I'm going to cheat here a bit
+							# and just force simplify *all* expressions.
+							for i in [0...expressionIndex.size()]
+								expression = expressionIndex.get(i)
+								rewrite.rewriteExpression(i, expression.expandAndSimplify(equivalenciesIndex).simplify(equivalenciesIndex))
+						else
+							window.alert("Units do not match: #{variableIDa} has units #{aUnits}, #{variableIDb} has units #{bUnits}.")
 				else if droppableFormulaType == "expression" and draggableFormulaType == "equation"
 					# Substitute the equation into this expression.
 					substituteEquation(droppableFormulaID, draggableFormulaID, draggableID)

@@ -3,9 +3,10 @@ define ["coffeequate"], (coffeequate) ->
 	# Retrieve a Coffeequate expression by its name.
 
 	formulae =
-		"kinetic-energy": -> new coffeequate.Equation("Ek", "m * v**2 * 1/2") # These are all functions, so they return new copies each time.
-		"momentum": -> new coffeequate.Equation("p", "m * v")
-		"gravity": -> new coffeequate.Equation("F", "\\G * m * M * r**-2")
+		"kinetic-energy": -> new coffeequate.Equation("Ek::{kg * m * s**-1}",
+								"m::{kg} * v::{m * s**(-1)}**2 * 1/2") # These are all functions, so they return new copies each time.
+		"momentum": -> new coffeequate.Equation("p::{kg * m * s**-1}", "m::{kg} * v::{m * s**-1}")
+		"gravity": -> new coffeequate.Equation("F::{kg * m * s**-2}", "\\G * m::{kg} * M::{kg} * r::{m}**-2")
 		"gravitational-potential-energy": -> new coffeequate.Equation("Ep", "-1 * \\G * m * M * r**-1")
 		"gravitational-potential-energy-simple": -> new coffeequate.Equation("Ep", "m * g * h")
 		"force": -> new coffeequate.Equation("F", "m * a")
@@ -25,6 +26,7 @@ define ["coffeequate"], (coffeequate) ->
 			# name: The name of the equation to return.
 			# -> The equation of the given name.
 			if name of formulae
+				console.log formulae[name]()
 				return formulae[name]()
 			else
 				throw new Error("No formula called " + name + " exists.")

@@ -431,7 +431,7 @@ define("lib/almond", function(){});
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define('parse',["require"], function(require) {
-    var ParseError, StringToExpression, VARIABLE_REGEX, stringToTerminal;
+    var CONSTANT_REGEX, DIMENSIONS_REGEX, ParseError, RATIO_REGEX, SYMBOLIC_CONSTANT_REGEX, StringToExpression, VARIABLE_REGEX, stringToTerminal;
     ParseError = (function(_super) {
       __extends(ParseError, _super);
 
@@ -447,19 +447,29 @@ define("lib/almond", function(){});
       return ParseError;
 
     })(Error);
-    VARIABLE_REGEX = /^@*[a-zA-Z][a-zA-Z_\-\d]*$/;
+    VARIABLE_REGEX = /^@*[a-zA-Zα-ω][a-zA-Zα-ω_\-\d]*$/;
+    CONSTANT_REGEX = /^-?\d+(\.\d+)?$/;
+    RATIO_REGEX = /^-?\d+(\.\d+)?\/\d+(\.\d+)?$/;
+    SYMBOLIC_CONSTANT_REGEX = /^\\@*[a-zA-Zα-ω][a-zA-Zα-ω_\-\d]*$/;
+    DIMENSIONS_REGEX = /^[^:]*::\{[^:+]*\}$/;
     stringToTerminal = function(string) {
-      var terminals;
+      var segments, terminal, terminals;
       if (/\^/.test(string)) {
         throw new Error("Unexpected carat (^). Coffeequate uses ** for exponentiation");
       }
+      if (DIMENSIONS_REGEX.test(string)) {
+        segments = string.split("::");
+        terminal = stringToTerminal(segments[0]);
+        terminal.units = new StringToExpression(segments[1].slice(1, segments[1].length - 1));
+        return terminal;
+      }
       string = string.trim();
       terminals = require("terminals");
-      if (/^-?\d+(\.\d+)?$/.test(string) || /^-?\d+(\.\d+)?\/\d+(\.\d+)?$/.test(string)) {
+      if (CONSTANT_REGEX.test(string) || RATIO_REGEX.test(string)) {
         return new terminals.Constant(string);
       } else if (VARIABLE_REGEX.test(string)) {
         return new terminals.Variable(string);
-      } else if (/^\\@*[a-zA-Zα-ω][a-zA-Zα-ω_\-\d]*$/.test(string)) {
+      } else if (SYMBOLIC_CONSTANT_REGEX.test(string)) {
         return new terminals.SymbolicConstant(string.slice(1));
       } else {
         throw new ParseError(string, "terminal");
@@ -482,7 +492,7 @@ define("lib/almond", function(){});
       }
 
       StringToExpression.tokenise = function(string) {
-        return string.split(/(\*\*|[+*()\-]|\s)/).filter(function(z) {
+        return string.split(/(\*\*|[+*()\-:]|\s)/).filter(function(z) {
           return !/^\s*$/.test(z);
         });
       };
@@ -554,8 +564,22 @@ define("lib/almond", function(){});
       };
 
       StringToExpression.prototype.parseTerm = function() {
-        var term;
-        term = stringToTerminal(this.getToken());
+        var term, terminal;
+        terminal = [];
+        if (this.getToken()[this.getToken().length - 1] === "}") {
+          while (this.getToken()[0] !== ":") {
+            terminal.push(this.getToken());
+            this.upto += 1;
+          }
+          terminal.push(this.getToken());
+          this.upto += 1;
+          terminal.push(this.getToken());
+          this.upto += 1;
+          terminal.push(this.getToken());
+          term = stringToTerminal(terminal.reverse().join(""));
+        } else {
+          term = stringToTerminal(this.getToken());
+        }
         this.upto += 1;
         return term;
       };
@@ -726,6 +750,10 @@ define("lib/almond", function(){});
         return [this.copy()];
       };
 
+      Constant.prototype.getVariableUnits = function() {
+        return null;
+      };
+
       Constant.prototype.toMathML = function(equationID, expression, equality, topLevel) {
         var closingHTML, html, mathClass, mathID, _ref;
         if (expression == null) {
@@ -798,14 +826,15 @@ define("lib/almond", function(){});
     SymbolicConstant = (function(_super) {
       __extends(SymbolicConstant, _super);
 
-      function SymbolicConstant(label, value) {
+      function SymbolicConstant(label, value, units) {
         this.label = label;
         this.value = value != null ? value : null;
+        this.units = units != null ? units : null;
         this.cmp = -5;
       }
 
       SymbolicConstant.prototype.copy = function() {
-        return new SymbolicConstant(this.label, this.value);
+        return new SymbolicConstant(this.label, this.value, this.units);
       };
 
       SymbolicConstant.prototype.compareSameType = function(b) {
@@ -855,6 +884,10 @@ define("lib/almond", function(){});
 
       SymbolicConstant.prototype.substituteExpression = function(sourceExpression, variable, equivalencies) {
         return [this.copy()];
+      };
+
+      SymbolicConstant.prototype.getVariableUnits = function() {
+        return null;
       };
 
       SymbolicConstant.prototype.toHTML = function(equationID, expression, equality, topLevel) {
@@ -913,13 +946,14 @@ define("lib/almond", function(){});
     Variable = (function(_super) {
       __extends(Variable, _super);
 
-      function Variable(label) {
+      function Variable(label, units) {
         this.label = label;
+        this.units = units != null ? units : null;
         this.cmp = -4;
       }
 
       Variable.prototype.copy = function() {
-        return new Variable(this.label);
+        return new Variable(this.label, this.units);
       };
 
       Variable.prototype.compareSameType = function(b) {
@@ -1005,6 +1039,18 @@ define("lib/almond", function(){});
         } else {
           return [this.copy()];
         }
+      };
+
+      Variable.prototype.getVariableUnits = function(variable, equivalencies) {
+        var _ref;
+        if (equivalencies != null) {
+          if (_ref = this.label, __indexOf.call(equivalencies.get(variable), _ref) >= 0) {
+            return this.units;
+          }
+        } else if (this.label === variable) {
+          return this.units;
+        }
+        return null;
       };
 
       Variable.prototype.simplify = function() {
@@ -1292,20 +1338,12 @@ define("lib/almond", function(){});
 
 // Generated by CoffeeScript 1.6.3
 (function() {
-
-
-}).call(this);
-
-define("differentiate", function(){});
-
-// Generated by CoffeeScript 1.6.3
-(function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __slice = [].slice,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  define('operators/Add',["nodes", "terminals", "generateInfo", "AlgebraError", "parseArgs", "require", "compare", "differentiate"], function(nodes, terminals, generateInfo, AlgebraError, parseArgs, require, compare, differentiate) {
+  define('operators/Add',["nodes", "terminals", "generateInfo", "AlgebraError", "parseArgs", "require", "compare"], function(nodes, terminals, generateInfo, AlgebraError, parseArgs, require, compare) {
     var Add, combinations;
     combinations = function(list) {
       var i, ii, results, _i, _j, _len, _len1, _ref, _ref1;
@@ -1388,6 +1426,24 @@ define("differentiate", function(){});
           }
         }
         return lengthComparison;
+      };
+
+      Add.prototype.getVariableUnits = function(variable, equivalencies) {
+        var child, childVariableUnits, variableEquivalencies, _i, _len, _ref, _ref1;
+        variableEquivalencies = equivalencies != null ? equivalencies.get(variable) : [variable];
+        _ref = this.children;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          child = _ref[_i];
+          if (child instanceof terminals.Variable && (_ref1 = child.label, __indexOf.call(variableEquivalencies, _ref1) >= 0)) {
+            return child.units;
+          } else {
+            childVariableUnits = child.getVariableUnits(variable, equivalencies);
+            if (childVariableUnits != null) {
+              return childVariableUnits;
+            }
+          }
+        }
+        return null;
       };
 
       Add.prototype.expand = function() {
@@ -1611,7 +1667,7 @@ define("differentiate", function(){});
       };
 
       Add.prototype.solve = function(variable, equivalencies) {
-        var Mul, Pow, a, a1, a2, added, answer, b, c, d, expr, factorised, factorisedEquatable, factorisedSquares, factorisedSquaresEquatable, factorisedTerm, inv, invSquare, inversed, inversedEquatable, inversedSquares, inversedSquaresEquatable, negatedTerms, negatedTermsEquatable, newAdd, newMul, newPow, nonNegatedTermsEquatable, power, quadratic, rd, subterm, subterms, term, termsContainingVariable, termsNotContainingVariable, v1, v2, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref10, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+        var Mul, Pow, a, a1, a2, added, answer, b, c, d, equiv, expr, factorised, factorisedEquatable, factorisedSquares, factorisedSquaresEquatable, factorisedTerm, inv, invSquare, inversed, inversedEquatable, inversedSquares, inversedSquaresEquatable, negatedTerms, negatedTermsEquatable, newAdd, newMul, newPow, nonNegatedTermsEquatable, power, quadratic, rd, subterm, subterms, term, termsContainingVariable, termsNotContainingVariable, units, v1, v2, variableUnits, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref, _ref1, _ref10, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
         if (equivalencies == null) {
           equivalencies = null;
         }
@@ -1627,6 +1683,15 @@ define("differentiate", function(){});
         }
         termsContainingVariable = [];
         termsNotContainingVariable = [];
+        variableUnits = null;
+        for (_i = 0, _len = equivalencies.length; _i < _len; _i++) {
+          equiv = equivalencies[_i];
+          units = this.getVariableUnits(equiv);
+          if (units != null) {
+            variableUnits = units;
+            break;
+          }
+        }
         if (expr instanceof terminals.Terminal) {
           if (expr instanceof terminals.Variable && (expr.label === variable || (_ref = expr.label, __indexOf.call(equivalencies.get(variable), _ref) >= 0))) {
             return [new terminals.Constant("0")];
@@ -1638,8 +1703,8 @@ define("differentiate", function(){});
           return expr.solve(variable, equivalencies);
         }
         _ref1 = expr.children;
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          term = _ref1[_i];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          term = _ref1[_j];
           if (term.copy != null) {
             term = term.copy();
           }
@@ -1652,8 +1717,8 @@ define("differentiate", function(){});
           } else if (term instanceof Mul) {
             added = false;
             _ref3 = term.children;
-            for (_j = 0, _len1 = _ref3.length; _j < _len1; _j++) {
-              subterm = _ref3[_j];
+            for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+              subterm = _ref3[_k];
               if (subterm instanceof terminals.Variable && (subterm.label === variable || (_ref4 = subterm.label, __indexOf.call(equivalencies.get(variable), _ref4) >= 0))) {
                 termsContainingVariable.push(term);
                 added = true;
@@ -1680,8 +1745,8 @@ define("differentiate", function(){});
         factorisedSquares = [];
         inversed = [];
         inversedSquares = [];
-        for (_k = 0, _len2 = termsContainingVariable.length; _k < _len2; _k++) {
-          term = termsContainingVariable[_k];
+        for (_l = 0, _len3 = termsContainingVariable.length; _l < _len3; _l++) {
+          term = termsContainingVariable[_l];
           if (term instanceof terminals.Variable) {
             factorised.push(new terminals.Constant("1"));
           } else if (term instanceof Pow) {
@@ -1710,8 +1775,8 @@ define("differentiate", function(){});
             inv = false;
             invSquare = false;
             _ref8 = term.children;
-            for (_l = 0, _len3 = _ref8.length; _l < _len3; _l++) {
-              subterm = _ref8[_l];
+            for (_m = 0, _len4 = _ref8.length; _m < _len4; _m++) {
+              subterm = _ref8[_m];
               if (subterm instanceof terminals.Variable && (subterm.label === variable || (_ref9 = subterm.label, __indexOf.call(equivalencies.get(variable), _ref9) >= 0))) {
 
               } else if (subterm instanceof Pow) {
@@ -1755,8 +1820,8 @@ define("differentiate", function(){});
           }
         }
         negatedTerms = [];
-        for (_m = 0, _len4 = termsNotContainingVariable.length; _m < _len4; _m++) {
-          term = termsNotContainingVariable[_m];
+        for (_n = 0, _len5 = termsNotContainingVariable.length; _n < _len5; _n++) {
+          term = termsNotContainingVariable[_n];
           newMul = new Mul("-1", (term.copy != null ? term.copy() : term));
           newMul = newMul.simplify(equivalencies);
           negatedTerms.push(newMul);
@@ -1827,7 +1892,7 @@ define("differentiate", function(){});
                 answer = new Mul(inversedEquatable, new Pow(negatedTermsEquatable, "-1"));
                 return [answer.expandAndSimplify(equivalencies)];
               } else {
-                newAdd = new Add(new Mul(nonNegatedTermsEquatable, new Pow(new terminals.Variable(variable), 2)), new Mul(inversedEquatable, new terminals.Variable(variable)), inversedSquaresEquatable);
+                newAdd = new Add(new Mul(nonNegatedTermsEquatable, new Pow(new terminals.Variable(variable, variableUnits), 2)), new Mul(inversedEquatable, new terminals.Variable(variable, variableUnits)), inversedSquaresEquatable);
                 return newAdd.solve(variable, equivalencies);
               }
             }
@@ -2216,6 +2281,24 @@ define("differentiate", function(){});
           }
         }
         return lengthComparison;
+      };
+
+      Mul.prototype.getVariableUnits = function(variable, equivalencies) {
+        var child, childVariableUnits, variableEquivalencies, _i, _len, _ref, _ref1;
+        variableEquivalencies = equivalencies != null ? equivalencies.get(variable) : [variable];
+        _ref = this.children;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          child = _ref[_i];
+          if (child instanceof terminals.Variable && (_ref1 = child.label, __indexOf.call(variableEquivalencies, _ref1) >= 0)) {
+            return child.units;
+          } else {
+            childVariableUnits = child.getVariableUnits(variable, equivalencies);
+            if (childVariableUnits != null) {
+              return childVariableUnits;
+            }
+          }
+        }
+        return null;
       };
 
       Mul.expandMulAdd = function(mul, add) {
@@ -2849,7 +2932,6 @@ define("differentiate", function(){});
             var child = new ctor, result = func.apply(child, args);
             return Object(result) === result ? result : child;
           })(Mul, this.children.slice(1), function(){});
-          console.log(f.toString(), g.toString());
           return new Add(new Mul(f, g.differentiate(variable)), new Mul(g, f.differentiate(variable))).expandAndSimplify();
         }
       };
@@ -2932,6 +3014,32 @@ define("differentiate", function(){});
         } else {
           return compare(this.children.right, b.children.right);
         }
+      };
+
+      Pow.prototype.getVariableUnits = function(variable, equivalencies) {
+        var leftVariableUnits, rightVariableUnits, variableEquivalencies, _ref, _ref1;
+        variableEquivalencies = equivalencies != null ? equivalencies.get(variable) : {
+          get: function(z) {
+            return [z];
+          }
+        };
+        if (this.children.left instanceof terminals.Variable && (_ref = this.children.left.label, __indexOf.call(variableEquivalencies, _ref) >= 0)) {
+          return this.children.left.units;
+        } else {
+          leftVariableUnits = this.children.left.getVariableUnits(variable, equivalencies);
+          if (leftVariableUnits != null) {
+            return leftVariableUnits;
+          }
+        }
+        if (this.children.right instanceof terminals.Variable && (_ref1 = this.children.right.label, __indexOf.call(variableEquivalencies, _ref1) >= 0)) {
+          return this.children.right.units;
+        } else {
+          rightVariableUnits = this.children.right.getVariableUnits(variable, equivalencies);
+          if (rightVariableUnits != null) {
+            return rightVariableUnits;
+          }
+        }
+        return null;
       };
 
       Pow.prototype.expand = function() {
@@ -3483,29 +3591,11 @@ define("differentiate", function(){});
       };
 
       Equation.prototype.sub = function(substitutions, equivalencies) {
-        var equiv, expr, _i, _len, _ref;
-        if (this.left instanceof terminals.Variable) {
-          if (equivalencies != null) {
-            _ref = equivalencies.get(this.left.label);
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              equiv = _ref[_i];
-              if (equiv in substitutions) {
-                expr = new operators.Add(this.right, new operators.Mul("-1", this.left));
-                return new Equation(expr.sub(substitutions, equivalencies));
-              }
-            }
-          } else {
-            if (this.left.label in substitutions) {
-              expr = new operators.Add(this.right, new operators.Mul("-1", this.left));
-              return new Equation(expr.sub(substitutions, equivalencies));
-            }
-          }
-        }
         return new Equation(this.left, this.right.sub(substitutions, equivalencies));
       };
 
       Equation.prototype.substituteExpression = function(source, variable, equivalencies, eliminate) {
-        var expr, i, results, s, sources, variableEquivalencies, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+        var i, results, s, sources, variableEquivalencies, _i, _j, _len, _len1, _ref;
         if (eliminate == null) {
           eliminate = false;
         }
@@ -3528,19 +3618,10 @@ define("differentiate", function(){});
         results = [];
         for (_i = 0, _len = sources.length; _i < _len; _i++) {
           s = sources[_i];
-          if (this.left instanceof terminals.Variable && (this.left.label === variable || (_ref = this.left.label, __indexOf.call(variableEquivalencies, _ref) >= 0))) {
-            expr = new operators.Add(this.right, new operators.Mul("-1", this.left));
-            _ref1 = expr.substituteExpression(s, variable, equivalencies);
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              i = _ref1[_j];
-              results.push(new Equation(i));
-            }
-          } else {
-            _ref2 = this.right.substituteExpression(s, variable, equivalencies);
-            for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-              i = _ref2[_k];
-              results.push(new Equation(this.left, i.expandAndSimplify(equivalencies)));
-            }
+          _ref = this.right.substituteExpression(s, variable, equivalencies);
+          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+            i = _ref[_j];
+            results.push(new Equation(this.left, i.expandAndSimplify(equivalencies)));
           }
         }
         return results;
@@ -3565,6 +3646,20 @@ define("differentiate", function(){});
         left = this.left.expand(equivalencies);
         right = this.right.expand(equivalencies);
         return new Equation(left, right);
+      };
+
+      Equation.prototype.getVariableUnits = function(variable, equivalencies) {
+        if (equivalencies == null) {
+          equivalencies = {
+            get: function(z) {
+              return [z];
+            }
+          };
+        }
+        if (this.left.label === variable) {
+          return this.left.units;
+        }
+        return this.right.getVariableUnits(variable, equivalencies);
       };
 
       Equation.prototype.toMathML = function(equationID, expression, equality, topLevel) {
