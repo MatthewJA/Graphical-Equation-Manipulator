@@ -10,6 +10,7 @@ require.config
 		"jqueryui": "lib/jQuery/jquery.ui.min"
 		"MobileEvents": "lib/jQuery/jquery.mobile.events.min"
 		"ContextMenu": "lib/jQuery/jquery.contextMenu"
+		"impromptu": "lib/jQuery/jquery.impromptu.min"
 		"TouchPunch": "lib/TouchPunch/jquery.ui.touchpunch.min"
 		"MathJax": (if window.getParameter("mathJaxEnabled") == "false" then "frontend/blank" else "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML")
 	shim:
@@ -17,6 +18,7 @@ require.config
 		"TouchPunch": ["jquery"]
 		"MobileEvents": ["jquery"]
 		"ContextMenu": ["jquery"]
+		"impromptu": ["jquery"]
 		"MathJax":
 			exports: "MathJax",
 			init: ->
@@ -44,7 +46,8 @@ require [
 	"frontend/settings"
 	"MathJax"
 	"ContextMenu"
-], ($, ui, me, setupFrontend, finishLoading, setupSettings, settings, MathJax, ContextMenu) ->
+	"impromptu"
+], ($, ui, me, setupFrontend, finishLoading, setupSettings, settings, MathJax, ContextMenu, impromptu) ->
 	$ ->
 		# Handle settings.
 		setupSettings()

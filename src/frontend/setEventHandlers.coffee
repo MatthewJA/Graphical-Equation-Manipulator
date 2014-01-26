@@ -80,17 +80,43 @@ define ["jquery"
 			"Set numerical value":
 				click: (variableElement) ->
 					[variable, formulaType, formulaID] = getInfo(variableElement)
-					value = window.prompt("Enter a numerical value for this variable.", "1")
-					if /^\d+(\.\d+)?$/.test(value)
-						# Make an equation equating this variable to a number.
-						[equationID, equation] = makeEquation(variable, value)
-						# If we already have an expression showing the equation, then rewrite it.
-						if numericalValues.getExpression(variable)?
-							require ["frontend/rewrite"], (rewrite) -> rewrite.rewriteExpression(numericalValues.getExpression(variable), equation)
-						else
-							require ["frontend/addExpression"], (addExpression) ->
-								eID = addExpression(equation)
-								numericalValues.set(variable, value, eID)
+					$.prompt(
+						{state0: {
+							title: "Enter a numerical value for this variable."
+							html:'<input type="text" name="numericalvalue" value="1"><br>'
+							buttons: {"Set Value": 1, "Cancel": -1}
+							focus: 0
+							submit: (e, v, m, f) ->
+								e.preventDefault()
+								if v == 1
+									value = f.numericalvalue
+									if /^\d+(\.\d+)?$/.test(value)
+										# Make an equation equating this variable to a number.
+										[equationID, equation] = makeEquation(variable, value)
+										# If we already have an expression showing the equation, then rewrite it.
+										if numericalValues.getExpression(variable)?
+											require ["frontend/rewrite"], (rewrite) -> rewrite.rewriteExpression(numericalValues.getExpression(variable), equation)
+										else
+											require ["frontend/addExpression"], (addExpression) ->
+												eID = addExpression(equation)
+												numericalValues.set(variable, value, eID)
+										$.prompt.close()
+									else
+										$.prompt.nextState()
+								else
+									$.prompt.close()
+							}
+						state1: {
+							title: "Please enter a number."
+							buttons: {"Okay": 1, "Cancel": -1}
+							focus: 0
+							submit: (e, v, m, f) ->
+								e.preventDefault()
+								if v == 1
+									$.prompt.prevState()
+								else
+									$.prompt.close()
+							}})
 			"Delete formula":
 				click: (variableElement) ->
 					[variable, formulaType, formulaID] = getInfo(variableElement)
