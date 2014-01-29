@@ -655,7 +655,7 @@ define("lib/almond", function(){});
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   define('terminals',["parse", "generateInfo"], function(parse, generateInfo) {
-    var Constant, SymbolicConstant, Terminal, Variable;
+    var Constant, SymbolicConstant, Terminal, Uncertainty, Variable;
     Terminal = (function() {
       function Terminal(label) {
         this.label = label;
@@ -687,6 +687,7 @@ define("lib/almond", function(){});
         } else {
           _ref1 = parse.constant(value), this.numerator = _ref1[0], this.denominator = _ref1[1];
         }
+        this.simplifyInPlace();
       }
 
       Constant.prototype.evaluate = function() {
@@ -734,8 +735,25 @@ define("lib/almond", function(){});
         return this.copy();
       };
 
+      Constant.prototype.simplifyInPlace = function() {
+        var a, b, gcd, _ref;
+        a = this.numerator;
+        b = this.denominator;
+        while (b !== 0) {
+          _ref = [b, Math.round(a % b * 10) / 10], a = _ref[0], b = _ref[1];
+        }
+        gcd = a;
+        this.numerator /= gcd;
+        this.numerator = Math.round(this.numerator * 10) / 10;
+        this.denominator /= gcd;
+        return this.denominator = Math.round(this.denominator * 10) / 10;
+      };
+
       Constant.prototype.simplify = function() {
-        return this.copy();
+        var constant;
+        constant = this.copy();
+        constant.simplifyInPlace();
+        return constant;
       };
 
       Constant.prototype.expand = function() {
@@ -748,6 +766,10 @@ define("lib/almond", function(){});
 
       Constant.prototype.substituteExpression = function(sourceExpression, variable, equivalencies) {
         return [this.copy()];
+      };
+
+      Constant.prototype.getUncertainty = function() {
+        return new Constant(0);
       };
 
       Constant.prototype.getVariableUnits = function() {
@@ -886,6 +908,10 @@ define("lib/almond", function(){});
         return [this.copy()];
       };
 
+      SymbolicConstant.prototype.getUncertainty = function() {
+        return new Constant(0);
+      };
+
       SymbolicConstant.prototype.getVariableUnits = function() {
         return null;
       };
@@ -982,9 +1008,13 @@ define("lib/almond", function(){});
       };
 
       Variable.prototype.replaceVariables = function(replacements) {
+        var copy;
+        console.log("replacing variables of " + this.label);
+        copy = this.copy();
         if (this.label in replacements) {
-          return this.label = replacements[this.label];
+          copy.label = replacements[this.label];
         }
+        return copy;
       };
 
       Variable.prototype.getAllVariables = function() {
@@ -1039,6 +1069,10 @@ define("lib/almond", function(){});
         } else {
           return [this.copy()];
         }
+      };
+
+      Variable.prototype.getUncertainty = function() {
+        return new Uncertainty(this.label);
       };
 
       Variable.prototype.getVariableUnits = function(variable, equivalencies) {
@@ -1150,11 +1184,128 @@ define("lib/almond", function(){});
       return Variable;
 
     })(Terminal);
+    Uncertainty = (function(_super) {
+      __extends(Uncertainty, _super);
+
+      function Uncertainty(label) {
+        this.label = label;
+        this.cmp = -4.5;
+      }
+
+      Uncertainty.prototype.copy = function() {
+        return new Uncertainty(this.label);
+      };
+
+      Uncertainty.prototype.compareSameType = function(b) {
+        if (this.label < b.label) {
+          return -1;
+        } else if (this.label === b.label) {
+          return 0;
+        } else {
+          return 1;
+        }
+      };
+
+      Uncertainty.prototype.equals = function(b, equivalencies) {
+        var _ref;
+        if (equivalencies == null) {
+          equivalencies = null;
+        }
+        if (!(b instanceof Uncertainty)) {
+          return false;
+        }
+        if (equivalencies != null) {
+          return _ref = this.label, __indexOf.call(equivalencies.get(b.label), _ref) >= 0;
+        } else {
+          return b.label === this.label;
+        }
+      };
+
+      Uncertainty.prototype.replaceVariables = function(replacements) {
+        var copy;
+        copy = this.copy();
+        if (this.label in replacements) {
+          copy.label = replacements[this.label];
+        }
+        return copy;
+      };
+
+      Uncertainty.prototype.getAllVariables = function() {
+        return [this.label];
+      };
+
+      Uncertainty.prototype.sub = function(substitutions) {
+        throw new Error("Can't sub uncertainties");
+      };
+
+      Uncertainty.prototype.substituteExpression = function(sourceExpression, variable, equivalencies, eliminate) {
+        if (equivalencies == null) {
+          equivalencies = null;
+        }
+        if (eliminate == null) {
+          eliminate = false;
+        }
+        throw new Error("Can't sub uncertainties");
+      };
+
+      Uncertainty.prototype.getUncertainty = function() {
+        throw new Error("Can't take uncertainty of an uncertainty");
+      };
+
+      Uncertainty.prototype.getVariableUnits = function(variable, equivalencies) {
+        throw new Error("Can't do that with uncertainties");
+      };
+
+      Uncertainty.prototype.simplify = function() {
+        return this.copy();
+      };
+
+      Uncertainty.prototype.expand = function() {
+        return this.copy();
+      };
+
+      Uncertainty.prototype.expandAndSimplify = function() {
+        return this.copy();
+      };
+
+      Uncertainty.prototype.toString = function() {
+        return "sigma(" + this.label + ")";
+      };
+
+      Uncertainty.prototype.toMathML = function(equationID, expression, equality, topLevel) {
+        if (expression == null) {
+          expression = false;
+        }
+        if (equality == null) {
+          equality = "0";
+        }
+        if (topLevel == null) {
+          topLevel = false;
+        }
+      };
+
+      Uncertainty.prototype.toLaTeX = function() {
+        var str;
+        str = this.label.replace("-", "_");
+        if (str.length > 1) {
+          str = str[0] + "_{" + str.slice(1) + "}";
+        }
+        return "\\sigma(" + str + ")";
+      };
+
+      Uncertainty.prototype.differentiate = function(variable) {
+        throw new Error("Can't do that with uncertainties");
+      };
+
+      return Uncertainty;
+
+    })(Terminal);
     return {
       Terminal: Terminal,
       Variable: Variable,
       Constant: Constant,
-      SymbolicConstant: SymbolicConstant
+      SymbolicConstant: SymbolicConstant,
+      Uncertainty: Uncertainty
     };
   });
 
@@ -1174,6 +1325,26 @@ define("lib/almond", function(){});
 
       BasicNode.prototype.getChildren = function() {
         return [];
+      };
+
+      BasicNode.prototype.getUncertainty = function() {
+        return require(["operators/Add, operators/Mul, operators/Pow, terminals"], function(Add, Mul, Pow, terminals) {
+          var Constant, Uncertainty, out, stuff, variable, variables, _i, _len;
+          Uncertainty = terminals.Uncertainty;
+          Constant = terminals.Constant;
+          variables = this.getAllVariables();
+          out = [];
+          for (_i = 0, _len = variables.length; _i < _len; _i++) {
+            variable = variables[_i];
+            stuff = new Mul(new Uncertainty(variable), this.differentiate(variable));
+            out.push(new Pow(stuff, 2));
+          }
+          return new Pow((function(func, args, ctor) {
+            ctor.prototype = func.prototype;
+            var child = new ctor, result = func.apply(child, args);
+            return Object(result) === result ? result : child;
+          })(Add, out, function(){}), new Constant(1, 2)).expandAndSimplify();
+        });
       };
 
       return BasicNode;
@@ -1198,7 +1369,6 @@ define("lib/almond", function(){});
 
         _Class.prototype.toLisp = function() {
           var childrenStrings;
-          console.log(this.children);
           childrenStrings = this.children.map(function(x) {
             if (x.toLisp) {
               return x.toLisp();
@@ -1975,20 +2145,25 @@ define("lib/almond", function(){});
       };
 
       Add.prototype.replaceVariables = function(replacements) {
-        var child, index, _i, _len, _ref, _results;
+        var child, children, index, _i, _len, _ref;
+        children = [];
         _ref = this.children;
-        _results = [];
         for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
           child = _ref[index];
           if (child instanceof terminals.Variable && child.label in replacements) {
-            _results.push(this.children[index].label = replacements[child.label]);
+            children.push(child.copy());
+            children[index].label = replacements[child.label];
           } else if (child.replaceVariables != null) {
-            _results.push(child.replaceVariables(replacements));
+            children.push(child.replaceVariables(replacements));
           } else {
-            _results.push(void 0);
+            children.push(child.copy());
           }
         }
-        return _results;
+        return (function(func, args, ctor) {
+          ctor.prototype = func.prototype;
+          var child = new ctor, result = func.apply(child, args);
+          return Object(result) === result ? result : child;
+        })(Add, children, function(){});
       };
 
       Add.prototype.sub = function(substitutions, equivalencies) {
@@ -2145,11 +2320,9 @@ define("lib/almond", function(){});
 
       Add.prototype.differentiate = function(variable) {
         var derivative, newChildren;
-        console.log(this.children);
         newChildren = this.children.map(function(x) {
           return x.differentiate(variable);
         });
-        console.log(newChildren);
         derivative = (function(func, args, ctor) {
           ctor.prototype = func.prototype;
           var child = new ctor, result = func.apply(child, args);
@@ -2651,20 +2824,25 @@ define("lib/almond", function(){});
       };
 
       Mul.prototype.replaceVariables = function(replacements) {
-        var child, index, _i, _len, _ref, _results;
+        var child, children, index, _i, _len, _ref;
+        children = [];
         _ref = this.children;
-        _results = [];
         for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
           child = _ref[index];
           if (child instanceof terminals.Variable && child.label in replacements) {
-            _results.push(this.children[index].label = replacements[child.label]);
+            children.push(child.copy());
+            children[index].label = replacements[child.label];
           } else if (child.replaceVariables != null) {
-            _results.push(child.replaceVariables(replacements));
+            children.push(child.replaceVariables(replacements));
           } else {
-            _results.push(void 0);
+            children.push(child.copy());
           }
         }
-        return _results;
+        return (function(func, args, ctor) {
+          ctor.prototype = func.prototype;
+          var child = new ctor, result = func.apply(child, args);
+          return Object(result) === result ? result : child;
+        })(Mul, children, function(){});
       };
 
       Mul.prototype.sub = function(substitutions, equivalencies) {
@@ -3299,16 +3477,20 @@ define("lib/almond", function(){});
       };
 
       Pow.prototype.replaceVariables = function(replacements) {
-        if (this.children.left instanceof terminals.Variable && this.children.left.label in replacements) {
-          this.children.left.label = replacements[this.children.left.label];
-        } else if (this.children.left.replaceVariables != null) {
-          this.children.left.replaceVariables(replacements);
+        var left, right;
+        left = this.children.left.copy();
+        right = this.children.right.copy();
+        if (left instanceof terminals.Variable && left.label in replacements) {
+          left.label = replacements[left.label];
+        } else if (left.replaceVariables != null) {
+          left = left.replaceVariables(replacements);
         }
-        if (this.children.right instanceof terminals.Variable && this.children.right.label in replacements) {
-          return this.children.right.label = replacements[this.children.right.label];
-        } else if (this.children.right.replaceVariables != null) {
-          return this.children.right.replaceVariables(replacements);
+        if (right instanceof terminals.Variable && right.label in replacements) {
+          right.label = replacements[right.label];
+        } else if (right.replaceVariables != null) {
+          right = right.replaceVariables(replacements);
         }
+        return new Pow(left, right);
       };
 
       Pow.prototype.substituteExpression = function(sourceExpression, variable, equivalencies, eliminate) {
@@ -3573,8 +3755,10 @@ define("lib/almond", function(){});
       };
 
       Equation.prototype.replaceVariables = function(replacements) {
-        this.left.replaceVariables(replacements);
-        return this.right.replaceVariables(replacements);
+        var left, right;
+        left = this.left.replaceVariables(replacements);
+        right = this.right.replaceVariables(replacements);
+        return new Equation(left, right);
       };
 
       Equation.prototype.getAllVariables = function() {

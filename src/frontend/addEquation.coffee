@@ -23,7 +23,7 @@ define [
 			# Make a unique ID for this variable.
 			replacements[variable] = variableIndex.getNextUniqueID(variable)
 
-		equation.replaceVariables(replacements)
+		equation = equation.replaceVariables(replacements)
 
 		if settings.get("mathJaxEnabled")
 			# Generate the div representing the equation.
@@ -75,11 +75,14 @@ define [
 				position: "absolute"
 			setEventHandlers(equationDiv)
 
+		return equation
+
 	return (equation, position=null) ->
 		# equation: The equation to add.
 		# position: {top, left} position of the equation to add. Optional.
 		# -> The ID of the newly-added equation.
 
 		equationID = equationIndex.add(equation)
-		addEquationToWhiteboard(equation, equationID, position)
+		equation = addEquationToWhiteboard(equation, equationID, position)
+		equationIndex.set(equationID, equation)
 		return equationID
