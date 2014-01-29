@@ -4,7 +4,8 @@ define [
 	"frontend/setSearchResultHandlers"
 	"frontend/connections"
 	"frontend/generateSearchResults"
-], ($, setEventHandlers, setSearchResultHandlers, connections, generateSearchResults) ->
+	"frontend/setExtraEventHandlers"
+], ($, setEventHandlers, setSearchResultHandlers, connections, generateSearchResults, setExtraEventHandlers) ->
 
 	# Initialise the frontend.
 	# This will be called by $(document).ready.
@@ -15,3 +16,4 @@ define [
 		setEventHandlers()
 		generateSearchResults()
 		setSearchResultHandlers()
+		setExtraEventHandlers()
