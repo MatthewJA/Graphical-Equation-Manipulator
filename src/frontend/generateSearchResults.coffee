@@ -1,4 +1,4 @@
-define ["jquery", "backend/formulae"], ($, formulae) ->
+define ["jquery", "backend/formulae", "frontend/settings"], ($, formulae, settings) ->
 
 	return ->
 		# <li id="formula-kinetic-energy" class="search-result">
@@ -20,4 +20,5 @@ define ["jquery", "backend/formulae"], ($, formulae) ->
 		# </li>
 		for formula in formulae.getAllFormulaNames()
 			$("#search-results ul").append($('<li id="formula-' + formula + '" class="search-result">' + formulae.get(formula).toMathML(null, false, "0", true) + '</li>'))
-		MathJax.Hub.Queue(["Typeset", MathJax.Hub])
+		if settings.get("mathJaxEnabled")
+			MathJax.Hub.Queue(["Typeset", MathJax.Hub])

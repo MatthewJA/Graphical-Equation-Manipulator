@@ -50,46 +50,50 @@ define [
 
 	rewriteExpression = (expressionID, newExpression) ->
 		# Rewrite the expression with the given ID as a new expression.
-		if settings.get("mathJaxEnabled")
-			# Generate the div representing the expression.
-			console.log newExpression
-			console.log newExpression.toMathML(expressionID, true, "0", true)
-			html = newExpression.toMathML(expressionID, true, "0", true)
-			expressionDiv = $(html)
-			position = $("#expression-#{expressionID}").position()
 
-			# Add the div to the whiteboard.
-			$("#expression-#{expressionID}").replaceWith(expressionDiv)
+		exp = expressionIndex.get(expressionID)
+		unless exp.equals?(newExpression)
+			console.log "#{exp} not equal to #{newExpression}"
 
-			# Typeset the expression with MathJax, and once that is
-			# finished, give the expression its event handlers.
-			MathJax.Hub.Queue(["Typeset", MathJax.Hub])
-			MathJax.Hub.Queue ->
-				# We need to use the queue because typesetting typically
-				# returns before it actually finishes typesetting - 
-				# and typesetting involves replacing all the HTML for
-				# the expression. So we want to add event handlers to the
-				# resultant HTML, after typesetting is done.
+			if settings.get("mathJaxEnabled")
+				# Generate the div representing the expression.
+				html = newExpression.toMathML(expressionID, true, "0", true)
+				expressionDiv = $(html)
+				position = $("#expression-#{expressionID}").position()
+
+				# Add the div to the whiteboard.
+				$("#expression-#{expressionID}").replaceWith(expressionDiv)
+
+				# Typeset the expression with MathJax, and once that is
+				# finished, give the expression its event handlers.
+				MathJax.Hub.Queue(["Typeset", MathJax.Hub])
+				MathJax.Hub.Queue ->
+					# We need to use the queue because typesetting typically
+					# returns before it actually finishes typesetting - 
+					# and typesetting involves replacing all the HTML for
+					# the expression. So we want to add event handlers to the
+					# resultant HTML, after typesetting is done.
+					$("#expression-#{expressionID}").css
+						top: "#{position.top}px"
+						left: "#{position.left}px"
+						position: "absolute"
+					require ["frontend/setEventHandlers"], (setEventHandlers) ->
+						setEventHandlers(expressionDiv)
+			else
+				html = newExpression.toHTML(expressionID, true, "0", true)
+				expressionDiv = $(html)
+				position = $("#expression-#{expressionID}").position()
+
+				# Add the div to the whiteboard.
+				$("#expression-#{expressionID}").replaceWith(expressionDiv)
 				$("#expression-#{expressionID}").css
 					top: "#{position.top}px"
 					left: "#{position.left}px"
 					position: "absolute"
 				require ["frontend/setEventHandlers"], (setEventHandlers) ->
 					setEventHandlers(expressionDiv)
-		else
-			html = expression.toHTML(expressionID, true, "0", true)
-			expressionDiv = $(html)
 
-			# Add the div to the whiteboard.
-			$("#expression-#{expressionID}").replaceWith(expressionDiv)
-			$("#expression-#{expressionID}").css
-				top: "#{position.top}px"
-				left: "#{position.left}px"
-				position: "absolute"
-			require ["frontend/setEventHandlers"], (setEventHandlers) ->
-				setEventHandlers(expressionDiv)
-
-		expressionIndex.set(expressionID, newExpression)
+			expressionIndex.set(expressionID, newExpression)
 
 	return {
 		rewriteEquation: rewriteEquation

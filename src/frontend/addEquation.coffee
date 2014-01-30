@@ -73,7 +73,8 @@ define [
 				top: "#{position.top}px"
 				left: "#{position.left}px"
 				position: "absolute"
-			setEventHandlers(equationDiv)
+			require ["frontend/setEventHandlers"], (setEventHandlers) ->
+				setEventHandlers(equationDiv)
 
 		return equation
 
