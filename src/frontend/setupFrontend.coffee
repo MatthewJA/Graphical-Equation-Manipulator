@@ -1,11 +1,10 @@
 define [
 	"jquery"
 	"frontend/setEventHandlers"
-	"frontend/setSearchResultHandlers"
 	"frontend/connections"
-	"frontend/generateSearchResults"
+	"frontend/updateSearchResults"
 	"frontend/setExtraEventHandlers"
-], ($, setEventHandlers, setSearchResultHandlers, connections, generateSearchResults, setExtraEventHandlers) ->
+], ($, setEventHandlers, connections, updateSearchResults, setExtraEventHandlers) ->
 
 	# Initialise the frontend.
 	# This will be called by $(document).ready.
@@ -14,6 +13,5 @@ define [
 		$(window).resize ->
 			connections.repaintVariables()
 		setEventHandlers()
-		generateSearchResults()
-		setSearchResultHandlers()
+		updateSearchResults()
 		setExtraEventHandlers()

@@ -1,6 +1,6 @@
-define ["jquery", "frontend/addTextComment"], ($, addTextComment) ->
+define ["jquery", "frontend/addTextComment", "frontend/updateSearchResults"], ($, addTextComment, updateSearchResults) ->
 
-	# Set event handlers for extra options.
+	# Set event handlers for extra options and fields.
 
 	return ->
 		$("#extra-add-comment").click ->
@@ -17,3 +17,7 @@ define ["jquery", "frontend/addTextComment"], ($, addTextComment) ->
 							addTextComment(comment)
 						$.prompt.close()
 					}})
+
+		$("#search-box").on "change keyup paste", ->
+			condition = (z) -> (new RegExp($("#search-box").val())).test(z)
+			updateSearchResults(condition)
