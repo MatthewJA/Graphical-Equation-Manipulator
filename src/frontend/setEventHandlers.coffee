@@ -144,7 +144,7 @@ define ["jquery"
 		else
 			target = $(".equation, .expression")
 
-		target.contextMenu("context-menu-variable", {
+		target.contextMenu("context-menu-formula", {
 			"Evaluate":
 				click: (variableElement) ->
 					[formulaType, formulaID] = variableElement.attr("id").split("-")

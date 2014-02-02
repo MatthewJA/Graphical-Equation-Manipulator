@@ -189,6 +189,8 @@ body {
 
 			#search-results {
 				ul {
+					@include border-box;
+
 					padding-top: 10px;
 					padding-left: 10px;
 

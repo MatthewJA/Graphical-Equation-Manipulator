@@ -9,8 +9,8 @@ define ["coffeequate"], (coffeequate) ->
 		## Force.
 		"force": -> new coffeequate.Equation("F::{kg * m * s**-2}", "m::{kg} * a::{m * s**-2}")
 		"centripetal-force": -> new coffeequate.Equation("F::{kg * m * s**-2}", "m::{kg} * v::{m * s**-1}**2 * r::{m}**-1")
-		"gravity": -> new coffeequate.Equation("F::{kg * m * s**-2}", "\\G * m::{kg} * M::{kg} * r::{m}**-2")
-		"friction": -> new coffeequate.Equation("F::{kg * m * s**-2}", "μ * N::{kg * m * s**-2}")
+		"gravity-force": -> new coffeequate.Equation("F::{kg * m * s**-2}", "\\G * m::{kg} * M::{kg} * r::{m}**-2")
+		"friction-force": -> new coffeequate.Equation("F::{kg * m * s**-2}", "μ * N::{kg * m * s**-2}")
 
 		## Momentum.
 		"momentum": -> new coffeequate.Equation("p::{kg * m * s**-1}", "m::{kg} * v::{m * s**-1}")
