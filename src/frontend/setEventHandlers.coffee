@@ -120,6 +120,8 @@ define ["jquery"
 			"Delete formula":
 				click: (variableElement) ->
 					[variable, formulaType, formulaID] = getInfo(variableElement)
+					console.log "removing"
+					connections.removeAllVariableConnections($("##{formulaType}-#{formulaID}"))
 					$("##{formulaType}-#{formulaID}").remove()
 			"Convert to LaTeX code":
 				click: (variableElement) ->
@@ -161,6 +163,7 @@ define ["jquery"
 			"Delete formula":
 				click: (variableElement) ->
 					variableElement.remove()
+					connections.removeAllVariableConnections(variableElement)
 			"Convert to LaTeX code":
 				click: (variableElement) ->
 					[formulaType, formulaID] = variableElement.attr("id").split("-")

@@ -52,13 +52,14 @@ define ["frontend/settings", "jquery", "backend/equivalenciesIndex"], (settings,
 	repaint = (connection) ->
 		# Repaint a connection.
 		# connection: {source, target, element}
-		p1 = connection.source.offset()
-		p2 = connection.target.offset()
-		w1 = connection.source.width()
-		w2 = connection.target.width()
-		h1 = connection.source.height()
-		h2 = connection.target.height()
-		connection.element.css(generateLineCSS(p1.left+w1/2, p1.top+h1/2, p2.left+w2/2, p2.top+h2/2))
+		unless connection.deleted?
+			p1 = connection.source.offset()
+			p2 = connection.target.offset()
+			w1 = connection.source.width()
+			w2 = connection.target.width()
+			h1 = connection.source.height()
+			h2 = connection.target.height()
+			connection.element.css(generateLineCSS(p1.left+w1/2, p1.top+h1/2, p2.left+w2/2, p2.top+h2/2))
 
 	return {
 		repaintVariables: (element=null) ->
@@ -98,6 +99,21 @@ define ["frontend/settings", "jquery", "backend/equivalenciesIndex"], (settings,
 			connections.push(connection)
 
 			return element
+
+		removeAllVariableConnections: (formula) ->
+			# Hide all connection lines from the given formula.
+
+			# Get all the variables.
+			variables = formula.find(".variable").addBack(formula.attr("id"))
+			for connection in connections
+				for variable in variables
+					variable = $(variable)
+					if variable.is(connection.source) or variable.is(connection.target)
+						console.log variable, "matches", connection.source, "or", connection.target
+						connection.element.remove?()
+						connection.deleted = true
+					else
+						console.log variable, "doesn't match", connection.source, "or", connection.target
 
 		setEquivalency: (a, b) ->
 			# Set a equivalent to b.
