@@ -7,7 +7,8 @@ define ["jquery"
 		"frontend/makeEquation"
 		"backend/numericalValues"
 		"frontend/alert"
-], ($, settings, connections, require, substituteEquation, expressionIndex, makeEquation, numericalValues, alert) ->
+		"backend/uncertaintiesIndex"
+], ($, settings, connections, require, substituteEquation, expressionIndex, makeEquation, numericalValues, alert, uncertaintiesIndex) ->
 
 	# Set the event handlers of either a specific element
 	# or every element on the page.
@@ -92,6 +93,14 @@ define ["jquery"
 									value = f.numericalvalue
 									if /^-?\d+(\.\d+)?(\s*\+-\s*-?\d+(\.\d+)?)?$/.test(value)
 
+										value = value.replace(/\s/g,"")
+										splitValue = value.split("+-")
+										uncertainty = splitValue[1]
+										value = splitValue[0]
+
+										# Set the uncertainty.
+										uncertaintiesIndex.set(variable, uncertainty)
+
 										# Make an equation equating this variable to a number.
 										[equationID, equation] = makeEquation(variable, value)
 										# If we already have an expression showing the equation, then rewrite it.
@@ -155,12 +164,12 @@ define ["jquery"
 						require [
 							"backend/expressionIndex", "frontend/addExpression", "backend/equivalenciesIndex"
 						], (expressionIndex, addExpression, equivalenciesIndex) ->
-							addExpression(expressionIndex.get(formulaID).sub(numericalValues.getNumericalValues(), equivalenciesIndex))
+							addExpression(expressionIndex.get(formulaID).sub(numericalValues.getNumericalValues(), uncertaintiesIndex.getUncertaintyMap(), equivalenciesIndex))
 					else if formulaType == "equation"
 						require [
 							"backend/equationIndex", "frontend/addExpression", "backend/equivalenciesIndex"
 						], (equationIndex, addExpression, equivalenciesIndex) ->
-							addExpression(equationIndex.get(formulaID).sub(numericalValues.getNumericalValues(), equivalenciesIndex))
+							addExpression(equationIndex.get(formulaID).sub(numericalValues.getNumericalValues(), uncertaintiesIndex.getUncertaintyMap(), equivalenciesIndex))
 			"Delete formula":
 				click: (variableElement) ->
 					variableElement.remove()
