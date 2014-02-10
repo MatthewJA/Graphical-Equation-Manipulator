@@ -90,7 +90,8 @@ define ["jquery"
 								e.preventDefault()
 								if v == 1
 									value = f.numericalvalue
-									if /^\d+(\.\d+)?$/.test(value)
+									if /^-?\d+(\.\d+)?(\s*\+-\s*-?\d+(\.\d+)?)?$/.test(value)
+
 										# Make an equation equating this variable to a number.
 										[equationID, equation] = makeEquation(variable, value)
 										# If we already have an expression showing the equation, then rewrite it.
