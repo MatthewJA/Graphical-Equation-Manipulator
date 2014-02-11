@@ -4145,7 +4145,7 @@ define("lib/almond", function(){});
         return rightVars;
       };
 
-      Equation.prototype.sub = function(substitutions, equivalencies, uncertainties) {
+      Equation.prototype.sub = function(substitutions, uncertainties, equivalencies) {
         return new Equation(this.left, this.right.sub(substitutions, uncertainties, equivalencies));
       };
 
