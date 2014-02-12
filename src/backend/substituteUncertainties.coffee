@@ -7,7 +7,15 @@ define ["backend/uncertaintiesIndex", "backend/equationIndex", "backend/numerica
 		uncertaintyMap = uncertaintiesIndex.getUncertaintyMap()
 		values = numericalValues.getNumericalValues()
 
-		return "<math>"
+		subbedEquation = equation.sub(values, {}, [])
+		uncertainties = equation.right.getUncertainty().sub(values, uncertaintyMap, {})
+
+		subbedEquationString = subbedEquation.toMathML(equationID, true, "0", true)
+		uncertaintiesString = uncertainties.toMathML(equationID, true, "0", false)
+
+		return (subbedEquationString.slice(0, subbedEquationString.length - 13)
+										+ uncertaintiesString
+										+ "</math></div>"
 
 	toHTML: (equationID, expression) ->
 		equation = equationIndex.get(equationID)
