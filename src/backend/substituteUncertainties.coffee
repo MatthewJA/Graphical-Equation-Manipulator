@@ -17,7 +17,7 @@ define ["backend/uncertaintiesIndex", "backend/equationIndex", "backend/numerica
 
 		uncertaintiesString = uncertainties.toMathML(equationID, true, "0", false)
 
-		return (subbedEquationString.slice(0, subbedEquationString.length - 13)	+ "&PlusMinus;" + uncertaintiesString + "</math></div>")
+		return (subbedEquationString + "&PlusMinus;" + uncertaintiesString + "</math></div>")
 
 	toHTML: (equationID, expression) ->
 		equation = equationIndex.get(equationID)
