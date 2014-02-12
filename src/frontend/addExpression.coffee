@@ -7,7 +7,8 @@ define [
 	"backend/numericalValues"
 	"backend/uncertaintiesIndex"
 	"backend/equivalenciesIndex"
-], ($, setEventHandlers, settings, expressionIndex, require, numericalValues, uncertaintiesIndex, equivalenciesIndex) ->
+	"frontend/expressionToString"
+], ($, setEventHandlers, settings, expressionIndex, require, numericalValues, uncertaintiesIndex, equivalenciesIndex, expressionToString) ->
 
 	# Add an expression to the program.
 	# This involves adding it to the whiteboard and adding it
@@ -20,7 +21,7 @@ define [
 
 		if settings.get("mathJaxEnabled")
 			# Generate the div representing the expression.
-			html = expression.toMathML(expressionID, true, "0", true)
+			html = expressionToString(expression, expressionID)
 			expressionDiv = $(html)
 
 			# Add the div to the whiteboard.
@@ -49,10 +50,7 @@ define [
 					left: "#{position.left}px"
 					position: "absolute"
 		else
-			if expression instanceof String or typeof expression == "string"
-				html = expression
-			else
-				html = expression.toHTML(expressionID, true, "0", true)
+			html = expressionToString(expression, expressionID)
 			expressionDiv = $(html)
 
 			# Add the div to the whiteboard.
@@ -78,9 +76,10 @@ define [
 		expressionID = expressionIndex.add(expression)
 
 		# If we have values set for any of the variables in this expression, we need to attach an evaluated version of the expression.
-		variables = expression.getAllVariables()
+		variables = expression.right.getAllVariables()
 		for variable in variables
-			if numericalValues[variable]?
+			console.log numericalValues
+			if numericalValues.get(variable)?
 				evaluatedExpression = expression.sub(numericalValues.getNumericalValues(), uncertaintiesIndex.getUncertaintyMap(), equivalenciesIndex)
 				expression._gem_evaluatedExpression = evaluatedExpression
 

@@ -12,7 +12,7 @@ define ->
 
 		get: (variable) ->
 			if variable of values
-				return value[variable]
+				return values[variable]
 			else
 				return null
 
