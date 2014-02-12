@@ -15,9 +15,14 @@ define [
 		# expression: A Coffeequate equation to add to the whiteboard.
 		# position: {top, left} position to add the expression. Optional.
 
+		# If expression is a string, use that string as html instead of generating the HTML automatically.
+
 		if settings.get("mathJaxEnabled")
 			# Generate the div representing the expression.
-			html = expression.toMathML(expressionID, true, "0", true)
+			if expression instanceof String or typeof expression == "string"
+				html = expression
+			else
+				html = expression.toMathML(expressionID, true, "0", true)
 			expressionDiv = $(html)
 
 			# Add the div to the whiteboard.
@@ -46,7 +51,10 @@ define [
 					left: "#{position.left}px"
 					position: "absolute"
 		else
-			html = expression.toHTML(expressionID, true, "0", true)
+			if expression instanceof String or typeof expression == "string"
+				html = expression
+			else
+				html = expression.toHTML(expressionID, true, "0", true)
 			expressionDiv = $(html)
 
 			# Add the div to the whiteboard.

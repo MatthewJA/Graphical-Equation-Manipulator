@@ -8,7 +8,8 @@ define ["jquery"
 		"backend/numericalValues"
 		"frontend/alert"
 		"backend/uncertaintiesIndex"
-], ($, settings, connections, require, substituteEquation, expressionIndex, makeEquation, numericalValues, alert, uncertaintiesIndex) ->
+		"backend/substituteUncertainties"
+], ($, settings, connections, require, substituteEquation, expressionIndex, makeEquation, numericalValues, alert, uncertaintiesIndex, substituteUncertainties) ->
 
 	# Set the event handlers of either a specific element
 	# or every element on the page.
@@ -163,12 +164,20 @@ define ["jquery"
 						require [
 							"backend/expressionIndex", "frontend/addExpression", "backend/equivalenciesIndex"
 						], (expressionIndex, addExpression, equivalenciesIndex) ->
-							addExpression(expressionIndex.get(formulaID).sub(numericalValues.getNumericalValues(), uncertaintiesIndex.getUncertaintyMap(), equivalenciesIndex))
+							if settings.get("mathJaxEnabled")
+								html = substituteUncertainties.toMathML(formulaID, true)
+							else
+								html = substituteUncertainties.toHTML(formulaID, true)
+							addExpression(html, formulaID, null)
 					else if formulaType == "equation"
 						require [
 							"backend/equationIndex", "frontend/addExpression", "backend/equivalenciesIndex"
 						], (equationIndex, addExpression, equivalenciesIndex) ->
-							addExpression(equationIndex.get(formulaID).sub(numericalValues.getNumericalValues(), uncertaintiesIndex.getUncertaintyMap(), equivalenciesIndex))
+							if settings.get("mathJaxEnabled")
+								html = substituteUncertainties.toMathML(formulaID, true)
+							else
+								html = substituteUncertainties.toHTML(formulaID, true)
+							addExpression(html, formulaID, null)
 			"Delete formula":
 				click: (variableElement) ->
 					variableElement.remove()
