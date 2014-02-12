@@ -174,9 +174,9 @@ define ["jquery"
 							"backend/equationIndex", "frontend/addExpression", "backend/equivalenciesIndex"
 						], (equationIndex, addExpression, equivalenciesIndex) ->
 							if settings.get("mathJaxEnabled")
-								html = substituteUncertainties.toMathML(formulaID, true)
+								html = substituteUncertainties.toMathML(formulaID, false)
 							else
-								html = substituteUncertainties.toHTML(formulaID, true)
+								html = substituteUncertainties.toHTML(formulaID, false)
 							addExpression(html, formulaID, null)
 			"Delete formula":
 				click: (variableElement) ->
