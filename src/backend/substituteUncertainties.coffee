@@ -1,4 +1,9 @@
-define ["backend/uncertaintiesIndex", "backend/equationIndex", "backend/numericalValues"], (uncertaintiesIndex, equationIndex, numericalValues)->
+define [
+	"backend/uncertaintiesIndex"
+	"backend/equationIndex"
+	"backend/numericalValues"
+	"backend/equivalencyIndex"
+], (uncertaintiesIndex, equationIndex, numericalValues, equivalencyIndex)->
 
 	# Substitute uncertainties into an equation and return the MathML or HTML representation of it.
 
@@ -7,8 +12,8 @@ define ["backend/uncertaintiesIndex", "backend/equationIndex", "backend/numerica
 		uncertaintyMap = uncertaintiesIndex.getUncertaintyMap()
 		values = numericalValues.getNumericalValues()
 
-		subbedEquation = equation.sub(values, {}, [])
-		uncertainties = equation.right.getUncertainty().sub(values, uncertaintyMap, {})
+		subbedEquation = equation.sub(values, uncertaintyMap, equivalencyIndex)
+		uncertainties = equation.right.getUncertainty().sub(values, uncertaintyMap, equivalencyIndex)
 
 		subbedEquationString = subbedEquation.toMathML(equationID, true, "0", true)
 
