@@ -8,8 +8,7 @@ define ["jquery"
 		"backend/numericalValues"
 		"frontend/alert"
 		"backend/uncertaintiesIndex"
-		"backend/substituteUncertainties"
-], ($, settings, connections, require, substituteEquation, expressionIndex, makeEquation, numericalValues, alert, uncertaintiesIndex, substituteUncertainties) ->
+], ($, settings, connections, require, substituteEquation, expressionIndex, makeEquation, numericalValues, alert, uncertaintiesIndex) ->
 
 	# Set the event handlers of either a specific element
 	# or every element on the page.
@@ -145,8 +144,6 @@ define ["jquery"
 			},
 			{
 				disable_native_context_menu: true
-				# showMenu: function() { alert("Showing menu"); },
-				# hideMenu: function() { alert("Hiding menu"); },
 				leftClick: false
 			}
 		)
@@ -157,27 +154,6 @@ define ["jquery"
 			target = $(".equation, .expression")
 
 		target.contextMenu("context-menu-formula", {
-			"Evaluate":
-				click: (variableElement) ->
-					[formulaType, formulaID] = variableElement.attr("id").split("-")
-					if formulaType == "expression"
-						require [
-							"backend/expressionIndex", "frontend/addExpression", "backend/equivalenciesIndex"
-						], (expressionIndex, addExpression, equivalenciesIndex) ->
-							if settings.get("mathJaxEnabled")
-								html = substituteUncertainties.toMathML(formulaID, true)
-							else
-								html = substituteUncertainties.toHTML(formulaID, true)
-							addExpression(html, formulaID, null)
-					else if formulaType == "equation"
-						require [
-							"backend/equationIndex", "frontend/addExpression", "backend/equivalenciesIndex"
-						], (equationIndex, addExpression, equivalenciesIndex) ->
-							if settings.get("mathJaxEnabled")
-								html = substituteUncertainties.toMathML(formulaID, false)
-							else
-								html = substituteUncertainties.toHTML(formulaID, false)
-							addExpression(html, formulaID, null)
 			"Delete formula":
 				click: (variableElement) ->
 					variableElement.remove()

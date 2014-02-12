@@ -4,7 +4,10 @@ define [
 	"frontend/settings"
 	"backend/expressionIndex"
 	"require"
-], ($, setEventHandlers, settings, expressionIndex, require) ->
+	"backend/numericalValues"
+	"backend/uncertaintiesIndex"
+	"backend/equivalenciesIndex"
+], ($, setEventHandlers, settings, expressionIndex, require, numericalValues, uncertaintiesIndex, equivalenciesIndex) ->
 
 	# Add an expression to the program.
 	# This involves adding it to the whiteboard and adding it
@@ -15,14 +18,9 @@ define [
 		# expression: A Coffeequate equation to add to the whiteboard.
 		# position: {top, left} position to add the expression. Optional.
 
-		# If expression is a string, use that string as html instead of generating the HTML automatically.
-
 		if settings.get("mathJaxEnabled")
 			# Generate the div representing the expression.
-			if expression instanceof String or typeof expression == "string"
-				html = expression
-			else
-				html = expression.toMathML(expressionID, true, "0", true)
+			html = expression.toMathML(expressionID, true, "0", true)
 			expressionDiv = $(html)
 
 			# Add the div to the whiteboard.
@@ -78,5 +76,22 @@ define [
 		# -> The ID of the newly-added expression.
 
 		expressionID = expressionIndex.add(expression)
+
+		# If we have values set for any of the variables in this expression, we need to attach an evaluated version of the expression.
+		variables = expression.getAllVariables()
+		for variable in variables
+			if numericalValues[variable]?
+				evaluatedExpression = expression.sub(numericalValues.getNumericalValues(), uncertaintiesIndex.getUncertaintyMap(), equivalenciesIndex)
+				expression._gem_evaluatedExpression = evaluatedExpression
+
+				# If we have uncertainties set for any of the variables in this expression, we need to attach those too.
+				for otherVariable in variables
+					if uncertaintiesIndex.get(otherVariable)?
+						uncertaintyExpression = expression.right.getUncertainty().sub(
+							numericalValues.getNumericalValues(), uncertaintiesIndex.getUncertaintyMap(), equivalenciesIndex)
+						expression._gem_uncertaintyExpression = uncertaintyExpression
+						break
+				break
+
 		addExpressionToWhiteboard(expression, expressionID)
 		return expressionID
