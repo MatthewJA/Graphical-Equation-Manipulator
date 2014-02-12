@@ -20,13 +20,13 @@ define [
 		uncertainties = equation.right.getUncertainty().sub(values, uncertaintyMap, equivalenciesIndex)
 
 		console.log("calling toMathML on subbedEquation")
-		subbedEquationString = subbedEquation.toMathML(equationID, expression, "0", true)
+		subbedEquationString = subbedEquation.toMathML(equationID, true, "0", true)
 
 		# We get rid of the "</math></div>" at the end of the string
 		subbedEquationString = subbedEquationString.slice(0, subbedEquationString.length - 13)
 
 		console.log("calling toMathML on uncertainties")
-		uncertaintiesString = uncertainties.toMathML(equationID, expression, "0", false)
+		uncertaintiesString = uncertainties.toMathML(equationID, true, "0", false)
 
 		return (subbedEquationString + "<mo>&PlusMinus;</mo>" + uncertaintiesString + "</math></div>")
 
