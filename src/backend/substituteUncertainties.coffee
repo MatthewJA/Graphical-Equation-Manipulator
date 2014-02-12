@@ -11,6 +11,10 @@ define ["backend/uncertaintiesIndex", "backend/equationIndex", "backend/numerica
 		uncertainties = equation.right.getUncertainty().sub(values, uncertaintyMap, {})
 
 		subbedEquationString = subbedEquation.toMathML(equationID, true, "0", true)
+
+		# We get rid of the "</math></div>" at the end of the string
+		subbedEquationString = subbedEquationString.slice(0, subbedEquationString.length - 13)
+
 		uncertaintiesString = uncertainties.toMathML(equationID, true, "0", false)
 
 		return (subbedEquationString.slice(0, subbedEquationString.length - 13)	+ "&PlusMinus;" + uncertaintiesString + "</math></div>")
