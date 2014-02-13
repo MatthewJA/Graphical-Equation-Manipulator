@@ -5,7 +5,9 @@ define [
 	"backend/expressionIndex"
 	"backend/equationIndex"
 	"require"
-], ($, setEventHandlers, settings, expressionIndex, equationIndex, require) ->
+	"frontend/setExpressionAddendums"
+	"frontend/expressionToString"
+], ($, setEventHandlers, settings, expressionIndex, equationIndex, require, setExpressionAddendums, expressionToString) ->
 
 	rewriteEquation = (equationID, newEquation) ->
 		# Rewrite the equation with the given ID as a new equation.
@@ -51,13 +53,16 @@ define [
 	rewriteExpression = (expressionID, newExpression) ->
 		# Rewrite the expression with the given ID as a new expression.
 
+		# Recalculate the addendums.
+		setExpressionAddendums(newExpression)
+
 		exp = expressionIndex.get(expressionID)
 		unless exp.equals?(newExpression)
 			console.log "#{exp} not equal to #{newExpression}"
 
 			if settings.get("mathJaxEnabled")
 				# Generate the div representing the expression.
-				html = newExpression.toMathML(expressionID, true, "0", true)
+				html = expressionToString(newExpression, expressionID)
 				expressionDiv = $(html)
 				position = $("#expression-#{expressionID}").position()
 
@@ -80,7 +85,7 @@ define [
 					require ["frontend/setEventHandlers"], (setEventHandlers) ->
 						setEventHandlers(expressionDiv)
 			else
-				html = newExpression.toHTML(expressionID, true, "0", true)
+				html = expressionToString(newExpression, expressionID)
 				expressionDiv = $(html)
 				position = $("#expression-#{expressionID}").position()
 

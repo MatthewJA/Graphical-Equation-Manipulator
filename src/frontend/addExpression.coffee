@@ -4,11 +4,9 @@ define [
 	"frontend/settings"
 	"backend/expressionIndex"
 	"require"
-	"backend/numericalValues"
-	"backend/uncertaintiesIndex"
-	"backend/equivalenciesIndex"
+	"frontend/setExpressionAddendums"
 	"frontend/expressionToString"
-], ($, setEventHandlers, settings, expressionIndex, require, numericalValues, uncertaintiesIndex, equivalenciesIndex, expressionToString) ->
+], ($, setEventHandlers, settings, expressionIndex, require, setExpressionAddendums, expressionToString) ->
 
 	# Add an expression to the program.
 	# This involves adding it to the whiteboard and adding it
@@ -76,21 +74,7 @@ define [
 		expressionID = expressionIndex.add(expression)
 
 		# If we have values set for any of the variables in this expression, we need to attach an evaluated version of the expression.
-		variables = expression.right.getAllVariables()
-		for variable in variables
-			console.log numericalValues
-			if numericalValues.get(variable)?
-				evaluatedExpression = expression.sub(numericalValues.getNumericalValues(), uncertaintiesIndex.getUncertaintyMap(), equivalenciesIndex)
-				expression._gem_evaluatedExpression = evaluatedExpression
-
-				# If we have uncertainties set for any of the variables in this expression, we need to attach those too.
-				for otherVariable in variables
-					if uncertaintiesIndex.get(otherVariable)?
-						uncertaintyExpression = expression.right.getUncertainty().sub(
-							numericalValues.getNumericalValues(), uncertaintiesIndex.getUncertaintyMap(), equivalenciesIndex)
-						expression._gem_uncertaintyExpression = uncertaintyExpression
-						break
-				break
+		setExpressionAddendums(expression)
 
 		addExpressionToWhiteboard(expression, expressionID)
 		return expressionID
