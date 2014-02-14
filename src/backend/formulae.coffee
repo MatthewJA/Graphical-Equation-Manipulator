@@ -87,4 +87,8 @@ define ["coffeequate"], (coffeequate) ->
 			# Make a new equation. Wrapper.
 			return new coffeequate.Equation(left, right)
 
+		makeExpression: (right) ->
+			# Make a new expression from a string.
+			return new coffeequate.parse.stringToExpression(right)
+
 	}

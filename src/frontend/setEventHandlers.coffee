@@ -86,7 +86,7 @@ define ["jquery"
 							title: "Enter a numerical value for this variable."
 							html:'<input type="text" name="numericalvalue" value="1"><br>'
 							buttons: {"Set Value": 1, "Cancel": -1}
-							focus: 0
+							focus: "input[name='numericalvalue']"
 							submit: (e, v, m, f) ->
 								e.preventDefault()
 								if v == 1
@@ -103,13 +103,19 @@ define ["jquery"
 
 										# Make an equation equating this variable to a number.
 										[equationID, equation] = makeEquation(variable, value)
-										# If we already have an expression showing the equation, then rewrite it.
-										if numericalValues.getExpression(variable)?
-											require ["frontend/rewrite"], (rewrite) -> rewrite.rewriteExpression(numericalValues.getExpression(variable), equation)
-										else
-											require ["frontend/addExpression"], (addExpression) ->
-												eID = addExpression(equation)
-												numericalValues.set(variable, value, eID)
+
+										require ["backend/formulae"], (formulae) ->
+											# Force the uncertainty for the expression.
+											if uncertainty?
+												equation._gem_uncertaintyExpression = formulae.makeExpression(uncertainty)
+
+											# If we already have an expression showing the equation, then rewrite it.
+											if numericalValues.getExpression(variable)?
+												require ["frontend/rewrite"], (rewrite) -> rewrite.rewriteExpression(numericalValues.getExpression(variable), equation)
+											else
+												require ["frontend/addExpression"], (addExpression) ->
+													eID = addExpression(equation)
+													numericalValues.set(variable, value, eID)
 										$.prompt.close()
 									else
 										$.prompt.nextState()
