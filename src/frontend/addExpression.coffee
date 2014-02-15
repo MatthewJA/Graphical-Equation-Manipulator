@@ -47,6 +47,10 @@ define [
 					top: "#{position.top}px"
 					left: "#{position.left}px"
 					position: "absolute"
+
+			# Connect the variables in this expression with variables in other equations and expressions.
+			variables = expression.getAllVariables()
+
 		else
 			html = expressionToString(expression, expressionID)
 			expressionDiv = $(html)
@@ -66,6 +70,7 @@ define [
 				top: "#{position.top}px"
 				left: "#{position.left}px"
 				position: "absolute"
+
 
 	return (expression) ->
 		# expression: The expression to add.

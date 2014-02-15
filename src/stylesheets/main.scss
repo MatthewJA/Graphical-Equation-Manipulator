@@ -224,6 +224,15 @@ body {
 					color: $off-white;
 					background-color: $search-box-colour;
 				}
+
+				button {
+					width: 100%;
+					margin: 0;
+				}
+
+				.button-down {
+					background-color: #AAAAFF;
+				}
 			}
 		}
 	}
