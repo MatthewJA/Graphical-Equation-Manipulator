@@ -133,6 +133,50 @@ define ["jquery"
 								else
 									$.prompt.close()
 							}})
+			"Make into equation":
+				click: (variableElement) ->
+					[variable, formulaType, formulaID] = getInfo(variableElement)
+					vid = (variableElement.attr("id").split("-")[-2..]).join("-")
+					$.prompt(
+						{state0: {
+							title: "Enter an expression representing this variable. You can use multiplication *, addition +," +\
+									" negation -, or exponentiation **. For example, A + 2 * B. You will be able to assign the values" +\
+									" later."
+							html:'<input type="text" name="equation" value="1"><br>'
+							buttons: {"Okay": 1, "Cancel": -1}
+							focus: "input[name='equation']"
+							submit: (e, v, m, f) ->
+								e.preventDefault()
+								if v == 1
+									require ["backend/formulae", "backend/equationIndex"], (formulae, equationIndex) ->
+										try
+											units = equationIndex.get(formulaID).getVariableUnits(vid)
+											equation = f.equation.replace(/[a-zA-Zα-ωΑ-Ω]+/g, "$&::{#{units}}")
+											equation = formulae.makeEquation((variable.split("-")[...-1]).join(""), equation)
+											require ["frontend/addEquation"], (addEquation) ->
+												addEquation(equation)
+												console.log "woop", equation.toString()
+												console.log vid.toString(), ",", equation.left.label
+												connections.setEquivalency(vid, equation.left.label)
+											$.prompt.close()
+										catch e
+											console.log "invalid expression #{equation}"
+											console.log e
+											$.prompt.nextState()
+								else
+									$.prompt.close()
+							},
+						state1: {
+							title: "Invalid expression."
+							buttons: {"Okay": 1, "Cancel": -1}
+							focus: 0
+							submit: (e, v, m, f) ->
+								e.preventDefault()
+								if v == 1
+									$.prompt.prevState()
+								else
+									$.prompt.close()
+							}})
 			"Delete formula":
 				click: (variableElement) ->
 					[variable, formulaType, formulaID] = getInfo(variableElement)

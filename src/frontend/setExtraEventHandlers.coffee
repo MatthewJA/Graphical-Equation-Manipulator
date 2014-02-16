@@ -9,7 +9,7 @@ define ["jquery", "frontend/addTextComment", "frontend/updateSearchResults", "fr
 					title: "Enter comment."
 					html:'<input type="text" name="comment" value="Physics is great"><br>'
 					buttons: {"Okay": 1, "Cancel": -1}
-					focus: 0
+					focus: "input[name='comment']"
 					submit: (e, v, m, f) ->
 						e.preventDefault()
 						if v == 1
