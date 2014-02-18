@@ -155,9 +155,10 @@ define ["jquery"
 											for theVariable in equation.getAllVariables()
 												equation.setVariableUnits(theVariable, equivalenciesIndex, units)
 											require ["frontend/addEquation"], (addEquation) ->
-												addEquation(equation)
-												console.log "woop", equation.toString()
-												console.log vid.toString(), ",", equation.left.label
+												eid = addEquation(equation)
+												equation = equationIndex.get(eid)
+												console.log vid
+												console.log equation.left.label
 												connections.setEquivalency(vid, equation.left.label)
 											$.prompt.close()
 										catch e
