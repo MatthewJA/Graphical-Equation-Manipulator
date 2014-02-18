@@ -142,17 +142,18 @@ define ["jquery"
 							title: "Enter an expression representing this variable. You can use multiplication *, addition +," +\
 									" negation -, or exponentiation **. For example, A + 2 * B. You will be able to assign the values" +\
 									" later."
-							html:'<input type="text" name="equation" value="1"><br>'
+							html:'<input type="text" name="equation" value="A + 2 * B"><br>'
 							buttons: {"Okay": 1, "Cancel": -1}
 							focus: "input[name='equation']"
 							submit: (e, v, m, f) ->
 								e.preventDefault()
 								if v == 1
-									require ["backend/formulae", "backend/equationIndex"], (formulae, equationIndex) ->
+									require ["backend/formulae", "backend/equationIndex", "backend/equivalenciesIndex"], (formulae, equationIndex, equivalenciesIndex) ->
 										try
 											units = equationIndex.get(formulaID).getVariableUnits(vid)
-											equation = f.equation.replace(/[a-zA-Zα-ωΑ-Ω]+/g, "$&::{#{units}}")
 											equation = formulae.makeEquation((variable.split("-")[...-1]).join(""), equation)
+											for theVariable in equation.getAllVariables()
+												equation.setVariableUnits(theVariable, equivalenciesIndex, units)
 											require ["frontend/addEquation"], (addEquation) ->
 												addEquation(equation)
 												console.log "woop", equation.toString()

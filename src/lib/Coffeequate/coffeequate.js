@@ -1256,6 +1256,10 @@ define("lib/almond", function(){});
         return null;
       };
 
+      Constant.prototype.setVariableUnits = function(variable, equivalencies, units) {
+        return null;
+      };
+
       Constant.prototype.toMathML = function(equationID, expression, equality, topLevel) {
         var closingHTML, html, mathClass, mathID, _ref;
         if (expression == null) {
@@ -1389,6 +1393,10 @@ define("lib/almond", function(){});
       };
 
       SymbolicConstant.prototype.getVariableUnits = function() {
+        return null;
+      };
+
+      SymbolicConstant.prototype.setVariableUnits = function(variable, equivalencies, units) {
         return null;
       };
 
@@ -1564,6 +1572,17 @@ define("lib/almond", function(){});
         return null;
       };
 
+      Variable.prototype.setVariableUnits = function(variable, equivalencies, units) {
+        var _ref;
+        if (equivalencies != null) {
+          if (_ref = this.label, __indexOf.call(equivalencies.get(variable), _ref) >= 0) {
+            return this.units = units;
+          }
+        } else if (this.label === variable) {
+          return this.units = units;
+        }
+      };
+
       Variable.prototype.simplify = function() {
         return this.copy();
       };
@@ -1724,7 +1743,6 @@ define("lib/almond", function(){});
             return new Constant(substitute);
           }
         } else {
-          console.log(assumeZero);
           if (!assumeZero) {
             return this.copy();
           } else {
@@ -1748,6 +1766,10 @@ define("lib/almond", function(){});
       };
 
       Uncertainty.prototype.getVariableUnits = function(variable, equivalencies) {
+        throw new Error("Can't do that with uncertainties");
+      };
+
+      Uncertainty.prototype.setVariableUnits = function(variable, equivalencies, units) {
         throw new Error("Can't do that with uncertainties");
       };
 
@@ -1990,6 +2012,17 @@ define("lib/almond", function(){});
           }
         }
         return null;
+      };
+
+      Add.prototype.setVariableUnits = function(variable, equivalencies, units) {
+        var variableEquivalencies;
+        variableEquivalencies = equivalencies != null ? equivalencies.get(variable) : {
+          get: function(z) {
+            return [z];
+          }
+        };
+        this.children.left.setVariableUnits(variable, equivalencies, units);
+        return this.children.right.setVariableUnits(variable, equivalencies, units);
       };
 
       Add.prototype.expand = function() {
@@ -2855,6 +2888,17 @@ define("lib/almond", function(){});
         return null;
       };
 
+      Mul.prototype.setVariableUnits = function(variable, equivalencies, units) {
+        var variableEquivalencies;
+        variableEquivalencies = equivalencies != null ? equivalencies.get(variable) : {
+          get: function(z) {
+            return [z];
+          }
+        };
+        this.children.left.setVariableUnits(variable, equivalencies, units);
+        return this.children.right.setVariableUnits(variable, equivalencies, units);
+      };
+
       Mul.expandMulAdd = function(mul, add) {
         var Add, c, child, newAdd, newMul, results, _i, _j, _len, _len1, _ref, _ref1;
         Add = require("operators/Add");
@@ -3651,6 +3695,17 @@ define("lib/almond", function(){});
         return null;
       };
 
+      Pow.prototype.setVariableUnits = function(variable, equivalencies, units) {
+        var variableEquivalencies;
+        variableEquivalencies = equivalencies != null ? equivalencies.get(variable) : {
+          get: function(z) {
+            return [z];
+          }
+        };
+        this.children.left.setVariableUnits(variable, equivalencies, units);
+        return this.children.right.setVariableUnits(variable, equivalencies, units);
+      };
+
       Pow.prototype.expand = function() {
         var Add, Mul, child, children, i, index, left, newMul, newPow, right, _i, _j, _len, _ref, _ref1;
         Mul = require("operators/Mul");
@@ -4275,6 +4330,20 @@ define("lib/almond", function(){});
           return this.left.units;
         }
         return this.right.getVariableUnits(variable, equivalencies);
+      };
+
+      Equation.prototype.setVariableUnits = function(variable, equivalencies, units) {
+        if (equivalencies == null) {
+          equivalencies = {
+            get: function(z) {
+              return [z];
+            }
+          };
+        }
+        if (this.left.label === variable) {
+          this.left.units = units;
+        }
+        return this.right.setVariableUnits(variable, equivalencies, units);
       };
 
       Equation.prototype.equals = function(b) {
