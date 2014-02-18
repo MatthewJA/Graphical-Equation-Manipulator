@@ -151,7 +151,7 @@ define ["jquery"
 									require ["backend/formulae", "backend/equationIndex", "backend/equivalenciesIndex"], (formulae, equationIndex, equivalenciesIndex) ->
 										try
 											units = equationIndex.get(formulaID).getVariableUnits(vid)
-											equation = formulae.makeEquation((variable.split("-")[...-1]).join(""), equation)
+											equation = formulae.makeEquation((variable.split("-")[...-1]).join(""), f.equation)
 											for theVariable in equation.getAllVariables()
 												equation.setVariableUnits(theVariable, equivalenciesIndex, units)
 											require ["frontend/addEquation"], (addEquation) ->
