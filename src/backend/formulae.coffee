@@ -51,6 +51,7 @@ define ["coffeequate"], (coffeequate) ->
 		## Radiation and power.
 		"black-body-radiation-power": -> new coffeequate.Equation("P::{kg * m**2 * s**-3}", "A::{m**2} * \\σ * T::{K}**4")
 		"heat-flow-through-insulator": -> new coffeequate.Equation("P::{kg * m**2 * s**-3}", "A::{m**2} * ΔT::{K} * R::{kg**-1 * s**3 * K}")
+		"larmor-radiation-power": -> new coffeequate.Equation("@E::{kg * m**2 * s**-3}", "-2/3 * q::{A * s}**2 * (4 * \\π * \\ε0)**-1 * a::{m * s**-2}**2 * \\c::{m * s**-1}**-1")
 
 		# Properties.
 		"volume-density": -> new coffeequate.Equation("ρ::{kg * m**-3}", "m::{kg} * V::{m**3}**-1")
@@ -58,6 +59,8 @@ define ["coffeequate"], (coffeequate) ->
 		# Electromagnetism.
 		"coulombs-law": -> new coffeequate.Equation("F::{kg * m * s**-2}", "(4 * \\π * \\ε0)**-1 * q1::{A * s} * q2::{A * s} * r::{m}**2")
 		"electric-field-strength": -> new coffeequate.Equation("E::{kg * m * s**-3 * A}", "F::{kg * m * s**-2} * q::{A * s}**-1")
+
+		# Quantum mechanics.
 
 		# Geometry.
 		"radius-circumference": -> new coffeequate.Equation("c::{m}", "2 * \\π * r::{m}")

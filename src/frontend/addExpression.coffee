@@ -72,7 +72,7 @@ define [
 				position: "absolute"
 
 
-	return (expression) ->
+	return (expression, units=null) ->
 		# expression: The expression to add.
 		# -> The ID of the newly-added expression.
 
@@ -80,6 +80,9 @@ define [
 
 		# If we have values set for any of the variables in this expression, we need to attach an evaluated version of the expression.
 		setExpressionAddendums(expression)
+
+		# If units are set then they need to be applied to the expression.
+		expression._gem_units = units
 
 		addExpressionToWhiteboard(expression, expressionID)
 		return expressionID

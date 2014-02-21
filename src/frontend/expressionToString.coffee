@@ -14,10 +14,15 @@ define ["frontend/settings"], (settings) ->
 										then expression._gem_evaluatedExpression.toMathML(expressionID, true, "0", false) \
 										else expression._gem_evaluatedExpression.toHTML(expressionID, true, "0", false))
 
-		if expression._gem_uncertaintyExpression?
-			html += "<mo>&plusmn;</mo>" + (if settings.get("mathJaxEnabled") \
-												then expression._gem_uncertaintyExpression.toMathML(expressionID, true, "0", false) \
-												else expression._gem_uncertaintyExpression.toHTML(expressionID, true, "0", false))
+			if expression._gem_uncertaintyExpression?
+				html += "<mo>&plusmn;</mo>" + (if settings.get("mathJaxEnabled") \
+													then expression._gem_uncertaintyExpression.toMathML(expressionID, true, "0", false) \
+													else expression._gem_uncertaintyExpression.toHTML(expressionID, true, "0", false))
+
+			if expression._gem_units?
+				html += (if settings.get("mathJaxEnabled") then expression._gem_units.toMathML() else expression._gem_units.toHTML())
+			else
+				console.log expression._gem_units
 
 		html += (if settings.get("mathJaxEnabled") then "</math></div>" else "</div>")
 

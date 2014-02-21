@@ -61,11 +61,14 @@ define ["jquery"
 				require [
 					"backend/solveEquation"
 					"frontend/addExpression"
-				], (solveEquation, addExpression) ->
+					"backend/expressionIndex"
+					"backend/equationIndex"
+					"backend/equivalenciesIndex"
+				], (solveEquation, addExpression, expressionIndex, equationIndex, equivalenciesIndex) ->
 					solutions = solveEquation(formulaID, variable)
 					for solution in solutions
-						expressionID = addExpression(solution)
-		
+						expressionID = addExpression(solution, equationIndex.get(formulaID).getVariableUnits(variable, equivalenciesIndex))
+
 		# Disable highlighting on variables.
 		target.disableSelection()
 
