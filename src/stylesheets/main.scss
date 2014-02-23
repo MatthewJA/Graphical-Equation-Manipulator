@@ -3,6 +3,7 @@
 // Colour scheme
 
 $off-white: #ECECE9;
+$highlighted-off-white: #FFBBBB;
 $search-panel-colour: #303127;
 $search-box-colour: #404238;
 $gem-window-colour: #272822;
@@ -204,6 +205,14 @@ body {
 					font-family: monospace;
 
 					list-style-type: none;
+
+					li {
+						cursor: default;
+					}
+
+					li:hover {
+						color: $highlighted-off-white;
+					}
 				}
 
 				overflow-y: scroll
