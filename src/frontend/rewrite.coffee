@@ -52,12 +52,20 @@ define [
 
 	rewriteExpression = (expressionID, newExpression) ->
 		# Rewrite the expression with the given ID as a new expression.
+		exp = expressionIndex.get(expressionID)
 
 		# Recalculate the addendums.
+		oldGemEvaluatedExpression = exp._gem_evaluatedExpression?.copy()
+		oldGemUncertaintyExpression = exp._gem_uncertaintyExpression?.copy()
 		setExpressionAddendums(newExpression)
 
-		exp = expressionIndex.get(expressionID)
-		unless exp.equals?(newExpression)
+		evaluationUnchanged = (if oldGemEvaluatedExpression? then \
+			oldGemEvaluatedExpression.equals(newExpression._gem_evaluatedExpression) else \
+			oldGemEvaluatedExpression == newExpression._gem_evaluatedExpression)
+		uncertaintyUnchanged = (if oldGemUncertaintyExpression? then \
+			oldGemUncertaintyExpression.equals(newExpression._gem_UncertaintyExpression) else \
+			oldGemUncertaintyExpression == newExpression._gem_UncertaintyExpression)
+		unless exp.equals?(newExpression) and evaluationUnchanged and uncertaintyUnchanged
 			console.log "#{exp} not equal to #{newExpression}"
 
 			if settings.get("mathJaxEnabled")
@@ -100,10 +108,17 @@ define [
 
 			expressionIndex.set(expressionID, newExpression)
 
+	refreshExpressionsWithVariable = (variable) ->
+		for expression, index in expressionIndex.getAllExpressions()
+			if variable in expression.getAllVariables()
+				console.log "refreshing expression", expression.toString()
+				rewriteExpression(index, expressionIndex.get(index))
+
 	return {
 		rewriteEquation: rewriteEquation
 		rewriteExpression: rewriteExpression
 		rewriteVariable: (equationID, variableID, newLabel, newVariableID=null) ->
 			# Rewrite a variable.
 			throw new Error("Not implemented.")
+		refreshExpressionsWithVariable: refreshExpressionsWithVariable
 	}
