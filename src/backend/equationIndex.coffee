@@ -41,4 +41,8 @@ define ->
 
 			equations[equationID] = equation
 			return equations[equationID]
+
+		clear: ->
+			# Clear the index.
+			equations.splice(0)
 	}

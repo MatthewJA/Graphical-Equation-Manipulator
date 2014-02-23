@@ -20,4 +20,10 @@ define ->
 		getUncertaintyMap: ->
 			return uncertainties
 
+		clear: ->
+			# Clear the index.
+			for prop of uncertainties
+				if uncertainties.hasOwnProperty(prop)
+					delete uncertainties[prop]
+
 	}

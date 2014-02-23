@@ -48,4 +48,13 @@ define ->
 			variableID = label + "-" + @getLabelCount(label)
 			@add(variableID, label)
 			return variableID
+
+		clear: ->
+			# Clear the index.
+			for prop of variables
+				if variables.hasOwnProperty(prop)
+					delete variables[prop]
+			for prop of variableLabels
+				if variableLabels.hasOwnProperty(prop)
+					delete variableLabels[prop]
 	}

@@ -22,4 +22,12 @@ define ->
 		getNumericalValues: ->
 			return values
 
+		clear: ->
+			# Clear the index.
+			for prop of values
+				if values.hasOwnProperty(prop)
+					delete values[prop]
+			for prop of valueExpressions
+				if valueExpressions.hasOwnProperty(prop)
+					delete valueExpressions[prop]
 	}

@@ -1,4 +1,10 @@
-define ["jquery", "frontend/addTextComment", "frontend/updateSearchResults", "frontend/settings"], ($, addTextComment, updateSearchResults, settings) ->
+define [
+	"jquery"
+	"frontend/addTextComment"
+	"frontend/updateSearchResults"
+	"frontend/settings"
+	"frontend/clearAll"
+], ($, addTextComment, updateSearchResults, settings, clearAll) ->
 
 	# Set event handlers for extra options and fields.
 
@@ -22,6 +28,9 @@ define ["jquery", "frontend/addTextComment", "frontend/updateSearchResults", "fr
 			$(@).toggleClass("button-down")
 			settings.set("showSymbolicUncertainties", not settings.get("showSymbolicUncertainties"))
 			settings.set("assumeZeroUncertainty", not settings.get("assumeZeroUncertainty"))
+
+		$("#extra-clear").click ->
+			clearAll()
 
 		$("#search-box").on "change keyup paste", ->
 			condition = (z) -> (new RegExp($("#search-box").val())).test(z)

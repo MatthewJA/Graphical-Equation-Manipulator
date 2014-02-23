@@ -41,4 +41,8 @@ define ->
 
 			expressions[expressionID] = expression
 			return expressions[expressionID]
+
+		clear: ->
+			# Clear the index.
+			expressions.splice(0)
 	}
