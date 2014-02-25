@@ -3559,11 +3559,7 @@ define("lib/almond", function(){});
                 power.numerator *= -1;
               }
               if (power.numerator < 0) {
-                if (Math.abs(power.numerator / power.denominator) - 1 > 0.000001) {
-                  bottom.push(new Pow(child.children.left, new terminals.Constant(power.numerator, -power.denominator)).toDrawingNode());
-                } else {
-                  bottom.push(child.children.left.toDrawingNode());
-                }
+                bottom.push(new Pow(child.children.left, new terminals.Constant(power.numerator, -power.denominator)).toDrawingNode());
               } else {
                 top.push(child.toDrawingNode());
               }
@@ -4154,6 +4150,9 @@ define("lib/almond", function(){});
         NumberNode = prettyRender.Number;
         if (this.children.right instanceof terminals.Constant) {
           if (this.children.right.numerator === 1) {
+            if (this.children.right.denominator === 1) {
+              return this.children.left.toDrawingNode();
+            }
             if (this.children.right.denominator > 0) {
               return new SurdNode(this.children.left.toDrawingNode(), this.children.right.denominator);
             } else {
