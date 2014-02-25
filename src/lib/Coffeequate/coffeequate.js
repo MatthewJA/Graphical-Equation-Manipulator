@@ -9,6 +9,7 @@
         //Browser globals case. Just assign the
         //result to a property on the global.
         root.libGlobalName = factory();
+        window.coffeequate = factory();
     }
 }(this, function () {
     //almond, and modules will be inlined here
@@ -447,10 +448,10 @@ define("lib/almond", function(){});
       return ParseError;
 
     })(Error);
-    VARIABLE_REGEX = /^@*[a-zA-Zα-ωΑ-Ω][a-zA-Zα-ωΑ-Ω_\-\d]*$/;
+    VARIABLE_REGEX = /^@*[a-zA-Z\u0391-\u03A9\u03B1-\u03C9][a-zA-Z\u0391-\u03A9\u03B1-\u03C9_\-\d]*$/;
     CONSTANT_REGEX = /^-?\d+(\.\d+)?$/;
     RATIO_REGEX = /^-?\d+(\.\d+)?\/\d+(\.\d+)?$/;
-    SYMBOLIC_CONSTANT_REGEX = /^\\@*[a-zA-Zα-ωΑ-Ω][a-zA-Zα-ωΑ-Ω_\-\d]*$/;
+    SYMBOLIC_CONSTANT_REGEX = /^\\@*[a-zA-Z\u0391-\u03A9\u03B1-\u03C9][a-zA-Z\u0391-\u03A9\u03B1-\u03C9_\-\d]*$/;
     DIMENSIONS_REGEX = /^[^:]*::\{[^:+]*\}$/;
     stringToTerminal = function(string) {
       var segments, terminal, terminals;
@@ -698,13 +699,21 @@ define("lib/almond", function(){});
         return this.label;
       };
 
-      BasicNode.prototype.toMathML = function(equationID, expression, equality) {
+      BasicNode.prototype.toMathML = function(equationID, expression, equality, topLevel) {
         var closingHTML, mathClass, mathID, openingHTML, _ref;
         if (equality == null) {
           equality = "0";
         }
+        if (topLevel == null) {
+          topLevel = false;
+        }
         _ref = generateInfo.getMathMLInfo(equationID, expression, equality), mathClass = _ref[0], mathID = _ref[1], openingHTML = _ref[2];
-        closingHTML = "</math></div>";
+        if (!topLevel) {
+          openingHTML = "";
+          closingHTML = "";
+        } else {
+          closingHTML = "</math></div>";
+        }
         return openingHTML + this.toDrawingNode().renderMathML(equationID, expression) + closingHTML;
       };
 
@@ -914,7 +923,7 @@ define("lib/almond", function(){});
       };
 
       Pow.prototype.renderMathML = function(equationID, expression) {
-        return "" + (this.left.renderMathML(equationID, expression)) + "<msup>" + innerHTML + (right.toMathML(equationID, expression)) + "</msup>";
+        return "<msup>" + (this.left.renderMathML(equationID, expression)) + (this.right.renderMathML(equationID, expression)) + "</msup>";
       };
 
       return Pow;
@@ -1173,10 +1182,11 @@ define("lib/almond", function(){});
           this.denominator *= -1;
           this.numerator *= -1;
         }
+        this.numerator = parseFloat(this.numerator.toPrecision(6));
       }
 
       Constant.prototype.evaluate = function() {
-        return this.numerator / this.denominator;
+        return parseFloat((this.numerator / this.denominator).toPrecision(6));
       };
 
       Constant.prototype.copy = function() {
@@ -1746,7 +1756,7 @@ define("lib/almond", function(){});
         if (assumeZero == null) {
           assumeZero = false;
         }
-        if (this.label in uncertaintySubstitutions) {
+        if (this.label in uncertaintySubstitutions && (uncertaintySubstitutions[this.label] != null)) {
           substitute = uncertaintySubstitutions[this.label];
           if (substitute.copy != null) {
             return substitute.copy();
@@ -3549,11 +3559,7 @@ define("lib/almond", function(){});
                 power.numerator *= -1;
               }
               if (power.numerator < 0) {
-                if (Math.abs(power.numerator / power.denominator) - 1 > 0.000001) {
-                  bottom.push(new Pow(child.children.left, new terminals.Constant(power.numerator, -power.denominator)).toDrawingNode());
-                } else {
-                  bottom.push(child.children.left.toDrawingNode());
-                }
+                bottom.push(new Pow(child.children.left, new terminals.Constant(power.numerator, -power.denominator)).toDrawingNode());
               } else {
                 top.push(child.toDrawingNode());
               }
@@ -4144,6 +4150,9 @@ define("lib/almond", function(){});
         NumberNode = prettyRender.Number;
         if (this.children.right instanceof terminals.Constant) {
           if (this.children.right.numerator === 1) {
+            if (this.children.right.denominator === 1) {
+              return this.children.left.toDrawingNode();
+            }
             if (this.children.right.denominator > 0) {
               return new SurdNode(this.children.left.toDrawingNode(), this.children.right.denominator);
             } else {
@@ -4364,6 +4373,10 @@ define("lib/almond", function(){});
           this.left.units = units;
         }
         return this.right.setVariableUnits(variable, equivalencies, units);
+      };
+
+      Equation.prototype.copy = function() {
+        return new Equation(this.left.copy(), this.right.copy());
       };
 
       Equation.prototype.equals = function(b) {

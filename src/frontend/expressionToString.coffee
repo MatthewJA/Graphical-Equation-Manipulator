@@ -3,6 +3,7 @@ define ["frontend/settings"], (settings) ->
 	# Take an expression, convert it to MathML or HTML, and patch the result so that it includes information on values and uncertainties.
 
 	(expression, expressionID) ->
+		console.log "getting string of", expression
 		html = (if settings.get("mathJaxEnabled") \
 					then expression.toMathML(expressionID, true, "0", true)[...-13] \
 					else expression.toHTML(expressionID, true, "0", true)[...-6])	# We slice it to remove </math></div> and </div>.
