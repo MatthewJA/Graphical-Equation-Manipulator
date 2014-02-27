@@ -36,7 +36,6 @@ define ["coffeequate"], (coffeequate) ->
 		## Velocity and acceleration.
 		"projectile-motion": -> new coffeequate.Equation("s::{m}", "u::{m * s**-1} * t::{s} + 1/2 * a::{m * s**-2} * t::{s}**2")
 		"projectile-velocity": -> new coffeequate.Equation("v::{m * s**-1}", "u::{m * s**-1} + a::{m * s**-2} * t::{s}")
-		"projectile-velocity-squared": -> new coffeequate.Equation("v::{m * s**-1}", "(u::{m * s**-1}**2 + 2 * a::{m * s**-2} * s::{m})**1/2")
 		"differential-velocity": -> new coffeequate.Equation("a::{m * s**-2}", "@v::{m * s**-2}")
 		"distance-over-time": -> new coffeequate.Equation("v::{m * s**-1}", "d::{m} * t::{s}**-1")
 		"velocity-over-time": -> new coffeequate.Equation("a::{m * s**-2}", "v::{m * s**-1} * t::{s}**-1")

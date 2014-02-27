@@ -111,14 +111,23 @@ define ["jquery"
 											# Force the uncertainty for the expression.
 											if uncertainty?
 												equation._gem_uncertaintyExpression = formulae.makeExpression(uncertainty)
+											else
+												delete equation._gem_uncertaintyExpression
 
+											# Set the value.
 											# If we already have an expression showing the equation, then rewrite it.
 											if numericalValues.getExpression(variable)?
-												require ["frontend/rewrite"], (rewrite) -> rewrite.rewriteExpression(numericalValues.getExpression(variable), equation)
+												require ["frontend/rewrite"], (rewrite) ->
+													rewrite.rewriteExpression(numericalValues.getExpression(variable), equation)
+													numericalValues.set(variable, value, numericalValues.getExpression(variable))
 											else
 												require ["frontend/addExpression"], (addExpression) ->
 													eID = addExpression(equation)
 													numericalValues.set(variable, value, eID)
+
+											# Refresh all expressions with this variable in them.
+											require ["frontend/rewrite"], (rewrite) ->
+												rewrite.refreshExpressionsWithVariable(variable)
 										$.prompt.close()
 									else
 										$.prompt.nextState()
