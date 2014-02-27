@@ -57,10 +57,13 @@ define ["coffeequate"], (coffeequate) ->
 		"volume-density": -> new coffeequate.Equation("ρ::{kg * m**-3}", "m::{kg} * V::{m**3}**-1")
 
 		# Electromagnetism.
-		"coulombs-law": -> new coffeequate.Equation("F::{kg * m * s**-2}", "(4 * \\π * \\ε0)**-1 * q1::{A * s} * q2::{A * s} * r::{m}**2")
+		"coulombs-law": -> new coffeequate.Equation("F::{kg * m * s**-2}", "(4 * \\π * \\ε0)**-1 * q1::{A * s} * q2::{A * s} * r::{m}**-2")
 		"electric-field-strength": -> new coffeequate.Equation("E::{kg * m * s**-3 * A}", "F::{kg * m * s**-2} * q::{A * s}**-1")
 
 		# Quantum mechanics.
+
+		# Thermodynamics.
+		"ideal-gas": -> new coffeequate.Equation("P::{kg * m**-1 * s**-2}", "n::{mol} * \\R * T::{K} * V::{m**3}**-1")
 
 		# Geometry.
 		"radius-circumference": -> new coffeequate.Equation("c::{m}", "2 * \\π * r::{m}")

@@ -12,7 +12,7 @@ define [
 		variables = expression.right.getAllVariables()
 		for variable in variables
 			if numericalValues.get(variable)?
-				evaluatedExpression = expression.sub(numericalValues.getNumericalValues(), uncertaintiesIndex.getUncertaintyMap(), equivalenciesIndex, settings.get("assumeZeroUncertainty"))
+				evaluatedExpression = expression.sub(numericalValues.getNumericalValues(), uncertaintiesIndex.getUncertaintyMap(), equivalenciesIndex, settings.get("assumeZeroUncertainty"), true)
 				expression._gem_evaluatedExpression = evaluatedExpression
 				break
 
@@ -21,6 +21,6 @@ define [
 			for otherVariable in variables
 				if showSymbolicUncertainties or uncertaintiesIndex.get(otherVariable)?
 					uncertaintyExpression = expression.right.getUncertainty().sub(
-						numericalValues.getNumericalValues(), uncertaintiesIndex.getUncertaintyMap(), equivalenciesIndex, settings.get("assumeZeroUncertainty"))
+						numericalValues.getNumericalValues(), uncertaintiesIndex.getUncertaintyMap(), equivalenciesIndex, settings.get("assumeZeroUncertainty"), true)
 					expression._gem_uncertaintyExpression = uncertaintyExpression
 					break
