@@ -5,6 +5,7 @@ define ["jquery"], ($) ->
 	return (comment) ->
 		c = $('<div class="text-comment" />')
 		c.text(comment)
+		c.html(c.html().replace("\\\\", "<br>"))
 		$("#whiteboard-panel").append(c)
 		c.draggable
 			containment: "#whiteboard-panel"
@@ -24,7 +25,7 @@ define ["jquery"], ($) ->
 							submit: (e, v, m, f) ->
 								e.preventDefault()
 								if v == 1
-									element.html(f.comment)
+									element.html(f.comment.replace("\\\\", "<br>"))
 									$.prompt.close()
 								else
 									$.prompt.close()
