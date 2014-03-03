@@ -46,6 +46,8 @@ define ["coffeequate"], (coffeequate) ->
 		"energy-mass-relation": -> new coffeequate.Equation("E::{kg * m**2 * s**-2}", "m::{kg} * \\c ** 2")
 		"rotational-energy": -> new coffeequate.Equation("E::{kg * m**2 * s**-2}", "I::{kg * m**2} * ω::{s**-1}**2")
 		"heat-energy": -> new coffeequate.Equation("EH::{kg * m**2 * s**-2}", "c::{m * s**-2 * K**-1} * m::{kg} * ΔT::{K}")
+		"internal-energy": -> new coffeequate.Equation("ΔU::{kg * m**2 * s**-2}", "Q::{kg * m**2 * s**-2} + W::{kg * m**2 * s**-2}")
+		"work-from-pressure-volume": -> new coffeequate.Equation("W::{kg * m**2 * s**-2}", "P::{kg * m**-1 * s**-2} * V::{m**3}")
 
 		## Radiation and power.
 		"black-body-radiation-power": -> new coffeequate.Equation("P::{kg * m**2 * s**-3}", "A::{m**2} * \\σ * T::{K}**4")
