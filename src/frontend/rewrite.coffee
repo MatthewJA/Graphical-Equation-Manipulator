@@ -108,14 +108,16 @@ define [
 
 			expressionIndex.set(expressionID, newExpression)
 
-	refreshExpressionsWithVariable = (variable) ->
+	refreshExpressionsWithVariable = (variable=null) ->
 		require ["backend/equivalenciesIndex"], (equivalenciesIndex) ->
 			equivalencies = equivalenciesIndex.get(variable)
 			for expression, index in expressionIndex.getAllExpressions()
-				for v in equivalencies
-					if v in expression.getAllVariables()
-						console.log "refreshing expression", expression.toString()
-						rewriteExpression(index, expressionIndex.get(index))
+				if variable?
+					for v in equivalencies
+						if v in expression.getAllVariables()
+							rewriteExpression(index, expressionIndex.get(index))
+				else
+					rewriteExpression(index, expressionIndex.get(index))
 
 	return {
 		rewriteEquation: rewriteEquation
@@ -124,4 +126,6 @@ define [
 			# Rewrite a variable.
 			throw new Error("Not implemented.")
 		refreshExpressionsWithVariable: refreshExpressionsWithVariable
+		refreshExpressions: ->
+			refreshExpressionsWithVariable(null)
 	}

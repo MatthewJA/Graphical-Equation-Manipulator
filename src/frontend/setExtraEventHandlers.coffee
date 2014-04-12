@@ -4,7 +4,8 @@ define [
 	"frontend/updateSearchResults"
 	"frontend/settings"
 	"frontend/clearAll"
-], ($, addTextComment, updateSearchResults, settings, clearAll) ->
+	"require"
+], ($, addTextComment, updateSearchResults, settings, clearAll, require) ->
 
 	# Set event handlers for extra options and fields.
 
@@ -28,6 +29,8 @@ define [
 			$(@).toggleClass("button-down")
 			settings.set("showSymbolicUncertainties", not settings.get("showSymbolicUncertainties"))
 			settings.set("assumeZeroUncertainty", not settings.get("assumeZeroUncertainty"))
+			require ["frontend/rewrite"], (rewrite) ->
+				rewrite.refreshExpressions()
 
 		$("#extra-clear").click ->
 			clearAll()

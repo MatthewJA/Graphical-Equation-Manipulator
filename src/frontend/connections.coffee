@@ -109,11 +109,8 @@ define ["frontend/settings", "jquery", "backend/equivalenciesIndex"], (settings,
 				for variable in variables
 					variable = $(variable)
 					if variable.is(connection.source) or variable.is(connection.target)
-						console.log variable, "matches", connection.source, "or", connection.target
 						connection.element.remove?()
 						connection.deleted = true
-					else
-						console.log variable, "doesn't match", connection.source, "or", connection.target
 
 		setEquivalency: (a, b) ->
 			# Set a equivalent to b.
