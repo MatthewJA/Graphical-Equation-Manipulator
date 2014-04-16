@@ -102,7 +102,10 @@ define ["jquery"
 										value = splitValue[0]
 
 										# Set the uncertainty.
-										uncertaintiesIndex.set(variable, uncertainty)
+										if uncertainty?
+											uncertaintiesIndex.set(variable, uncertainty)
+										else
+											uncertaintiesIndex.set(variable, "0")
 
 										# Make an equation equating this variable to a number.
 										[equationID, equation] = makeEquation(variable, value)
