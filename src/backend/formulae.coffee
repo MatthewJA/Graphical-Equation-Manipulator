@@ -52,38 +52,67 @@ define ["coffeequate"], (coffeequate) ->
 			equation: -> new coffeequate.Equation("Ep::{kg * m**2 * s**-2}", "-1 * \\G * m::{kg} * M::{kg} * r::{m}**-1")
 
 		"gravitational-potential-energy-simple":
+			name: "Gravitational Potential Energy in a Constant Gravitational Field"
+			keywords: ["gravity", "gravitational", "potential", "energy", "mass", "distance"]
 			equation: -> new coffeequate.Equation("Ep::{kg * m**2 * s**-2}", "m::{kg} * g::{m * s**-2} * h::{m}")
 
 		## Springs.
 		"spring-force":
+			name: "Spring Force"
+			keywords: ["spring", "force", "constant", "distance", "displacement"]
 			equation: -> new coffeequate.Equation("F::{kg * m * s**-2}", "-k::{kg * s**-2} * D::{m}")
+
 		"spring-energy":
+			name: "Spring Energy"
+			keywords: ["spring", "energy", "constant", "distance", "displacement"]
 			equation: -> new coffeequate.Equation("E::{kg * m**2 * s**-2}", "1/2 * k::{kg * s**-2} * D::{m}**2")
 
 		## Momentum.
 		"momentum":
+			name: "Momentum"
+			keywords: ["momentum", "mass", "velocity", "speed"]
 			equation: -> new coffeequate.Equation("p::{kg * m * s**-1}", "m::{kg} * v::{m * s**-1}")
+
 		"angular-momentum":
+			name: "Angular Momentum"
+			keywords: ["angular", "momentum", "moment of", "inertia", "frequency"]
 			equation: -> new coffeequate.Equation("L::{kg * m**2 * s**-1}", "I::{kg * m**2} * ω::{s**-1}")
 
 		## Moment of inertia.
 		"moment-of-inertia-disk":
+			name: "Moment of Inertia for a Disk"
+			keywords: ["moment of", "inertia", "disk", "mass", "radius"]
 			equation: -> new coffeequate.Equation("I::{kg * m**2}", "1/2 * m::{kg} * R::{m}**2")
+
 		"moment-of-inertia-point":
+			name: "Moment of Inertia for a Point Mass"
+			keywords: ["moment of", "inertia", "point", "mass", "radius"]
 			equation: -> new coffeequate.Equation("I::{kg * m**2}", "m::{kg} * R::{m}**2")
 
 		## Velocity and acceleration.
 		"projectile-motion":
+			name: "Projectile Motion Displacement"
+			keywords: ["projectile", "motion", "displacement", "distance", "time", "speed", "initial", "velocity", "final", "acceleration"]
 			equation: -> new coffeequate.Equation("s::{m}", "u::{m * s**-1} * t::{s} + 1/2 * a::{m * s**-2} * t::{s}**2")
+
 		"projectile-velocity":
+			name: "Projectile Motion Velocity"
+			keywords: ["projectile", "motion", "velocity", "speed", "initial", "final", "acceleration", "time"]
 			equation: -> new coffeequate.Equation("v::{m * s**-1}", "u::{m * s**-1} + a::{m * s**-2} * t::{s}")
-		"differential-velocity":
-			equation: -> new coffeequate.Equation("a::{m * s**-2}", "@v::{m * s**-2}")
+
 		"distance-over-time":
+			name: "Velocity"
+			keywords: ["velocity", "distance", "time", "displacement", "speed"]
 			equation: -> new coffeequate.Equation("v::{m * s**-1}", "d::{m} * t::{s}**-1")
+
 		"velocity-over-time":
+			name: "Acceleration"
+			keywords: ["acceleration", "velocity", "speed", "time"]
 			equation: -> new coffeequate.Equation("a::{m * s**-2}", "v::{m * s**-1} * t::{s}**-1")
+
 		"angular-velocity":
+			name: "Angular Velocity"
+			keywords: ["angular", "velocity", "radius", "distance", "displacement", "frequency"]
 			equation: -> new coffeequate.Equation("v::{m * s**-1}", "r::{m} * ω::{s**-1}")
 
 		## Energy.
@@ -135,12 +164,11 @@ define ["coffeequate"], (coffeequate) ->
 			equation: -> new coffeequate.Equation("V::{m**3}", "A::{m**2} * h::{m}")
 
 	return {
-		get: (name) ->
+		getEquation: (name) ->
 			# name: The name of the equation to return.
 			# -> The equation of the given name.
 			if name of formulae
-				console.log formulae[name]()
-				return formulae[name]()
+				return formulae[name].equation()
 			else
 				throw new Error("No formula called " + name + " exists.")
 
@@ -151,6 +179,13 @@ define ["coffeequate"], (coffeequate) ->
 				names.push(formula)
 
 			return names
+
+		getName: (name) ->
+			# Return the proper name of an equation.
+			if name of formulae
+				return formulae[name].name
+			else
+				throw new Error("No formula called " + name + " exists.")
 
 		makeEquation: (left, right) ->
 			# Make a new equation. Wrapper.
