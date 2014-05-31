@@ -117,51 +117,57 @@ define ["coffeequate"], (coffeequate) ->
 
 		## Energy.
 		"kinetic-energy":
+			name: "Kinetic Energy"
+			keywords: ["kinetic", "energy", "mass", "velocity", "speed"]
 			equation: -> new coffeequate.Equation("Ek::{kg * m**2 * s**-2}", "m::{kg} * v::{m * s**-1}**2 * 1/2")
+
 		"energy-mass-relation":
+			name: "Energy-Mass Equivalence"
+			keywords: ["energy", "mass", "relation", "equivalence", "einstein"]
 			equation: -> new coffeequate.Equation("E::{kg * m**2 * s**-2}", "m::{kg} * \\c ** 2")
-		"rotational-energy":
-			equation: -> new coffeequate.Equation("E::{kg * m**2 * s**-2}", "I::{kg * m**2} * ω::{s**-1}**2")
-		"heat-energy":
-			equation: -> new coffeequate.Equation("EH::{kg * m**2 * s**-2}", "c::{m * s**-2 * K**-1} * m::{kg} * ΔT::{K}")
-		"internal-energy":
-			equation: -> new coffeequate.Equation("ΔU::{kg * m**2 * s**-2}", "Q::{kg * m**2 * s**-2} + W::{kg * m**2 * s**-2}")
-		"work-from-pressure-volume":
-			equation: -> new coffeequate.Equation("W::{kg * m**2 * s**-2}", "P::{kg * m**-1 * s**-2} * V::{m**3}")
 
-		## Radiation and power.
-		"black-body-radiation-power":
-			equation: -> new coffeequate.Equation("P::{kg * m**2 * s**-3}", "A::{m**2} * \\σ * T::{K}**4")
-		"heat-flow-through-insulator":
-			equation: -> new coffeequate.Equation("P::{kg * m**2 * s**-3}", "A::{m**2} * ΔT::{K} * R::{kg**-1 * s**3 * K}")
-		"larmor-radiation-power":
-			equation: -> new coffeequate.Equation("@E::{kg * m**2 * s**-3}", "-2/3 * q::{A * s}**2 * (4 * \\π * \\ε0)**-1 * a::{m * s**-2}**2 * \\c::{m * s**-1}**-1")
+		# "rotational-energy":
+		# 	equation: -> new coffeequate.Equation("E::{kg * m**2 * s**-2}", "I::{kg * m**2} * ω::{s**-1}**2")
+		# "heat-energy":
+		# 	equation: -> new coffeequate.Equation("EH::{kg * m**2 * s**-2}", "c::{m * s**-2 * K**-1} * m::{kg} * ΔT::{K}")
+		# "internal-energy":
+		# 	equation: -> new coffeequate.Equation("ΔU::{kg * m**2 * s**-2}", "Q::{kg * m**2 * s**-2} + W::{kg * m**2 * s**-2}")
+		# "work-from-pressure-volume":
+		# 	equation: -> new coffeequate.Equation("W::{kg * m**2 * s**-2}", "P::{kg * m**-1 * s**-2} * V::{m**3}")
 
-		# Properties.
-		"volume-density":
-			equation: -> new coffeequate.Equation("ρ::{kg * m**-3}", "m::{kg} * V::{m**3}**-1")
+		# ## Radiation and power.
+		# "black-body-radiation-power":
+		# 	equation: -> new coffeequate.Equation("P::{kg * m**2 * s**-3}", "A::{m**2} * \\σ * T::{K}**4")
+		# "heat-flow-through-insulator":
+		# 	equation: -> new coffeequate.Equation("P::{kg * m**2 * s**-3}", "A::{m**2} * ΔT::{K} * R::{kg**-1 * s**3 * K}")
+		# "larmor-radiation-power":
+		# 	equation: -> new coffeequate.Equation("@E::{kg * m**2 * s**-3}", "-2/3 * q::{A * s}**2 * (4 * \\π * \\ε0)**-1 * a::{m * s**-2}**2 * \\c::{m * s**-1}**-1")
 
-		# Electromagnetism.
-		"coulombs-law":
-			equation: -> new coffeequate.Equation("F::{kg * m * s**-2}", "(4 * \\π * \\ε0)**-1 * q1::{A * s} * q2::{A * s} * r::{m}**-2")
-		"electric-field-strength":
-			equation: -> new coffeequate.Equation("E::{kg * m * s**-3 * A}", "F::{kg * m * s**-2} * q::{A * s}**-1")
+		# # Properties.
+		# "volume-density":
+		# 	equation: -> new coffeequate.Equation("ρ::{kg * m**-3}", "m::{kg} * V::{m**3}**-1")
 
-		# Quantum mechanics.
+		# # Electromagnetism.
+		# "coulombs-law":
+		# 	equation: -> new coffeequate.Equation("F::{kg * m * s**-2}", "(4 * \\π * \\ε0)**-1 * q1::{A * s} * q2::{A * s} * r::{m}**-2")
+		# "electric-field-strength":
+		# 	equation: -> new coffeequate.Equation("E::{kg * m * s**-3 * A}", "F::{kg * m * s**-2} * q::{A * s}**-1")
 
-		# Thermodynamics.
-		"ideal-gas":
-			equation: -> new coffeequate.Equation("P::{kg * m**-1 * s**-2}", "n::{mol} * \\R * T::{K} * V::{m**3}**-1")
+		# # Quantum mechanics.
 
-		# Geometry.
-		"radius-circumference":
-			equation: -> new coffeequate.Equation("c::{m}", "2 * \\π * r::{m}")
-		"circle-area":
-			equation: -> new coffeequate.Equation("A::{m**2}", "\\π * r::{m}**2")
-		"rectangle-area":
-			equation: -> new coffeequate.Equation("A::{m**2}", "w::{m} * l::{m}")
-		"prism-volume":
-			equation: -> new coffeequate.Equation("V::{m**3}", "A::{m**2} * h::{m}")
+		# # Thermodynamics.
+		# "ideal-gas":
+		# 	equation: -> new coffeequate.Equation("P::{kg * m**-1 * s**-2}", "n::{mol} * \\R * T::{K} * V::{m**3}**-1")
+
+		# # Geometry.
+		# "radius-circumference":
+		# 	equation: -> new coffeequate.Equation("c::{m}", "2 * \\π * r::{m}")
+		# "circle-area":
+		# 	equation: -> new coffeequate.Equation("A::{m**2}", "\\π * r::{m}**2")
+		# "rectangle-area":
+		# 	equation: -> new coffeequate.Equation("A::{m**2}", "w::{m} * l::{m}")
+		# "prism-volume":
+		# 	equation: -> new coffeequate.Equation("V::{m**3}", "A::{m**2} * h::{m}")
 
 	return {
 		getEquation: (name) ->
@@ -184,6 +190,13 @@ define ["coffeequate"], (coffeequate) ->
 			# Return the proper name of an equation.
 			if name of formulae
 				return formulae[name].name
+			else
+				throw new Error("No formula called " + name + " exists.")
+
+		getKeywords: (name) ->
+			# Return the keywords of an equation.
+			if name of formulae
+				return formulae[name].keywords
 			else
 				throw new Error("No formula called " + name + " exists.")
 
