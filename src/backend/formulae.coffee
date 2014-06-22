@@ -136,8 +136,10 @@ define ["coffeequate"], (coffeequate) ->
 		# 	equation: -> new coffeequate.Equation("W::{kg * m**2 * s**-2}", "P::{kg * m**-1 * s**-2} * V::{m**3}")
 
 		# ## Radiation and power.
-		# "black-body-radiation-power":
-		# 	equation: -> new coffeequate.Equation("P::{kg * m**2 * s**-3}", "A::{m**2} * \\σ * T::{K}**4")
+		"black-body-radiation-power":
+			name: "Stefan-Boltzmann Law"
+			keywords: ["blackbody", "black", "body", "radiation", "stefan", "stefan-boltzmann", "boltzmann", "law", "power", "emissivity", "temperature", "area"]
+			equation: -> new coffeequate.Equation("P::{kg * m**2 * s**-3}", "\\ε * A::{m**2} * \\σ * T::{K}**4")
 		# "heat-flow-through-insulator":
 		# 	equation: -> new coffeequate.Equation("P::{kg * m**2 * s**-3}", "A::{m**2} * ΔT::{K} * R::{kg**-1 * s**3 * K}")
 		# "larmor-radiation-power":
