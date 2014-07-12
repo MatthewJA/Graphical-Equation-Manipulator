@@ -7,8 +7,11 @@ define ["jquery", "backend/formulae", "frontend/settings", "frontend/setSearchRe
 		$("#search-results ul").empty()
 		# Fill with new formulae.
 		for formula in formulae.getAllFormulaNames()
-			if (not condition?) or condition(formula)
-				$("#search-results ul").append($('<li id="formula-' + formula + '" class="search-result">' + formulae.get(formula).toMathML(null, false, "0", true) + '</li>'))
+			if (not condition?) or condition(formulae.getKeywords(formula))
+				ele = $('<li id="formula-' + formula + '" class="search-result" title="' + formulae.getName(formula) + '">' + formulae.getEquation(formula).toMathML(null, false, "0", true) + '</li>')
+				$("#search-results ul").append(ele)
+				ele.tooltip()
+				ele.tooltip("option", "hide", {effect: "fade", duration: 50, delay:0})
 		if settings.get("mathJaxEnabled")
 			MathJax.Hub.Queue(["Typeset", MathJax.Hub])
 			MathJax.Hub.Queue ->

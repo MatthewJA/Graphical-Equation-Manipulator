@@ -36,5 +36,10 @@ define [
 			clearAll()
 
 		$("#search-box").on "change keyup paste", ->
-			condition = (z) -> (new RegExp($("#search-box").val())).test(z)
+			condition = (z) ->
+				regex = new RegExp($("#search-box").val())
+				for keyword in z
+					if regex.test(keyword)
+						return true
+				return false
 			updateSearchResults(condition)

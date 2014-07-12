@@ -25,7 +25,7 @@ define [
 				drop: (event, ui) ->
 					equationName = $(ui.draggable).attr("id").split("-")[1..].join("-")
 
-					equation = formulae.get(equationName)
+					equation = formulae.getEquation(equationName)
 					addEquation(equation, ui.position)
 
 			initialised = true
@@ -35,7 +35,7 @@ define [
 			equationName = $(@).attr("id").split("-")[1..].join("-")
 
 			# Add the equation to the frontend and the backend.
-			equation = formulae.get(equationName)
+			equation = formulae.getEquation(equationName)
 			addEquation(equation)
 
 		target.draggable
