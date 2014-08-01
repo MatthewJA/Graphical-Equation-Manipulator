@@ -5,13 +5,13 @@ require.config
 	baseUrl: "./src"
 	catchError: true
 	paths:
-		"coffeequate": "lib/Coffeequate/coffeequate"
-		"jquery": "lib/jQuery/jquery.min"
-		"jqueryui": "lib/jQuery/jquery.ui.min"
-		"MobileEvents": "lib/jQuery/jquery.mobile.events.min"
-		"ContextMenu": "lib/jQuery/jquery.contextMenu"
-		"impromptu": "lib/jQuery/jquery.impromptu.min"
-		"TouchPunch": "lib/TouchPunch/jquery.ui.touchpunch.min"
+		"coffeequate": "vendor/Coffeequate/coffeequate"
+		"jquery": "vendor/jQuery/jquery.min"
+		"jqueryui": "vendor/jQuery/jquery.ui.min"
+		"MobileEvents": "vendor/jQuery/jquery.mobile.events.min"
+		"ContextMenu": "vendor/jQuery/jquery.contextMenu"
+		"impromptu": "vendor/jQuery/jquery.impromptu.min"
+		"TouchPunch": "vendor/TouchPunch/jquery.ui.touchpunch.min"
 		"MathJax": (if window.getParameter("mathJaxEnabled") == "false" then "frontend/blank" else "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML")
 	shim:
 		"jqueryui": ["jquery"]
