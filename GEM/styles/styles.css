@@ -1,0 +1,59 @@
+/* Overall layout */
+html, body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+
+	width: 100%;
+	height: 100%;
+
+	background-color: #CBF2F0;
+
+	color: #14242C;
+	font-family: "Noto Serif", Times, serif;
+}
+
+#main {
+	display: inline-block;
+	vertical-align: top;
+
+	width: -webkit-calc(100% - 200px);
+	width: -moz-calc(100% - 200px);
+	width: calc(100% - 200px); /* 200px is the sidebar width. */
+	height: 100%;
+}
+
+#side {
+	display: inline-block;
+	vertical-align: top;
+
+	width: 200px;
+	height: 100%;
+
+	background-color: #A7DBD8;
+}
+
+/* Loader */
+
+#loader {
+	padding: 10px;
+	margin: auto;
+
+	text-align: center;
+}
+
+#preloader {
+	width: 500px; /* The orbit of Jupiter... */
+	height: 500px;
+
+	background-color: #222222;
+
+	border-radius: 250px;
+
+	position: relative;
+	margin: 0 auto;
+}
+
+#preloader img {
+	position: absolute;
+}
