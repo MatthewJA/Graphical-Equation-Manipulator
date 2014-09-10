@@ -6,15 +6,14 @@ define ["coffeequate", "elementTools"], (CQ, elementTools) ->
 
 		# Make a new Expression.
 		#
-		# @param lhs [String, CQ.Expression] The left hand side of the expression.
-		# @param rhs [String, CQ.Expression] The right hand side of the expression.
+		# @param lhs [String, CQ.Expression] The left hand side of expression.
+		# @param rhs [String, CQ.Expression] The right hand side of expression.
 		# @return [Expression]
 		constructor: (lhs, rhs) ->
 			@lhs = CQ(lhs)
 			@rhs = CQ(rhs)
+			@element = elementTools.makeExpression(@toMathML())
+			@id = null
 
 		toMathML: ->
 			"<mrow>#{@lhs.toMathML()}<mo>=</mo>#{@rhs.toMathML()}</mrow>"
-
-		toElement: ->
-			elementTools.makeExpression(@toMathML())

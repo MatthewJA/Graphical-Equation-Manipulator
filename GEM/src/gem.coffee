@@ -40,3 +40,5 @@ require [
 	# Trigger the flag that we've finished loading.
 	window.gem.loaded = true # window.gem is defined in the preloader.
 
+	require ["addExpression", "Expression"], (ae, Expression) ->
+		ae(new Expression("a", "b + c"))

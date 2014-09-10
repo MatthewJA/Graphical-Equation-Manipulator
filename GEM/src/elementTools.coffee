@@ -9,7 +9,7 @@ define ["jquery"], ($) ->
 	# @return [Element] A jQuery element for an equation element.
 	makeEquation = (mathML) ->
 		element = $("<math>#{mathML}</math>")
-		element.attr("id", "equation")
+		element.attr("class", "equation")
 		return element
 
 	# Take a MathML string and turn it into an expression element.
@@ -18,7 +18,7 @@ define ["jquery"], ($) ->
 	# @return [Element] A jQuery element for an expression element.
 	makeExpression = (mathML) ->
 		element = $("<math>#{mathML}</math>")
-		element.attr("id", "expression")
+		element.attr("class", "expression")
 		return element
 
 	return {

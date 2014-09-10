@@ -81,12 +81,12 @@ html, body {
 
 /* Math */
 
-#equation {
+.equation {
 	font-size: 125%;
 	color: #408D5A;
 }
 
-#expression {
+.expression {
 	font-size: 125%;
 	color: #405A8D;
 }
