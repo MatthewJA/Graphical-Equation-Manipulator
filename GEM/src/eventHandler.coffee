@@ -16,6 +16,10 @@ define ["jquery"], ($) ->
 
 		# Called upon stopping dragging.
 		stop: (event, ui) ->
+			$(@).css("left",
+				"#{parseInt($(@).css("left"))/($("#whiteboard").width()/100)}%")
+			$(@).css("top",
+				"#{parseInt($(@).css("top"))/($("#whiteboard").height()/100)}%")
 
 	# Set event handlers on an equation and its components.
 	#
