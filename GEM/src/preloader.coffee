@@ -2,6 +2,8 @@
 # This code uses no libraries, for somewhat obvious reasons that they will
 # not yet have loaded when this runs.
 
+window.gem = {} # GEM flags.
+
 preloader = document.getElementById("preloader")
 
 # Properties of each heavenly sphere in the animation.
@@ -38,6 +40,9 @@ dt = 0
 # Current preloader opacity.
 opacity = 1.0
 
+# Current preloader activity.
+closingPreloader = true
+
 # Step through the animation.
 sim = ->
 	now = (new Date()).getTime()
@@ -55,19 +60,32 @@ sim = ->
 		bodies[body].position[1] = (bodies[body].position[1] +
 			bodies[body].speed*dt) % (Math.PI * 2)
 
-	window.loadedGEM = true
-
-	unless window.loadedGEM?
+	unless window.gem.loaded?
 		setTimeout(sim, 0)
 	else
 		setTimeout(closePreloader, 0)
 
 # Step through the animated closing of the preloader.
 closePreloader = ->
-	opacity -= 0.02
+	if closingPreloader
+		opacity -= 0.02
+		document.getElementById("loader").style.opacity = "#{opacity}"
 
-	document.getElementById("loader").style.opacity = "#{opacity}"
+		if opacity <= 0
+			closingPreloader = false
+			document.getElementById("loader").style.display = "none"
+			setTimeout(closePreloader, 0)
+		else
+			setTimeout(sim, 0)
 
-	setTimeout(sim, 0)
+	else
+		opacity += 0.02
+		document.getElementById("whiteboard").style.display = "block"
+		document.getElementById("whiteboard").style.opacity = "#{opacity}"
+
+		if opacity < 1
+			setTimeout(closePreloader, 0)
+		else
+			window.gem.preloaderClosed = true
 
 sim()
