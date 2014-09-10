@@ -1,4 +1,5 @@
 /* Overall layout */
+
 html, body {
 	margin: 0;
 	padding: 0;
@@ -11,6 +12,10 @@ html, body {
 
 	color: #14242C;
 	font-family: "Noto Serif", Times, serif;
+}
+
+p {
+	margin: 10pt 0;
 }
 
 #main {
