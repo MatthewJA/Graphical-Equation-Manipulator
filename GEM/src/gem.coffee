@@ -12,7 +12,31 @@ require.config
 	baseUrl: "./src"
 	paths:
 		jquery: "vendor/jquery-2.1.1.min"
+		coffeequate: "vendor/coffeequate.min"
+		mathjax: "http://cdn.mathjax.org/mathjax/latest/" +
+			"MathJax.js?config=MML_HTMLorMML.js"
+		jqueryui: "vendor/jquery-ui.min"
+	shim:
+		jqueryui: ["jquery"]
+		mathjax:
+			exports: "MathJax"
+			init: ->
+				MathJax.Hub.Config
+					config: ["MMLorHTML.js"]
+					jax: ["input/MathML", "output/HTML-CSS"]
+					extensions: ["mml2jax.js","MathMenu.js","MathZoom.js"]
+					showMathMenu: false
+					showMathMenuMSIE: false
+				MathJax.Hub.Startup.onload()
+				return MathJax
 
-require ["jquery"], ($) ->
+require [
+	"jquery"
+	"Expression"
+	"render"
+	"jqueryui"
+], ($, Expression, render, ui) ->
+
 	# Trigger the flag that we've finished loading.
 	window.gem.loaded = true # window.gem is defined in the preloader.
+
