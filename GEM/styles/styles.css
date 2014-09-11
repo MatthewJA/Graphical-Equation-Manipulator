@@ -57,6 +57,7 @@ p {
 	padding: 10px;
 
 	display: none; /* We want to show the preloader first. */
+	position: relative;
 }
 
 /* Loader */
