@@ -6,7 +6,7 @@ define ["mathjax"], (MathJax) ->
 	# Rerender MathJax in the whiteboard.
 	# @param callback [Function] Optional. A callback function.
 	math = (callback) ->
-		MathJax.Hub.Queue(["Typeset", MathJax.Hub, "#whiteboard"])
+		MathJax.Hub.Queue(["Typeset", MathJax.Hub])
 		MathJax.Hub.Queue(callback)
 
 	return {

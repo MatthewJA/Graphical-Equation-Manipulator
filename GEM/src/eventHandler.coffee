@@ -26,9 +26,7 @@ define ["jquery"], ($) ->
 	# @param element [$.Element] An element to set event handlers for.
 	equation = (element) ->
 		# Set draggable.
-		# element.draggable(draggableProperties)
-		console.log element
-		element.draggable()
+		element.draggable(draggableProperties)
 
 	# Set event handlers on an expression and its components.
 	#

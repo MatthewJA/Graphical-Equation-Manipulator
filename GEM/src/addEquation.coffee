@@ -7,6 +7,25 @@ define [
 	"eventHandler"
 ], ($, index, render, eventHandler) ->
 
+	# Place an element in a random position.
+	placeRandomly = (element) ->
+		wT = $("#whiteboard").offset().top
+		wL = $("#whiteboard").offset().left
+		wH = $("#whiteboard").height()
+		wW = $("#whiteboard").width()
+		eT = element.offset().top
+		eL = element.offset().left
+		eH = element.height()
+		eW = element.width()
+
+		# Random number between -eT and wH - eT
+		top = (Math.random() * (wH - eH) - eT)/wH * 100
+		left = (Math.random() * (wW - eW) - eL)/wL * 100
+
+		element.css
+			top: top + "%"
+			left: left + "%"
+
 	# Add a new equation to the whiteboard and index.
 	#
 	# @param equation [Equation] The equation to add.
@@ -21,17 +40,8 @@ define [
 
 			# Add event handlers.
 			eventHandler.equation(equation.element)
-			
-			# Position the element randomly.
-			elW = equation.element.width()
-			elH = equation.element.height()
-			wW = $("#whiteboard").width()
-			wH = $("#whiteboard").height()
-			left = Math.random()*((wW - elW)/wW)*100
-			console.log left
-			top = Math.random()*((wH - elH)/wH)*100
-			equation.element.css("position", "absolute")
-			equation.element.css("left", "#{left}%")
-			equation.element.css("top", "#{top}%")
+
+			# Place the element randomly.
+			placeRandomly(equation.element)
 
 	return addEquation
