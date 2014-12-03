@@ -88,13 +88,36 @@ p {
 /* Math */
 
 .equation {
-	font-size: 125%;
-	color: #408D5A;
+	font-size: 125%; /* For some reason, this is further multiplied by 130%.
+						No clue why. */
+	color: #222222;
 }
 
 .expression {
 	font-size: 125%;
+	color: #222222;
+}
+
+.equation .variable {
+	color: #408D5A;
+	font-weight: bold;
+}
+
+.expression .variable {
 	color: #405A8D;
+	font-weight: bold;
+}
+
+.equationHelper {
+	color: #408D5A;
+	font-size: 162.5%;
+	font-weight: bold;
+}
+
+.expressionHelper {
+	color: #405A8D;
+	font-size: 162.5%;
+	font-weight: bold;
 }
 
 .grabbable {
@@ -103,4 +126,5 @@ p {
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
+	-khtml-user-select: none;
 }

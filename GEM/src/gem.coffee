@@ -40,5 +40,6 @@ require [
 	# Trigger the flag that we've finished loading.
 	window.gem.loaded = true # window.gem is defined in the preloader.
 
-	require ["addEquation", "formulae"], (addEquation, formulae) ->
+	require ["addEquation", "addExpression", "formulae"], (addEquation, addExpression, formulae) ->
 		addEquation(formulae.getEquation("force"))
+		addExpression(formulae.getEquation("force").toExpression())

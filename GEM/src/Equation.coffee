@@ -1,6 +1,6 @@
 # GEM Equation object, which wraps a Coffeequate Expression.
 
-define ["coffeequate", "elementTools"], (CQ, elementTools) ->
+define ["coffeequate", "elementTools", "Expression"], (CQ, elementTools, Expression) ->
 
 	class Equation
 
@@ -17,3 +17,6 @@ define ["coffeequate", "elementTools"], (CQ, elementTools) ->
 
 		toMathML: ->
 			"<mrow>#{@lhs.toMathML()}<mo>=</mo>#{@rhs.toMathML()}</mrow>"
+
+		toExpression: ->
+			new Expression(@lhs, @rhs)
