@@ -11,6 +11,9 @@ define ["jquery"], ($) ->
 		# Ensure only non-variable parts can be dragged.
 		cancel: ".variable"
 
+		# Called upon starting dragging.
+		start: (event, ui) ->
+
 		# Called upon drag.
 		drag: (event, ui) ->
 
@@ -21,12 +24,21 @@ define ["jquery"], ($) ->
 			$(@).css("top",
 				"#{parseInt($(@).css("top"))/($("#whiteboard").height()/100)}%")
 
+	# Event handler for mousedown on draggable equations and expressions.
+	mousedownHandler = (event) ->
+		$(event.target).css("cursor", "grabbing")
+
+	mouseupHandler = (event) ->
+		$(event.target).css("cursor", "grab")
+
 	# Set event handlers on an equation and its components.
 	#
 	# @param element [$.Element] An element to set event handlers for.
 	equation = (element) ->
 		# Set draggable.
 		element.draggable(draggableProperties)
+		element.mousedown(mousedownHandler)
+		element.mouseup(mouseupHandler)
 
 	# Set event handlers on an expression and its components.
 	#
@@ -34,6 +46,8 @@ define ["jquery"], ($) ->
 	expression = (element) ->
 		# Set draggable.
 		element.draggable(draggableProperties)
+		element.mousedown(mousedownHandler)
+		element.mouseup(mouseupHandler)
 
 	return {
 		equation: equation

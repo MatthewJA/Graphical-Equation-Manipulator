@@ -90,9 +90,11 @@ p {
 .equation {
 	font-size: 125%;
 	color: #408D5A;
+	cursor: grab;
 }
 
 .expression {
 	font-size: 125%;
 	color: #405A8D;
+	cursor: grab;
 }
