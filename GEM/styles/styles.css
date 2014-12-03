@@ -90,11 +90,17 @@ p {
 .equation {
 	font-size: 125%;
 	color: #408D5A;
-	cursor: grab;
 }
 
 .expression {
 	font-size: 125%;
 	color: #405A8D;
+}
+
+.grabbable {
 	cursor: grab;
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
 }
