@@ -112,19 +112,32 @@ p {
 	color: #408D5A;
 	font-size: 162.5%;
 	font-weight: bold;
+	cursor: default; /* This helps reset the pointer after we stop dragging. */
 }
 
 .expressionHelper {
 	color: #405A8D;
 	font-size: 162.5%;
 	font-weight: bold;
+	cursor: default; /* This helps reset the pointer after we stop dragging. */
 }
 
 .grabbable {
+	cursor: pointer; /* Fallback for browsers that don't support grab. */
+	cursor: -webkit-grab;
+	cursor: -moz-grab;
 	cursor: grab;
 	user-select: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	-khtml-user-select: none;
+}
+
+.grabbed {
+	cursor: move !important; /* Fallback for browsers that don't support
+								grabbing */
+	cursor: -webkit-grabbing !important;
+	cursor: -moz-grabbing !important;
+	cursor: grabbing !important;
 }

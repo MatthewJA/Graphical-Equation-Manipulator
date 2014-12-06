@@ -40,10 +40,17 @@ define ["jquery"], ($) ->
         start: (event, ui) ->
             # Hide the original variable we are dragging.
             $(event.target).fadeTo(0, 0)
+            # Remove the grabbed cursor --- the mouseup handler won't ever fire
+            # because we eventually release far away from here.
+            $(event.target).removeClass("grabbed")
             if $(event.target).parents(".equation").length != 0
                 $(ui.helper).addClass("equationHelper variable")
             else
                 $(ui.helper).addClass("expressionHelper variable")
+
+            # We also want the cursor to return to normal once we're done
+            # dragging. If we don't do this step, we get weird UI lag.
+            $(ui.helper).mouseup(mouseupHandler)
 
         # Called upon drag.
         drag: (event, ui) ->
@@ -55,10 +62,10 @@ define ["jquery"], ($) ->
 
     # Event handler for mousedown on draggable equations and expressions.
     mousedownHandler = (event) ->
-        $(event.target).css("cursor", "grabbing")
+        $(event.target).addClass("grabbed")
 
     mouseupHandler = (event) ->
-        $(event.target).css("cursor", "grab")
+        $(event.target).removeClass("grabbed")
 
     # Set event handlers on an equation and its components.
     #
