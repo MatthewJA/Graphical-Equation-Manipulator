@@ -32,7 +32,6 @@ define [
 	addExpression = (expression) ->
 		$("#whiteboard").append(expression.element)
 
-		index.expression.add(expression)
 		expression.element.attr("id", "expression-#{expression.id}")
 		render.math ->
 			# Update the element as MathJax just replaced it.

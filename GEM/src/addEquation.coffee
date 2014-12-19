@@ -20,7 +20,7 @@ define [
 
 		# Random number between -eT and wH - eT
 		top = (Math.random() * (wH - eH) - eT)/wH * 100
-		left = (Math.random() * (wW - eW) - eL)/wL * 100
+		left = (Math.random() * (wW - eW) - eL)/wW * 100
 
 		element.css
 			top: top + "%"
@@ -32,7 +32,6 @@ define [
 	addEquation = (equation) ->
 		$("#whiteboard").append(equation.element)
 
-		index.equation.add(equation)
 		equation.element.attr("id", "equation-#{equation.id}")
 		render.math ->
 			# Update the element as MathJax just replaced it.
@@ -45,7 +44,7 @@ define [
 			placeRandomly(equation.element)
 
 			# Go through the variables in the equation and give each a unique
-			# ID.
+			# CSS ID.
 			for variable in equation.element.find(".variable")
 				label = $(variable).text()
 				$(variable).attr("id", "variable-equ-#{equation.id}-#{label}")

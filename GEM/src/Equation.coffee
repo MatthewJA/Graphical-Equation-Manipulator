@@ -1,6 +1,11 @@
 # GEM Equation object, which wraps a Coffeequate Expression.
 
-define ["coffeequate", "elementTools", "Expression"], (CQ, elementTools, Expression) ->
+define [
+	"coffeequate"
+	"elementTools"
+	"Expression"
+	"index"
+	], (CQ, elementTools, Expression, index) ->
 
 	class Equation
 
@@ -12,8 +17,22 @@ define ["coffeequate", "elementTools", "Expression"], (CQ, elementTools, Express
 		constructor: (lhs, rhs) ->
 			@lhs = CQ(lhs)
 			@rhs = CQ(rhs)
+
+			# Add ourselves to the index.
+			index.equation.add(@)
+
+			# Go through the CQ expression and change the labels of the
+			# variables to have a number on them. This is so that we can
+			# identify them uniquely later.
+			id = @id
+			changeLabels = (variable) ->
+				variable.label += id
+				console.log(variable.label)
+				return variable
+			@lhs = @lhs.mapOverVariables(changeLabels)
+			@rhs = @rhs.mapOverVariables(changeLabels)
+
 			@element = elementTools.makeEquation(@toMathML())
-			@id = null
 
 		toMathML: ->
 			"<mrow>#{@lhs.toMathML()}<mo>=</mo>#{@rhs.toMathML()}</mrow>"

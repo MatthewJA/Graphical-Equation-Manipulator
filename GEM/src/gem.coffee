@@ -60,4 +60,6 @@ require [
 
     require ["addEquation", "addExpression", "formulae", "Line", "index"], (addEquation, addExpression, formulae, Line, index) ->
         addEquation(formulae.getEquation("angular-momentum"))
-        addEquation(formulae.getEquation("momentum"))
+        b = formulae.getEquation("momentum")
+        addEquation(b)
+        addExpression(b.toExpression())

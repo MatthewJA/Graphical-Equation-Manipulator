@@ -1,6 +1,6 @@
 # GEM Expression object, which wraps a Coffeequate Expression.
 
-define ["coffeequate", "elementTools"], (CQ, elementTools) ->
+define ["coffeequate", "elementTools", "index"], (CQ, elementTools, index) ->
 
 	class Expression
 
@@ -12,8 +12,11 @@ define ["coffeequate", "elementTools"], (CQ, elementTools) ->
 		constructor: (lhs, rhs) ->
 			@lhs = CQ(lhs)
 			@rhs = CQ(rhs)
+
+			# Add ourselves to the index.
+			index.expression.add(@)
+
 			@element = elementTools.makeExpression(@toMathML())
-			@id = null
 
 		toMathML: ->
 			"<mrow>#{@lhs.toMathML()}<mo>=</mo>#{@rhs.toMathML()}</mrow>"

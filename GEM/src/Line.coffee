@@ -13,14 +13,14 @@ define [], ->
             offset = @a.offset()
             width = @a.width()
             height = @a.height()
-            return [offset.left - width/2, offset.top - height/2]
+            return [offset.left - width/2, offset.top]
 
         endPosition: ->
             # Get the last [x, y] value.
             offset = @b.offset()
             width = @b.width()
             height = @b.height()
-            return [offset.left - width/2, offset.top - height/2]
+            return [offset.left - width/2, offset.top]
 
         draw: (context) ->
             # Draw this line onto a canvas.
