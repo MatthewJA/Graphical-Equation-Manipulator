@@ -21,9 +21,9 @@ define ["jquery", "redrawCanvas"], ($, redrawCanvas) ->
         # Called upon stopping dragging.
         stop: (event, ui) ->
             $(@).css("left",
-                "#{parseInt($(@).css("left"))/($("#whiteboard").width()/100)}%")
+                "#{parseInt($(@).css("left"))/($("#main").width()/100)}%")
             $(@).css("top",
-                "#{parseInt($(@).css("top"))/($("#whiteboard").height()/100)}%")
+                "#{parseInt($(@).css("top"))/($("#main").height()/100)}%")
 
     draggableVariableProperties =
         # Constrain movement within the whiteboard.
@@ -74,8 +74,12 @@ define ["jquery", "redrawCanvas"], ($, redrawCanvas) ->
     equation = (element) ->
         # Set draggable.
         element.draggable(draggableFormulaProperties)
+        # Set position to absolute to handle positioning problems.
+        element.css("position","absolute")
+        # Set grabby handlers.
         element.mousedown(mousedownHandler)
         element.mouseup(mouseupHandler)
+        # Set variables to be draggable.
         element.find(".variable").draggable(draggableVariableProperties)
 
     # Set event handlers on an expression and its components.
@@ -84,8 +88,12 @@ define ["jquery", "redrawCanvas"], ($, redrawCanvas) ->
     expression = (element) ->
         # Set draggable.
         element.draggable(draggableFormulaProperties)
+        # Set position to absolute to handle positioning problems.
+        element.css("position","absolute")
+        # Set grabby handlers.
         element.mousedown(mousedownHandler)
         element.mouseup(mouseupHandler)
+        # Set variables to be draggable.
         element.find(".variable").draggable(draggableVariableProperties)
 
     return {
