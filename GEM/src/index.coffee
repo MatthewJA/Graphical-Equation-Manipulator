@@ -65,8 +65,46 @@ define ->
 
 	).call()
 
+	line = (->
+
+		lines = []
+
+		# Add a new line to the index.
+		#
+		# @param line [Line] The new line object.
+		add = (line) ->
+			line.id = lines.length
+			lines.push(line)
+
+		# Get a line from the index.
+		#
+		# @param id [Number] The id of the expression.
+		get = (id) ->
+			lines[id]
+
+		# Get the original array of existing expressions. Bad idea.
+		#
+		# @return [Array<Line>] An array of lines *by reference*.
+		getRawLines = ->
+			lines
+
+		redrawAll = (context) ->
+			context = $("#lines-canvas")[0].getContext("2d") unless context?
+
+			for line in lines
+				line.draw(context)
+
+		return {
+			add: add
+			get: get
+			getRaw: getRawLines
+			redrawAll: redrawAll
+			}
+
+	).call()
 
 	return {
 		equation: equation
 		expression: expression
+		line: line
 	}

@@ -1,6 +1,6 @@
 # Setup event handlers for various elements.
 
-define ["jquery"], ($) ->
+define ["jquery", "redrawCanvas"], ($, redrawCanvas) ->
 
     # Properties of draggable equations and expressions.
     draggableFormulaProperties =
@@ -16,6 +16,7 @@ define ["jquery"], ($) ->
 
         # Called upon drag.
         drag: (event, ui) ->
+            redrawCanvas()
 
         # Called upon stopping dragging.
         stop: (event, ui) ->

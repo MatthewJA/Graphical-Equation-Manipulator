@@ -87,5 +87,8 @@ closePreloader = ->
 			setTimeout(closePreloader, 0)
 		else
 			window.gem.preloaderClosed = true
+			# Trigger the updating of canvas size in case the whiteboard changed
+			# size when we lost the preloader.
+			window.gem.updateCanvasSize()
 
 sim()
