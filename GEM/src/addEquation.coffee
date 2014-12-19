@@ -44,4 +44,10 @@ define [
 			# Place the element randomly.
 			placeRandomly(equation.element)
 
+			# Go through the variables in the equation and give each a unique
+			# ID.
+			for variable in equation.element.find(".variable")
+				label = $(variable).text()
+				$(variable).attr("id", "variable-equ-#{equation.id}-#{label}")
+
 	return addEquation

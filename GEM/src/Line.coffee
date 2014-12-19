@@ -35,7 +35,6 @@ define [], ->
             context.strokeStyle = "#AAAAAA"
 
             context.beginPath()
-            console.log(@startPosition()...)
             context.moveTo(@startPosition()...)
             context.lineTo(@endPosition()...)
             context.stroke()

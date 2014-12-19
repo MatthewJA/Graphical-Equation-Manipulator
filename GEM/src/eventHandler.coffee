@@ -1,6 +1,6 @@
 # Setup event handlers for various elements.
 
-define ["jquery", "redrawCanvas"], ($, redrawCanvas) ->
+define ["jquery", "redrawCanvas", "index"], ($, redrawCanvas, index) ->
 
     # Properties of draggable equations and expressions.
     draggableFormulaProperties =
@@ -61,6 +61,24 @@ define ["jquery", "redrawCanvas"], ($, redrawCanvas) ->
             # Show the original variable we are dragging.
             $(event.target).fadeTo(0, 1)
 
+    droppableVariableProperties =
+        drop: (event, ui) ->
+            draggedLabel = ui.draggable.text()
+            droppedLabel = $(@).text()
+            if ui.draggable.parents(".equation").length != 0
+                draggedFormulaType = "equation"
+            else
+                draggedFormulaType = "expression"
+
+            if $(@).parents(".equation").length != 0
+                droppedFormulaType = "equation"
+            else
+                droppedFormulaType = "expression"
+
+            if droppedFormulaType == "equation"
+                if draggedFormulaType == "equation"
+                    index.equivalency.add(ui.draggable, $(@))
+
     # Event handler for mousedown on draggable equations and expressions.
     mousedownHandler = (event) ->
         $(event.target).addClass("grabbed")
@@ -78,9 +96,10 @@ define ["jquery", "redrawCanvas"], ($, redrawCanvas) ->
         element.css("position","absolute")
         # Set grabby handlers.
         element.mousedown(mousedownHandler)
-        element.mouseup(mouseupHandler)
+               .mouseup(mouseupHandler)
         # Set variables to be draggable.
         element.find(".variable").draggable(draggableVariableProperties)
+                                 .droppable(droppableVariableProperties)
 
     # Set event handlers on an expression and its components.
     #
@@ -92,9 +111,10 @@ define ["jquery", "redrawCanvas"], ($, redrawCanvas) ->
         element.css("position","absolute")
         # Set grabby handlers.
         element.mousedown(mousedownHandler)
-        element.mouseup(mouseupHandler)
+               .mouseup(mouseupHandler)
         # Set variables to be draggable.
         element.find(".variable").draggable(draggableVariableProperties)
+                                 .droppable(droppableVariableProperties)
 
     return {
         equation: equation

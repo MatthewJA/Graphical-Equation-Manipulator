@@ -44,4 +44,11 @@ define [
 			# Place the element randomly.
 			placeRandomly(expression.element)
 
+			# Go through the variables in the expression and give each a unique
+			# ID.
+			for variable in expression.element.find(".variable")
+				label = $(variable).text()
+				$(variable).attr("id",
+					"variable-exp-#{expression.id}-#{label}")
+
 	return addExpression

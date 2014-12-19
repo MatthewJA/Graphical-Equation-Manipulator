@@ -58,12 +58,6 @@ require [
         clearTimeout(resizeTimer)
         resizeTimer = setTimeout(window.gem.updateCanvasSize, 50))
 
-    require ["addEquation", "addExpression", "formulae", "lines", "index"], (addEquation, addExpression, formulae, line, index) ->
-        addEquation(formulae.getEquation("force"))
-        addExpression(formulae.getEquation("force").toExpression())
-
-        window.setTimeout((->
-                l = new line($("#equation-0 .variable"), $("#expression-0 .variable"))
-                index.line.add(l)
-                l.draw(canvas.getContext("2d"))
-                console.log("drawn")), 2000)
+    require ["addEquation", "addExpression", "formulae", "Line", "index"], (addEquation, addExpression, formulae, Line, index) ->
+        addEquation(formulae.getEquation("angular-momentum"))
+        addEquation(formulae.getEquation("momentum"))
