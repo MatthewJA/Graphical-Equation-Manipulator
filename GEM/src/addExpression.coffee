@@ -20,7 +20,7 @@ define [
 
 		# Random number between -eT and wH - eT
 		top = (Math.random() * (wH - eH) - eT)/wH * 100
-		left = (Math.random() * (wW - eW) - eL)/wL * 100
+		left = (Math.random() * (wW - eW) - eL)/wW * 100
 
 		element.css
 			top: top + "%"
@@ -30,7 +30,9 @@ define [
 	#
 	# @param expression [Expression] The expression to add.
 	addExpression = (expression) ->
+		console.log "let's add an expression"
 		$("#whiteboard").append(expression.element)
+		console.log "it's in the whiteboard now"
 
 		expression.element.attr("id", "expression-#{expression.id}")
 		render.math ->

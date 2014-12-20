@@ -25,6 +25,7 @@ define ["jquery", "redrawCanvas", "index"], ($, redrawCanvas, index) ->
             $(@).css("top",
                 "#{parseInt($(@).css("top"))/($("#main").height()/100)}%")
 
+    # Properties of draggable variables.
     draggableVariableProperties =
         # Constrain movement within the whiteboard.
         containment: "#whiteboard"
@@ -61,23 +62,32 @@ define ["jquery", "redrawCanvas", "index"], ($, redrawCanvas, index) ->
             # Show the original variable we are dragging.
             $(event.target).fadeTo(0, 1)
 
+    # Properties of droppable variables.
     droppableVariableProperties =
         drop: (event, ui) ->
             draggedLabel = ui.draggable.text()
             droppedLabel = $(@).text()
-            if ui.draggable.parents(".equation").length != 0
-                draggedFormulaType = "equation"
-            else
-                draggedFormulaType = "expression"
 
-            if $(@).parents(".equation").length != 0
-                droppedFormulaType = "equation"
-            else
-                droppedFormulaType = "expression"
+            draggedIsEquation = !!ui.draggable.parents(".equation").length
+            droppedIsEquation = !!$(@).parents(".equation").length
 
-            if droppedFormulaType == "equation"
-                if draggedFormulaType == "equation"
-                    index.equivalency.add(ui.draggable, $(@))
+            if droppedIsEquation and draggedIsEquation
+                index.equivalency.add(ui.draggable, $(@))
+
+    # Event handler for double-clicked variables.
+    dblclickVariableHandler = (event) ->
+        variable = $(event.target).closest(".variable")
+        label = variable.text()
+        equation = $(event.target).closest(".equation")
+        isEquation = !!equation.length
+        if isEquation
+            equationId = equation.attr("id").split("equation-")[1]
+            equation = index.equation.get(equationId)
+            expressions = equation.solveFor(label)
+            require ["addExpression"], (addExpression) ->
+                for expression in expressions
+                    console.log("adding expression", expression)
+                    addExpression(expression)
 
     # Event handler for mousedown on draggable equations and expressions.
     mousedownHandler = (event) ->
@@ -100,6 +110,7 @@ define ["jquery", "redrawCanvas", "index"], ($, redrawCanvas, index) ->
         # Set variables to be draggable.
         element.find(".variable").draggable(draggableVariableProperties)
                                  .droppable(droppableVariableProperties)
+                                 .dblclick(dblclickVariableHandler)
 
     # Set event handlers on an expression and its components.
     #
@@ -115,6 +126,7 @@ define ["jquery", "redrawCanvas", "index"], ($, redrawCanvas, index) ->
         # Set variables to be draggable.
         element.find(".variable").draggable(draggableVariableProperties)
                                  .droppable(droppableVariableProperties)
+                                 .dblclick(dblclickVariableHandler)
 
     return {
         equation: equation

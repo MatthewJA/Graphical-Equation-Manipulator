@@ -3,25 +3,25 @@
 
 define ["jquery"], ($) ->
 
-	# Take a MathML string and turn it into an equation element.
-	#
-	# @param mathML [String] A MathML string.
-	# @return [Element] A jQuery element for an equation element.
-	makeEquation = (mathML) ->
-		element = $("<math>#{mathML}</math>")
-		element.addClass("grabbable equation")
-		return element
+    # Take a MathML string and turn it into an equation element.
+    #
+    # @param mathML [String] A MathML string.
+    # @return [Element] A jQuery element for an equation element.
+    makeEquation = (mathML) ->
+        element = $("<math>#{mathML}</math>")
+        element.addClass("grabbable equation")
+        return element
 
-	# Take a MathML string and turn it into an expression element.
-	#
-	# @param mathML [String] A MathML string.
-	# @return [Element] A jQuery element for an expression element.
-	makeExpression = (mathML) ->
-		element = $("<math>#{mathML}</math>")
-		element.addClass("grabbable expression")
-		return element
+    # Take a MathML string and turn it into an expression element.
+    #
+    # @param mathML [String] A MathML string.
+    # @return [Element] A jQuery element for an expression element.
+    makeExpression = (mathML) ->
+        element = $("<math>#{mathML}</math>")
+        element.addClass("grabbable expression")
+        return element
 
-	return {
-		makeEquation: makeEquation
-		makeExpression: makeExpression
-	}
+    return {
+        makeEquation: makeEquation
+        makeExpression: makeExpression
+    }
