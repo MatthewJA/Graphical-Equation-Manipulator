@@ -24,6 +24,7 @@ define ["jquery", "redrawCanvas", "index"], ($, redrawCanvas, index) ->
                 "#{parseInt($(@).css("left"))/($("#main").width()/100)}%")
             $(@).css("top",
                 "#{parseInt($(@).css("top"))/($("#main").height()/100)}%")
+            $(event.target).find("*").removeClass("grabbed")
 
     # Properties of draggable variables.
     draggableVariableProperties =
@@ -44,7 +45,7 @@ define ["jquery", "redrawCanvas", "index"], ($, redrawCanvas, index) ->
             $(event.target).fadeTo(0, 0)
             # Remove the grabbed cursor --- the mouseup handler won't ever fire
             # because we eventually release far away from here.
-            $(event.target).removeClass("grabbed")
+            $(event.target).closest(".variable").find("*").removeClass("grabbed")
             if $(event.target).parents(".equation").length != 0
                 $(ui.helper).addClass("equationHelper variable")
             else
@@ -86,7 +87,6 @@ define ["jquery", "redrawCanvas", "index"], ($, redrawCanvas, index) ->
             expressions = equation.solveFor(label)
             require ["addExpression"], (addExpression) ->
                 for expression in expressions
-                    console.log("adding expression", expression)
                     addExpression(expression)
 
     # Event handler for mousedown on draggable equations and expressions.
