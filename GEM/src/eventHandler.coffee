@@ -45,7 +45,8 @@ define ["jquery", "redrawCanvas", "index"], ($, redrawCanvas, index) ->
             $(event.target).fadeTo(0, 0)
             # Remove the grabbed cursor --- the mouseup handler won't ever fire
             # because we eventually release far away from here.
-            $(event.target).closest(".variable").find("*").removeClass("grabbed")
+            variable = $(event.target).closest(".variable")
+            variable.find("*").addBack(variable).removeClass("grabbed")
             if $(event.target).parents(".equation").length != 0
                 $(ui.helper).addClass("equationHelper variable")
             else
